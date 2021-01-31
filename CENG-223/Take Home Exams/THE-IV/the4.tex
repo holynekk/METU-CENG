@@ -1,0 +1,118 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\usepackage[hmargin=3cm,vmargin=6.0cm]{geometry}
+%\topmargin=0cm
+\topmargin=-2cm
+\addtolength{\textheight}{6.5cm}
+\addtolength{\textwidth}{2.0cm}
+%\setlength{\leftmargin}{-5cm}
+\setlength{\oddsidemargin}{0.0cm}
+\setlength{\evensidemargin}{0.0cm}
+
+% symbol commands for the curious
+\newcommand{\setZp}{\mathbb{Z}^+}
+\newcommand{\setR}{\mathbb{R}}
+\newcommand{\calT}{\mathcal{T}}
+
+\begin{document}
+
+\section*{Student Information } 
+%Write your full name and id number between the colon and newline
+%Put one empty space character after colon and before newline
+Full Name :  Mert Kaan YILMAZ\\
+Id Number :  2381093\\
+
+% Write your answers below the section tags
+\section*{Answer 1}
+Picking a start from 10 distinct stars: $\binom{10}{1}$ = 10\\
+Picking two habitable planets from 20 habitable planets: $\binom{20}{2}$\\
+Picking eight non-habitable planets from 80 habitable planets: $\binom{80}{8}$\\
+Then from product rule, choosing all the possibilities for selecting: $\binom{10}{1}\cdot\binom{20}{2}\cdot\binom{80}{8}$\\
+Since the order of the planets matter, we should calculate all the permutations of the chosen planets: 10!\\\\
+Therefore, the answer is: $\binom{10}{1}\cdot\binom{20}{2}\cdot\binom{80}{8}\cdot10! = 199860952\cdot10^{12}$
+
+
+\section*{Answer 2}
+Reorder the equation:
+$a_n-2a_{n-1}-15a_{n-2}+36a_{n-3} = 2^n$\\
+Let $a_n = r^3, a_{n-1} = r^2, a_{n-2} = r, a_{n-3} = 1$\\
+The characteristic equation: $r^3-2r^2-15r+36 = 0 = (r+4)(r-3)^2$\\
+So $r_1 = -4, r_{2,3} = 3$ (multiplicity of 2)\\\\
+The solution of the homogeneous recurrence relation:\\
+$a_n^{(h)} = A(-4)^n + (Bn+C)3^n$\\
+Particular solution:\\
+F(n) = $2^n$\\
+Since 2 is not a root of the characteristic equation of the associated linear homogeneous recurrence relation, there is a particular solution of the form\\
+$a_n^{(p)} = p_0(2)^n$ and this should satisfy the recurrence relation.\\
+$a_n-2a_{n-1}-15a_{n-2}+36a_{n-3} = 2^n$\\
+$ p_0(2)^n - 2p_0(2)^{n-1} - 15p_0(2)^{n-2} + 36p_0(2)^{n-3} = 2^n$ \:\:\:Divide both sides with $2^{n-3}$\\
+$8p_0 - 8p_0 - 30p_0 + 36p_0 = 8 \:\:\rightarrow\:\: p_0 = 3/4$\\
+Then $a_n^{(p)} = (3/4)(2)^n$\\\\
+Therefore, general solution for the recurrence relation is:\\
+$a_n = a_n^{(h)} + a_n^{(p)}n = A(-4)^n + (Bn+C)3^n + (3/4)(2)^n$
+
+\newpage
+
+\section*{Answer 3}
+$a_1 = 5$\\
+There are two mutual exclusive sets of valid activation codes\\
+a. X $\rightarrow |$a valid code with length n-1$|$ + even digit\\
+b. Y $\rightarrow |$an invalid code with length n-1$|$ + odd digit\\
+$|X| = a_{n-1}\cdot5$\\
+$|Y| = (10^{n-1}-a_{n-1})\cdot5$\\
+Then,\\
+$a_n = |X|+|Y|$\\
+$a_n = 5\cdot a_{n-1} + 5\cdot (10^{n-1}-a_{n-1})$\\
+$a_n = 5\cdot10^{n-1}$\\
+
+
+\section*{Answer 4}
+The equation can be written as: $a_k - 3\cdot a_{k-1}+3\cdot a_{k-2}-a_{k-3} = 0$\\
+Let $f_{(x)}$ denote the generating function for the sequence $a_k$; that is, $f_{(x)}=\sum_{k\geq0}^na_k\cdot x^k$\\
+Taking the first equation, multiply each term by $x^k$ and sum each term over all positive k$\geq$3. \\
+$\sum_{k\geq3}^na_k\cdot x^k - 3\cdot\sum_{k\geq3}^na_{k-1}\cdot x^k + 3\cdot\sum_{k\geq3}^na_{k-2}\cdot x^k - \sum_{k\geq3}^na_{k-3}\cdot x^k = 0$\\\\
+Manipulate each term so that we can write them as expressions in terms of the generating function $f_{(x)}$ and known series representations. \\\\
+$\sum_{k\geq3}^na_k\cdot x^k = \sum_{k\geq3}^na_k\cdot x^k + a_0 + a_1x + a_2x^2 - a_0 - a_1x - a_2x^2 = \sum_{k\geq0}^na_k\cdot x^k - a_0 - a_1 - a_2x^2 \\= f(x) - 1 - 3x - 6x^2$\\\\
+$\sum_{k\geq3}^na_{k-1}\cdot x^{k} = x\cdot\sum_{k\geq3}^na_{k-1}\cdot x^{k-1} = x\cdot\sum_{k\geq2}^na_k\cdot x^k = x\cdot(\sum_{k\geq0}^na_k\cdot x^k - a_1x - a_0) = x(f(x) - 3x - 1)$\\\\
+$\sum_{k\geq3}^na_{k-2}\cdot x^{k} = x^2\cdot\sum_{k\geq3}^na_{k-2}\cdot x^{k-2} = x^2\cdot\sum_{k\geq1}^na_k\cdot x^k = x\cdot(\sum_{k\geq0}^na_k\cdot x^k - a_0) = x^2(f(x) - 1)$\\\\
+$\sum_{k\geq3}^na_{k-3}\cdot x^{k} = x^3\cdot\sum_{k\geq3}^na_{k-3}\cdot x^{k-3} = x^3\cdot\sum_{k\geq0}^na_k\cdot x^k = x^3f(x)$\\\\
+Then, our equation will be:\\
+$f(x)-1-3x-6x^2-3xf(x)+9x^2+3x+3x^2f(x)-3x^2-x^3f(x) = 0$\\
+$f(x)-3xf(x)+3x^2f(x)-x^3f(x) = 1$\\
+$f(x)(1-x)^3 = 1$\\
+$f(x) = \frac{1}{(1-x)^3}$\\\\
+From book, page 542: $\frac{1}{(1-x)^n} = \sum_{k=0}^nC(n+k-1,k)\cdot x^{k} and a_k = C(n+k-1,k)$\\
+Therefore, for n = 3\\ $a_k = C(2+k, k)$
+\newpage
+\section*{Answer 5}
+\paragraph{a.}
+For the given relation to be an equivalence class, it should be reflexive, symmetric, and transitive.\\
+$\textbf{Reflexivity}$\\
+Consider (a,b)R(a,b), (a,b) on $\setZp$x $\setZp$\\
+Apply given relation condition: a+b = b+a\\
+Since this is true for all (a,b), R is reflexive\\\\
+$\textbf{Symmetry}$\\
+Given (a,b)R(c,d) such that a+d=b+c\\
+Consider (c,d)R(a,b) on $\setZp$x $\setZp$\\
+Given relation condition says that: c+b=d+a.\\
+Because this satisfies the given relation condition, R is symmetric.\\\\
+$\textbf{Transitivity}$\\
+Let (a,b)R(c,d) and (c,d)R(m,n), and all those pairs are in the set of $\setZp x\setZp$\\
+Apply given relation condition:\\
+c+n=d+m (*)\\
+a+d=b+c (can also be written as a-c=b-d(**))\\
+Add (*) and (**) side by side,
+a-c+c+n = b-d+d+m\\
+a+n=b+m $\rightarrow$ (a,b)R(m,n) also satisfies the condition.\\
+Therefore R is transitive.\\\\
+Since we showed that R is reflexive, symmetric, and transitive, R is an equivalence relation.\\
+\paragraph{b.}
+This class consist of all real pairs (a,b) satisfying (a,b)R(1,2).\\
+Apply the given relation condition: 1+b = 2+a $\rightarrow$ b = a+1\\
+Therefore, the equivalence class of (1,2): [(1,2)] = \{(a,a+1)$|$a$\in\setZp$\}
+
+\end{document}

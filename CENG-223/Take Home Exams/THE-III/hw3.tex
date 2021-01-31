@@ -1,0 +1,118 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[dvips]{graphicx}
+\usepackage{epsfig}
+\usepackage{fancybox}
+\usepackage{verbatim}
+\usepackage{array}
+\usepackage{latexsym}
+\usepackage{alltt}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{color}
+\usepackage[hmargin=3cm,vmargin=5.0cm]{geometry}
+\topmargin=-1.8cm
+\addtolength{\textheight}{6.5cm}
+\addtolength{\textwidth}{2.0cm}
+\setlength{\oddsidemargin}{0.0cm}
+\setlength{\evensidemargin}{0.0cm}
+
+\newcommand{\HRule}{\rule{\linewidth}{1mm}}
+\newcommand{\kutu}[2]{\framebox[#1mm]{\rule[-2mm]{0mm}{#2mm}}}
+\newcommand{\gap}{ \\[1mm] }
+
+\newcommand{\Q}{\raisebox{1.7pt}{$\scriptstyle\bigcirc$}}
+
+\lstset{
+    %backgroundcolor=\color{lbcolor},
+    tabsize=2,
+    language=C++,
+    basicstyle=\footnotesize,
+    numberstyle=\footnotesize,
+    aboveskip={0.0\baselineskip},
+    belowskip={0.0\baselineskip},
+    columns=fixed,
+    showstringspaces=false,
+    breaklines=true,
+    prebreak=\raisebox{0ex}[0ex][0ex]{\ensuremath{\hookleftarrow}},
+    %frame=single,
+    showtabs=false,
+    showspaces=false,
+    showstringspaces=false,
+    identifierstyle=\ttfamily,
+    keywordstyle=\color[rgb]{0,0,1},
+    commentstyle=\color[rgb]{0.133,0.545,0.133},
+    stringstyle=\color[rgb]{0.627,0.126,0.941},
+}
+
+
+\begin{document}
+
+
+
+\noindent
+\HRule \\[3mm]
+\small
+\begin{tabular}[b]{lp{3.8cm}r}
+{} Middle East Technical University &  &
+{} Department of Computer Engineering \\
+\end{tabular} \\
+\begin{center}
+
+                 \LARGE \textbf{CENG 223} \\[4mm]
+                 \Large Discrete Computational Structures \\[4mm]
+                \normalsize Fall '2020-2021 \\
+                    \Large Homework 3 \\
+                \normalsize Student Name and Surname:  Mert Kaan YILMAZ\\
+                \normalsize Student Number:  2381093\\
+\end{center}
+\HRule
+
+
+\section*{Question 1}
+For the Fermat's Little Theorem, $a^{p-1}\equiv 1(mod\:p)$, if p is prime and a cannot be divided by p. Also for every integer a, $a^p\equiv a(mod\:p)$.\\
+Then,\\
+$(2^{22}+4^{44}+6^{66}+8^{80}+10^{110})(mod\:11)$\\
+$\equiv\:(2^2\cdot(2^2)^{10}+4^4\cdot(4^4)^{10}+6^6\cdot(6^6)^{10}+(8^8)^{10}+(10^{11})^{10})(mod\:11)$\\
+$\equiv\:(4\cdot1+16\cdot16\cdot1+36\cdot36\cdot36\cdot1+1+1)(mod\:11)$\\
+$\equiv\:(4+5\cdot5+3\cdot3\cdot3+1+1)(mod\:11)$\\
+$\equiv\:58(mod\:11)$\\
+$\equiv 3$
+
+\section*{Question 2}
+To find gcd(5n + 3, 7n + 4) we will use The Euclidean Algorithm.\\\\
+$7n+4 = 1\cdot(5n+3)+(2n+1)$\\
+$5n+3 = 2\cdot(2n+1)+(n+1)$\\
+$2n+1 = 1\cdot(n+1)+n$\\
+$n+1 = 1\cdot(n)+1$\\\\
+Then gcd(5n + 3, 7n + 4) = 1
+\newpage
+\section*{Question 3}
+We know that x is a prime number and, $m^2=n^2+k\cdot x$ equation holds for m,n,k integer values.\\
+Then, we can write this equation as,\\
+$m^2-n^2=k\cdot x$\\
+$(m+n)\cdot(m-n)=k\cdot x$\\
+For this equality to be hold, x should be the prime factor of either (m-n) or (m+n).\\
+So this means $x|(m+n)\:or\:x|(m-n)$
+
+\section*{Question 4}
+Let P(n) be the proposition that the sum of all the integers that \\\\
+P(1) is true, because 1 = $\frac{1\cdot(3\cdot1-1)}{2}$. 
+For the inductive part, we assume that P(k) holds for an arbitrary positive integer k.\\
+Namely, we assume that,\\
+$1+4+7+...+(3\cdot k-2) = \frac{k\cdot(3\cdot k-1)}{2}$\\
+Under this assumption, we should show that P(k+1) is true.\\
+Namely,\\
+$1+4+7+...+(3\cdot k-2)+(3\cdot k+1) = \frac{(k+1)\cdot(3\cdot(k+1)-1)}{2} = \frac{(k+1)\cdot(3\cdot k+2)}{2}$\\
+is also true.\\
+We add both sides $(3\cdot k+1)$.\\
+$1+4+7+...+(3\cdot k-2)+(3\cdot k+1) =\frac{k\cdot(3\cdot k-1)}{2}+(3\cdot k+1)$\\
+$1+4+7+...+(3\cdot k-2)+(3\cdot k+1) =\frac{k\cdot(3\cdot k-1)+2\cdot(3\cdot k+1)}{2}$\\
+$1+4+7+...+(3\cdot k-2)+(3\cdot k+1) =\frac{(3\cdot k+2)\cdot(k+1)}{2}$\\
+This last equation shows that P(k+1) is true under the assumtion that P(k) is true. This completes the inductive step.\\\\
+In other words, we have proven $1+4+7+...+(3\cdot n-2) = \frac{n\cdot(3\cdot n-1)}{2}$
+
+\end{document}
+

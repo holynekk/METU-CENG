@@ -1,0 +1,224 @@
+All movies (id sorted):
+0074751 | King Kong | John Guillermin | X Classics | 1976 | 136 | Y
+0103873 | Dead Alive | Peter JACKSON | X Movies | 1994 | 104 | Y
+0104346 | Gladiator | Rowdy Herrington | O'Reilly Movies | 1992 | 104 | Y
+0120737 | The Lord of the Rings: The Fellowship of the Ring | Peter Jackson | X Movies | 2001 | 150 | Y
+0172495 | Gladiator | Ridley Scott | Z Movies | 2000 | 136 | Y
+0360717 | King Kong | pEteR JackSon | Y Movies | 2005 | 102 | Y
+1170358 | the hobbit: The Desolation of Smaug | peter JACKSON | Y Movies | 2013 | 160 | Y
+7905466 | They Shall Not Grow Old | Peter Jackson | X Movies | 2018 | 245 | Y
+---------------------------------
+All movies (director-title sorted):
+0074751 | King Kong | John Guillermin | X Classics | 1976 | 136 | Y
+0103873 | Dead Alive | Peter JACKSON | X Movies | 1994 | 104 | Y
+0360717 | King Kong | pEteR JackSon | Y Movies | 2005 | 102 | Y
+1170358 | the hobbit: The Desolation of Smaug | peter JACKSON | Y Movies | 2013 | 160 | Y
+0120737 | The Lord of the Rings: The Fellowship of the Ring | Peter Jackson | X Movies | 2001 | 150 | Y
+7905466 | They Shall Not Grow Old | Peter Jackson | X Movies | 2018 | 245 | Y
+0172495 | Gladiator | Ridley Scott | Z Movies | 2000 | 136 | Y
+0104346 | Gladiator | Rowdy Herrington | O'Reilly Movies | 1992 | 104 | Y
+---------------------------------
+All movies (title-director sorted):
+0103873 | Dead Alive | Peter JACKSON | X Movies | 1994 | 104 | Y
+0172495 | Gladiator | Ridley Scott | Z Movies | 2000 | 136 | Y
+0104346 | Gladiator | Rowdy Herrington | O'Reilly Movies | 1992 | 104 | Y
+0074751 | King Kong | John Guillermin | X Classics | 1976 | 136 | Y
+0360717 | King Kong | pEteR JackSon | Y Movies | 2005 | 102 | Y
+1170358 | the hobbit: The Desolation of Smaug | peter JACKSON | Y Movies | 2013 | 160 | Y
+0120737 | The Lord of the Rings: The Fellowship of the Ring | Peter Jackson | X Movies | 2001 | 150 | Y
+7905466 | They Shall Not Grow Old | Peter Jackson | X Movies | 2018 | 245 | Y
+---------------------------------
+All movies since 2003:
+0360717 | King Kong | pEteR JackSon | Y Movies | 2005 | 102 | Y
+1170358 | the hobbit: The Desolation of Smaug | peter JACKSON | Y Movies | 2013 | 160 | Y
+7905466 | They Shall Not Grow Old | Peter Jackson | X Movies | 2018 | 245 | Y
+---------------------------------
+All movies by PETER JACKSON with titles in ["c", "p"]
+0103873 | Dead Alive | Peter JACKSON | X Movies | 1994 | 104 | Y
+0360717 | King Kong | pEteR JackSon | Y Movies | 2005 | 102 | Y
+---------------------------------
+All movies by PETER JACKSON
+0103873 | Dead Alive | Peter JACKSON | X Movies | 1994 | 104 | Y
+0360717 | King Kong | pEteR JackSon | Y Movies | 2005 | 102 | Y
+1170358 | the hobbit: The Desolation of Smaug | peter JACKSON | Y Movies | 2013 | 160 | Y
+0120737 | The Lord of the Rings: The Fellowship of the Ring | Peter Jackson | X Movies | 2001 | 150 | Y
+7905466 | They Shall Not Grow Old | Peter Jackson | X Movies | 2018 | 245 | Y
+---------------------------------
+Movies with title "Gladiator" are now unavailable
+All movies (id sorted):
+0074751 | King Kong | John Guillermin | X Classics | 1976 | 136 | Y
+0103873 | Dead Alive | Peter JACKSON | X Movies | 1994 | 104 | Y
+0104346 | Gladiator | Rowdy Herrington | O'Reilly Movies | 1992 | 104 | N
+0120737 | The Lord of the Rings: The Fellowship of the Ring | Peter Jackson | X Movies | 2001 | 150 | Y
+0172495 | Gladiator | Ridley Scott | Z Movies | 2000 | 136 | N
+0360717 | King Kong | pEteR JackSon | Y Movies | 2005 | 102 | Y
+1170358 | the hobbit: The Desolation of Smaug | peter JACKSON | Y Movies | 2013 | 160 | Y
+7905466 | They Shall Not Grow Old | Peter Jackson | X Movies | 2018 | 245 | Y
+---------------------------------
+All movies (director-title sorted):
+0074751 | King Kong | John Guillermin | X Classics | 1976 | 136 | Y
+0103873 | Dead Alive | Peter JACKSON | X Movies | 1994 | 104 | Y
+0360717 | King Kong | pEteR JackSon | Y Movies | 2005 | 102 | Y
+1170358 | the hobbit: The Desolation of Smaug | peter JACKSON | Y Movies | 2013 | 160 | Y
+0120737 | The Lord of the Rings: The Fellowship of the Ring | Peter Jackson | X Movies | 2001 | 150 | Y
+7905466 | They Shall Not Grow Old | Peter Jackson | X Movies | 2018 | 245 | Y
+0172495 | Gladiator | Ridley Scott | Z Movies | 2000 | 136 | N
+0104346 | Gladiator | Rowdy Herrington | O'Reilly Movies | 1992 | 104 | N
+---------------------------------
+All movies (title-director sorted):
+0103873 | Dead Alive | Peter JACKSON | X Movies | 1994 | 104 | Y
+0172495 | Gladiator | Ridley Scott | Z Movies | 2000 | 136 | N
+0104346 | Gladiator | Rowdy Herrington | O'Reilly Movies | 1992 | 104 | N
+0074751 | King Kong | John Guillermin | X Classics | 1976 | 136 | Y
+0360717 | King Kong | pEteR JackSon | Y Movies | 2005 | 102 | Y
+1170358 | the hobbit: The Desolation of Smaug | peter JACKSON | Y Movies | 2013 | 160 | Y
+0120737 | The Lord of the Rings: The Fellowship of the Ring | Peter Jackson | X Movies | 2001 | 150 | Y
+7905466 | They Shall Not Grow Old | Peter Jackson | X Movies | 2018 | 245 | Y
+---------------------------------
+Rowdy Herrington's movie is now available
+All movies (id sorted):
+0074751 | King Kong | John Guillermin | X Classics | 1976 | 136 | Y
+0103873 | Dead Alive | Peter JACKSON | X Movies | 1994 | 104 | Y
+0104346 | Gladiator | Rowdy Herrington | O'Reilly Movies | 1992 | 104 | Y
+0120737 | The Lord of the Rings: The Fellowship of the Ring | Peter Jackson | X Movies | 2001 | 150 | Y
+0172495 | Gladiator | Ridley Scott | Z Movies | 2000 | 136 | N
+0360717 | King Kong | pEteR JackSon | Y Movies | 2005 | 102 | Y
+1170358 | the hobbit: The Desolation of Smaug | peter JACKSON | Y Movies | 2013 | 160 | Y
+7905466 | They Shall Not Grow Old | Peter Jackson | X Movies | 2018 | 245 | Y
+---------------------------------
+All movies (director-title sorted):
+0074751 | King Kong | John Guillermin | X Classics | 1976 | 136 | Y
+0103873 | Dead Alive | Peter JACKSON | X Movies | 1994 | 104 | Y
+0360717 | King Kong | pEteR JackSon | Y Movies | 2005 | 102 | Y
+1170358 | the hobbit: The Desolation of Smaug | peter JACKSON | Y Movies | 2013 | 160 | Y
+0120737 | The Lord of the Rings: The Fellowship of the Ring | Peter Jackson | X Movies | 2001 | 150 | Y
+7905466 | They Shall Not Grow Old | Peter Jackson | X Movies | 2018 | 245 | Y
+0172495 | Gladiator | Ridley Scott | Z Movies | 2000 | 136 | N
+0104346 | Gladiator | Rowdy Herrington | O'Reilly Movies | 1992 | 104 | Y
+---------------------------------
+All movies (title-director sorted):
+0103873 | Dead Alive | Peter JACKSON | X Movies | 1994 | 104 | Y
+0172495 | Gladiator | Ridley Scott | Z Movies | 2000 | 136 | N
+0104346 | Gladiator | Rowdy Herrington | O'Reilly Movies | 1992 | 104 | Y
+0074751 | King Kong | John Guillermin | X Classics | 1976 | 136 | Y
+0360717 | King Kong | pEteR JackSon | Y Movies | 2005 | 102 | Y
+1170358 | the hobbit: The Desolation of Smaug | peter JACKSON | Y Movies | 2013 | 160 | Y
+0120737 | The Lord of the Rings: The Fellowship of the Ring | Peter Jackson | X Movies | 2001 | 150 | Y
+7905466 | They Shall Not Grow Old | Peter Jackson | X Movies | 2018 | 245 | Y
+---------------------------------
+Peter Jackson now works with "Company X"
+All movies (id sorted):
+0074751 | King Kong | John Guillermin | X Classics | 1976 | 136 | Y
+0103873 | Dead Alive | Peter JACKSON | Company X | 1994 | 104 | Y
+0104346 | Gladiator | Rowdy Herrington | O'Reilly Movies | 1992 | 104 | Y
+0120737 | The Lord of the Rings: The Fellowship of the Ring | Peter Jackson | Company X | 2001 | 150 | Y
+0172495 | Gladiator | Ridley Scott | Z Movies | 2000 | 136 | N
+0360717 | King Kong | pEteR JackSon | Company X | 2005 | 102 | Y
+1170358 | the hobbit: The Desolation of Smaug | peter JACKSON | Company X | 2013 | 160 | Y
+7905466 | They Shall Not Grow Old | Peter Jackson | Company X | 2018 | 245 | Y
+---------------------------------
+All movies (director-title sorted):
+0074751 | King Kong | John Guillermin | X Classics | 1976 | 136 | Y
+0103873 | Dead Alive | Peter JACKSON | Company X | 1994 | 104 | Y
+0360717 | King Kong | pEteR JackSon | Company X | 2005 | 102 | Y
+1170358 | the hobbit: The Desolation of Smaug | peter JACKSON | Company X | 2013 | 160 | Y
+0120737 | The Lord of the Rings: The Fellowship of the Ring | Peter Jackson | Company X | 2001 | 150 | Y
+7905466 | They Shall Not Grow Old | Peter Jackson | Company X | 2018 | 245 | Y
+0172495 | Gladiator | Ridley Scott | Z Movies | 2000 | 136 | N
+0104346 | Gladiator | Rowdy Herrington | O'Reilly Movies | 1992 | 104 | Y
+---------------------------------
+All movies (title-director sorted):
+0103873 | Dead Alive | Peter JACKSON | Company X | 1994 | 104 | Y
+0172495 | Gladiator | Ridley Scott | Z Movies | 2000 | 136 | N
+0104346 | Gladiator | Rowdy Herrington | O'Reilly Movies | 1992 | 104 | Y
+0074751 | King Kong | John Guillermin | X Classics | 1976 | 136 | Y
+0360717 | King Kong | pEteR JackSon | Company X | 2005 | 102 | Y
+1170358 | the hobbit: The Desolation of Smaug | peter JACKSON | Company X | 2013 | 160 | Y
+0120737 | The Lord of the Rings: The Fellowship of the Ring | Peter Jackson | Company X | 2001 | 150 | Y
+7905466 | They Shall Not Grow Old | Peter Jackson | Company X | 2018 | 245 | Y
+---------------------------------
+Removing movie with id 7905466
+All movies (id sorted):
+0074751 | King Kong | John Guillermin | X Classics | 1976 | 136 | Y
+0103873 | Dead Alive | Peter JACKSON | Company X | 1994 | 104 | Y
+0104346 | Gladiator | Rowdy Herrington | O'Reilly Movies | 1992 | 104 | Y
+0120737 | The Lord of the Rings: The Fellowship of the Ring | Peter Jackson | Company X | 2001 | 150 | Y
+0172495 | Gladiator | Ridley Scott | Z Movies | 2000 | 136 | N
+0360717 | King Kong | pEteR JackSon | Company X | 2005 | 102 | Y
+1170358 | the hobbit: The Desolation of Smaug | peter JACKSON | Company X | 2013 | 160 | Y
+---------------------------------
+All movies (director-title sorted):
+0074751 | King Kong | John Guillermin | X Classics | 1976 | 136 | Y
+0103873 | Dead Alive | Peter JACKSON | Company X | 1994 | 104 | Y
+0360717 | King Kong | pEteR JackSon | Company X | 2005 | 102 | Y
+1170358 | the hobbit: The Desolation of Smaug | peter JACKSON | Company X | 2013 | 160 | Y
+0120737 | The Lord of the Rings: The Fellowship of the Ring | Peter Jackson | Company X | 2001 | 150 | Y
+0172495 | Gladiator | Ridley Scott | Z Movies | 2000 | 136 | N
+0104346 | Gladiator | Rowdy Herrington | O'Reilly Movies | 1992 | 104 | Y
+---------------------------------
+All movies (title-director sorted):
+0103873 | Dead Alive | Peter JACKSON | Company X | 1994 | 104 | Y
+0172495 | Gladiator | Ridley Scott | Z Movies | 2000 | 136 | N
+0104346 | Gladiator | Rowdy Herrington | O'Reilly Movies | 1992 | 104 | Y
+0074751 | King Kong | John Guillermin | X Classics | 1976 | 136 | Y
+0360717 | King Kong | pEteR JackSon | Company X | 2005 | 102 | Y
+1170358 | the hobbit: The Desolation of Smaug | peter JACKSON | Company X | 2013 | 160 | Y
+0120737 | The Lord of the Rings: The Fellowship of the Ring | Peter Jackson | Company X | 2001 | 150 | Y
+---------------------------------
+Removing Peter Jackson's movie "the hobbit: The Desolation of Smaug"
+All movies (id sorted):
+0074751 | King Kong | John Guillermin | X Classics | 1976 | 136 | Y
+0103873 | Dead Alive | Peter JACKSON | Company X | 1994 | 104 | Y
+0104346 | Gladiator | Rowdy Herrington | O'Reilly Movies | 1992 | 104 | Y
+0120737 | The Lord of the Rings: The Fellowship of the Ring | Peter Jackson | Company X | 2001 | 150 | Y
+0172495 | Gladiator | Ridley Scott | Z Movies | 2000 | 136 | N
+0360717 | King Kong | pEteR JackSon | Company X | 2005 | 102 | Y
+---------------------------------
+All movies (director-title sorted):
+0074751 | King Kong | John Guillermin | X Classics | 1976 | 136 | Y
+0103873 | Dead Alive | Peter JACKSON | Company X | 1994 | 104 | Y
+0360717 | King Kong | pEteR JackSon | Company X | 2005 | 102 | Y
+0120737 | The Lord of the Rings: The Fellowship of the Ring | Peter Jackson | Company X | 2001 | 150 | Y
+0172495 | Gladiator | Ridley Scott | Z Movies | 2000 | 136 | N
+0104346 | Gladiator | Rowdy Herrington | O'Reilly Movies | 1992 | 104 | Y
+---------------------------------
+All movies (title-director sorted):
+0103873 | Dead Alive | Peter JACKSON | Company X | 1994 | 104 | Y
+0172495 | Gladiator | Ridley Scott | Z Movies | 2000 | 136 | N
+0104346 | Gladiator | Rowdy Herrington | O'Reilly Movies | 1992 | 104 | Y
+0074751 | King Kong | John Guillermin | X Classics | 1976 | 136 | Y
+0360717 | King Kong | pEteR JackSon | Company X | 2005 | 102 | Y
+0120737 | The Lord of the Rings: The Fellowship of the Ring | Peter Jackson | Company X | 2001 | 150 | Y
+---------------------------------
+Removing all movies with title "Gladiator"
+All movies (id sorted):
+0074751 | King Kong | John Guillermin | X Classics | 1976 | 136 | Y
+0103873 | Dead Alive | Peter JACKSON | Company X | 1994 | 104 | Y
+0120737 | The Lord of the Rings: The Fellowship of the Ring | Peter Jackson | Company X | 2001 | 150 | Y
+0360717 | King Kong | pEteR JackSon | Company X | 2005 | 102 | Y
+---------------------------------
+All movies (director-title sorted):
+0074751 | King Kong | John Guillermin | X Classics | 1976 | 136 | Y
+0103873 | Dead Alive | Peter JACKSON | Company X | 1994 | 104 | Y
+0360717 | King Kong | pEteR JackSon | Company X | 2005 | 102 | Y
+0120737 | The Lord of the Rings: The Fellowship of the Ring | Peter Jackson | Company X | 2001 | 150 | Y
+---------------------------------
+All movies (title-director sorted):
+0103873 | Dead Alive | Peter JACKSON | Company X | 1994 | 104 | Y
+0074751 | King Kong | John Guillermin | X Classics | 1976 | 136 | Y
+0360717 | King Kong | pEteR JackSon | Company X | 2005 | 102 | Y
+0120737 | The Lord of the Rings: The Fellowship of the Ring | Peter Jackson | Company X | 2001 | 150 | Y
+---------------------------------
+Removing all movies with title "King Kong"
+All movies (id sorted):
+0103873 | Dead Alive | Peter JACKSON | Company X | 1994 | 104 | Y
+0120737 | The Lord of the Rings: The Fellowship of the Ring | Peter Jackson | Company X | 2001 | 150 | Y
+---------------------------------
+All movies (director-title sorted):
+0103873 | Dead Alive | Peter JACKSON | Company X | 1994 | 104 | Y
+0120737 | The Lord of the Rings: The Fellowship of the Ring | Peter Jackson | Company X | 2001 | 150 | Y
+---------------------------------
+All movies (title-director sorted):
+0103873 | Dead Alive | Peter JACKSON | Company X | 1994 | 104 | Y
+0120737 | The Lord of the Rings: The Fellowship of the Ring | Peter Jackson | Company X | 2001 | 150 | Y
+---------------------------------

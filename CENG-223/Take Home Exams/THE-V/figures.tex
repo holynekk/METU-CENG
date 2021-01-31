@@ -1,0 +1,295 @@
+\documentclass[12pt]{article}
+%\usepackage{alltt}
+\usepackage[utf8]{inputenc}
+\usepackage[dvips]{graphicx}
+%\usepackage{a4wide}
+\usepackage{epsfig}
+\usepackage{fancybox}
+\usepackage{verbatim}
+\usepackage{array}
+\usepackage{latexsym}
+\usepackage{alltt}
+%\usepackage{dsfont}
+\usepackage{caption}
+\usepackage{subcaption}
+%\usepackage{fullpage}
+\usepackage{hyperref}
+\usepackage{textcomp}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{tikz}
+\usepackage{float}
+\usepackage[hmargin=3cm,vmargin=5.0cm]{geometry}
+%\topmargin=0cm
+\topmargin=-1.8cm
+\addtolength{\textheight}{6.5cm}
+\addtolength{\textwidth}{2.0cm}
+%\setlength{\leftmargin}{-5cm}
+\setlength{\oddsidemargin}{0.0cm}
+\setlength{\evensidemargin}{0.0cm}
+
+\newcommand{\HRule}{\rule{\linewidth}{1mm}}
+\newcommand{\kutu}[2]{\framebox[#1mm]{\rule[-2mm]{0mm}{#2mm}}}
+\newcommand{\gap}{ \\[1mm] }
+
+\newcommand{\Q}{\raisebox{1.7pt}{$\scriptstyle\bigcirc$}}
+
+\lstset{
+    %backgroundcolor=\color{lbcolor},
+    tabsize=2,
+    language=C++,
+    basicstyle=\footnotesize,
+    numberstyle=\footnotesize,
+    aboveskip={0.0\baselineskip},
+    belowskip={0.0\baselineskip},
+    columns=fixed,
+    showstringspaces=false,
+    breaklines=true,
+    prebreak=\raisebox{0ex}[0ex][0ex]{\ensuremath{\hookleftarrow}},
+    %frame=single,
+    showtabs=false,
+    showspaces=false,
+    showstringspaces=false,
+    identifierstyle=\ttfamily,
+    keywordstyle=\color[rgb]{0,0,1},
+    commentstyle=\color[rgb]{0.133,0.545,0.133},
+    stringstyle=\color[rgb]{0.627,0.126,0.941},
+}
+
+
+\begin{document}
+
+
+
+\noindent
+\begin{center}
+                    \Large Take Home Exam 5 Figures
+\end{center}
+
+
+
+
+
+
+
+\section*{Question 2 Figures}
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+	
+	\node[shape=circle,draw=black] (a) at (0, 4)     {\textbf{a}};
+	\node[shape=circle,draw=black] (b) at (4, 4)     {\textbf{b}};
+	\node[shape=circle,draw=black] (c) at (6, 2)     {\textbf{c}};
+	\node[shape=circle,draw=black] (d) at (4, 0)     {\textbf{d}};
+	\node[shape=circle,draw=black] (e) at (0, 0)     {\textbf{e}};
+	
+	\path[-, thick] (a) edge (b);
+	\path[-, thick] (a) edge (e);
+	\path[-, thick] (b) edge (c);
+	\path[-, thick] (b) edge (e);
+	\path[-, thick] (b) edge (d);
+	\path[-, thick] (d) edge (c);
+	\path[-, thick] (d) edge (e);
+	
+	\end{tikzpicture} 
+	\caption{Graph G in Q2.}	
+	\label{fig:g2}
+\end{figure}
+
+
+\section*{Question 3 Figures}
+
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}[b]{0.4\textwidth}
+         \centering
+         \begin{tikzpicture}
+	
+	\node[shape=circle,draw=black] (a) at (0, 6)     {\textbf{a}};
+	\node[shape=circle,draw=black] (b) at (6, 6)     {\textbf{b}};
+	\node[shape=circle,draw=black] (c) at (6, 0)     {\textbf{c}};
+	\node[shape=circle,draw=black] (d) at (0, 0)     {\textbf{d}};
+	\node[shape=circle,draw=black] (e) at (1.5, 4.5)     {\textbf{e}};
+	\node[shape=circle,draw=black] (f) at (4.5, 4.5)     {\textbf{f}};
+	\node[shape=circle,draw=black] (g) at (4.5, 1.5)     {\textbf{g}};
+	\node[shape=circle,draw=black] (h) at (1.5, 1.5)     {\textbf{h}};
+	
+	\path[-, thick] (a) edge (b);
+	\path[-, thick] (b) edge (c);
+	\path[-, thick] (c) edge (d);
+	\path[-, thick] (d) edge (a);
+	\path[-, thick] (e) edge (f);
+	\path[-, thick] (f) edge (g);
+	\path[-, thick] (g) edge (h);
+	\path[-, thick] (h) edge (e);
+	\path[-, thick] (h) edge (c);
+	\path[-, thick] (g) edge (c);
+	\path[-, thick] (h) edge (d);
+	\path[-, thick] (a) edge (e);
+	\path[-, thick] (a) edge (f);
+	\path[-, thick] (b) edge (e);
+	\path[-, thick] (b) edge (g);
+	\path[-, thick] (f) edge [bend right=40] (d);
+	
+	\end{tikzpicture} 
+         \caption{G}
+         \label{fig:g}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.4\textwidth}
+         \centering
+         \begin{tikzpicture}
+	
+	\node[shape=circle,draw=black] (h') at (0, 3)     {\textbf{h'}};
+	\node[shape=circle,draw=black] (g') at (0, 1)     {\textbf{g'}};
+	\node[shape=circle,draw=black] (a') at (2, 5)     {\textbf{a'}};
+	\node[shape=circle,draw=black] (b') at (4, 5)     {\textbf{b'}};
+	\node[shape=circle,draw=black] (c') at (6, 3)     {\textbf{c'}};
+	\node[shape=circle,draw=black] (d') at (6, 1)     {\textbf{d'}};
+	\node[shape=circle,draw=black] (e') at (4, -1)     {\textbf{e'}};
+	\node[shape=circle,draw=black] (f') at (2, -1)     {\textbf{f'}};
+	
+    \path[-, thick] (a') edge (b');
+    \path[-, thick] (b') edge (c');
+    \path[-, thick] (c') edge (d');
+    \path[-, thick] (d') edge (e');
+    \path[-, thick] (e') edge (f');
+    \path[-, thick] (f') edge (g');
+    \path[-, thick] (g') edge (h');
+    \path[-, thick] (h') edge (a');
+    \path[-, thick] (a') edge (c');
+    \path[-, thick] (a') edge (g');
+    \path[-, thick] (b') edge (h');
+    \path[-, thick] (b') edge (f');
+    \path[-, thick] (c') edge (e');
+    \path[-, thick] (d') edge (h');
+    \path[-, thick] (d') edge (f');
+    \path[-, thick] (e') edge (g');
+	
+	\end{tikzpicture} 
+         \caption{H}
+         \label{fig:h}
+     \end{subfigure}
+     \caption{Graph G and H in Q3.}
+        \label{fig:g3}
+\end{figure}
+
+
+\section*{Question 4 Figures}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+	
+	\node[shape=circle,draw=black] (a) at (-2, 2)     {\textbf{a}};
+	\node[shape=circle,draw=black] (b) at (0, 4)     {\textbf{b}};
+	\node[shape=circle,draw=black] (c) at (2, 4)     {\textbf{c}};
+	\node[shape=circle,draw=black] (d) at (4, 4)     {\textbf{d}};
+	\node[shape=circle,draw=black] (e) at (0, 2)     {\textbf{e}};
+	\node[shape=circle,draw=black] (f) at (2, 2)     {\textbf{f}};
+	\node[shape=circle,draw=black] (g) at (4, 2)     {\textbf{g}};
+	\node[shape=circle,draw=black] (h) at (0, 0)     {\textbf{h}};
+	\node[shape=circle,draw=black] (i) at (2, 0)     {\textbf{i}};
+	\node[shape=circle,draw=black] (j) at (4, 0)     {\textbf{j}};
+	\node[shape=circle,draw=black] (k) at (6, 2)     {\textbf{k}};
+	
+	\path[-, thick] (a) edge node[left]{3} (b);
+	\path[-, thick] (a) edge node[above]{5} (e);
+	\path[-, thick] (a) edge node[right]{4} (h);
+	\path[-, thick] (b) edge node[above]{2} (c);
+	\path[-, thick] (b) edge node[right]{5} (e);
+	\path[-, thick] (b) edge node[right]{7} (f);
+	\path[-, thick] (c) edge node[above]{3} (d);
+	\path[-, thick] (c) edge node[right]{2} (f);
+	\path[-, thick] (c) edge node[right]{6} (g);
+	\path[-, thick] (d) edge node[right]{7} (g);
+	\path[-, thick] (d) edge node[right]{2} (k);
+	\path[-, thick] (e) edge node[above]{4} (f);
+	\path[-, thick] (e) edge node[right]{7} (h);
+	\path[-, thick] (f) edge node[above]{4} (g);
+	\path[-, thick] (f) edge node[left]{5} (h);
+	\path[-, thick] (f) edge node[right]{4} (i);
+	\path[-, thick] (f) edge node[right]{3} (j);
+	\path[-, thick] (g) edge node[right]{4} (j);
+	\path[-, thick] (g) edge node[above]{6} (k);
+	\path[-, thick] (h) edge node[above]{2} (i);
+	\path[-, thick] (i) edge node[above]{6} (j);
+	\path[-, thick] (j) edge node[left]{5} (k);
+	
+	\end{tikzpicture} 
+	\caption{Graph G in Q4.}	
+	\label{fig:g4}
+\end{figure}
+
+\section*{Question 5 Figures}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+	
+	\node[shape=circle,draw=black] (a) at (0, 3)     {\textbf{a}};
+	\node[shape=circle,draw=black] (b) at (3, 3)     {\textbf{b}};
+	\node[shape=circle,draw=black] (c) at (6, 3)     {\textbf{c}};
+	\node[shape=circle,draw=black] (d) at (0, 0)     {\textbf{d}};
+	\node[shape=circle,draw=black] (e) at (3, 0)     {\textbf{e}};
+	\node[shape=circle,draw=black] (f) at (6, 0)     {\textbf{f}};
+	
+	\path[-, thick] (a) edge node[above]{1} (b);
+	\path[-, thick] (b) edge node[above]{4} (c);
+	\path[-, thick] (a) edge node[right]{3} (d);
+	\path[-, thick] (a) edge node[right]{8} (e);
+	\path[-, thick] (b) edge node[right]{5} (e);
+	\path[-, thick] (c) edge node[right]{2} (e);
+	\path[-, thick] (c) edge node[left]{2} (f);
+	\path[-, thick] (d) edge node[below]{6} (e);
+	\path[-, thick] (e) edge node[below]{2} (f);
+	
+	\end{tikzpicture} 
+	\caption{Graph G in Q5.}	
+	\label{fig:g5}
+\end{figure}
+
+
+\section*{Question 6 Figures}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+	
+	\node[shape=circle,draw=black] (p) at (7, 7.5)     {\textbf{p}};
+	\node[shape=circle,draw=black] (q) at (3, 5)     {\textbf{q}};
+	\node[shape=circle,draw=black] (r) at (11, 5)     {\textbf{r}};
+	\node[shape=circle,draw=black] (s) at (1, 2.5)     {\textbf{s}};
+	\node[shape=circle,draw=black] (t) at (5, 2.5)     {\textbf{t}};
+	\node[shape=circle,draw=black] (u) at (9, 2.5)    {\textbf{u}};
+	\node[shape=circle,draw=black] (v) at (13, 2.5)     {\textbf{v}};
+	\node[shape=circle,draw=black] (w) at (2, 0)     {\textbf{w}};
+	\node[shape=circle,draw=black] (m) at (4, 0)     {\textbf{m}};
+	\node[shape=circle,draw=black] (x) at (8, 0)     {\textbf{x}};
+	\node[shape=circle,draw=black] (y) at (10, 0)     {\textbf{y}};
+	\node[shape=circle,draw=black] (z) at (14, 0)     {\textbf{z}};
+	\node[shape=circle,draw=black] (n) at (9, -2.5)     {\textbf{n}};
+		
+	\path[-] (p) edge (q);
+	\path[-] (p) edge (r);
+	\path[-] (q) edge (t);
+	\path[-] (q) edge (s);
+	\path[-] (r) edge (u);
+	\path[-] (r) edge (v);
+	\path[-] (s) edge (w);
+	\path[-] (t) edge (m);
+	\path[-] (u) edge (x);
+	\path[-] (u) edge (y);
+	\path[-] (v) edge (z);
+	\path[-] (y) edge (n);
+	\end{tikzpicture} 
+	\caption{Tree T in Q6.}	
+	\label{fig:t6}
+\end{figure}
+   
+
+
+\end{document}
+

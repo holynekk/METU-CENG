@@ -1,0 +1,123 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[shortlabels]{enumitem}
+
+\usepackage[hmargin=3cm,vmargin=6.0cm]{geometry}
+%\topmargin=0cm
+\topmargin=-2cm
+\addtolength{\textheight}{6.5cm}
+\addtolength{\textwidth}{2.0cm}
+%\setlength{\leftmargin}{-5cm}
+\setlength{\oddsidemargin}{0.0cm}
+\setlength{\evensidemargin}{0.0cm}
+
+% symbol commands for the curious
+\newcommand{\setZp}{\mathbb{Z}^+}
+\newcommand{\setR}{\mathbb{R}}
+\newcommand{\calT}{\mathcal{T}}
+
+\begin{document}
+
+\section*{Student Information } 
+%Write your full name and id number between the colon and newline
+%Put one empty space character after colon and before newline
+Full Name :  Mert Kaan YILMAZ\\
+Id Number :  2381093\\
+
+% Write your answers below the section tags
+\section*{Answer 1}
+
+    \begin{enumerate}[(a)]
+        \item
+            \begin{enumerate}[(i)]
+                \item $\calT_1$ is a topology. Since the entire space and the empty set are both open ($A,\emptyset \in \calT_1$), and there are no other elements other than those, we can say that $\calT_1$ is a topology.
+                
+                \item $\calT_2$ is not a topology, because "the union of any number of open sets is open" property does not hold for $\calT_2$. For example, $\{a\}\cup\{b\} = \{a, b\} \notin \calT_2$. Therefore, we can say $\calT_2$ is not a topology.
+                
+                \item $\calT_3$ is a topology. $\emptyset$ and A are in the $\calT_3$. The union of the elements of any subset of $\calT_3$ is in $\calT_3$. Also the intersection of the elements of any subset of $\calT_3$ is in $\calT_3$. Therefore, we can say that $\calT_3$ is a topology.
+                
+                \item $\calT_4$ is not a topology. $\emptyset$ and A are in the $\calT_3$, but we cannot say the union of any collection of sets in $\calT_4$ is also in $\calT_4$. For example, $\{a,c\}\cup\{b\}\notin\calT_4$, so $\calT_4$ is not a topology.
+            \end{enumerate}
+            ~ 
+        \item
+            \begin{enumerate}[(i)]
+                \item 
+                \item 
+                \item 
+            \end{enumerate}
+            ~ 
+    \end{enumerate}
+
+\section*{Answer 2}
+    \begin{enumerate}[(a)]
+        \item Yes, f is injective. Let's pick random different points from, Ax(0,1] such that (a1,b1) and (a2,b2). Assume f(a1,b1) = f(a2,b2), so this means a1+b1 = a2+b2. This can be written as a1-a2 = b1-b2. Since the least possible difference for a1-a2 is 1, this equation does not hold, because $|b2-b1|$ $<$ 0 for all values of b1 and b2 in (0,1). 
+        
+        \item No, f is not surjective. Note a+b$\in$[0,$\infty$), and f(a,b) $\neq$ 0 $\forall$(a,b) $\in$ Ax(0,1). If it was, then f(a,b)=0 $\rightarrow$ a+b=0 $\rightarrow$ a = -b. So a and b both should be zero, or b should be equal to -a, but (0,0) $\notin$Ax(0,1) and there are no a such that -a$\in$(0,1). Therefore f is not surjective.
+        
+        \item By Cantor-Schroder-Bernstein theorem, if A and B are sets with $|A|\leq|B|\:and\:|B|\leq|A|$, then $|A| = |B|$. Namely if we can show there are 1-to-1 functions f from A to B and B to A, cardinalities of A and B are same, because there is one-to-one correspondence. Since we have defined f function that is injective and given g function which is also injective, we have bijection between Ax$(0,1)$ and $[0,\infty)$. Therefore, we can say that Ax$(0,1)$ and $[0,\infty)$ have the same cardinality.
+    \end{enumerate}
+\newpage
+\section*{Answer 3}
+    \begin{enumerate}[(a)]
+        \item Since the domain of function is finite, and co-domain is countable; we can list all the function elements like,\{(0,1),(1,1),(0,2),(1,2),(0,3),(1,3),...\}, we can say that this set of function is countable.
+        \item In this function set, our domain is finite and co-domain is countable, so we can list all the function set as \{(0,1),(1,1),(2,1),...,(n,1),(0,2),(1,2),...,(n,2),(0,3)...\}, this function set is countable.
+        \item We count the elements of $\mathbb{Z}^+$ like $\mathbb{Z}^+$ = \{1, -1, 2, -2, 3, -3, ...\}\\
+        Since, we can define a bijective function such that f: $\mathbb{Z}^+\rightarrow \mathbb{Z}^+$ : f(x) = x $\forall x\in\mathbb{Z}^+$\\
+        we can say that the set C of all functions f: $\mathbb{Z}^+\rightarrow \mathbb{Z}^+$ is countable.
+        
+        \item Let's assume there are countable infinite functions from N$\rightarrow$\{0,1\}. Functions that are defined can be written as $f_1 : 00010101...$, $f_2 : 110101010...$, $f_3 : 01010111101...$, ...\\
+        If we pick $n^{th}$ element of $n^{th}$ function for different n values, and construct a function, which is not in this countable infinite list, we prove by contradiction, the set D is uncountably infinite.
+        \item
+    \end{enumerate}
+
+\section*{Answer 4}
+    \begin{enumerate}[(a)]
+        \item 
+            We start by showing that log(n!) is $O(n^n)$. Then we should show that $|log(n!)|$ $\leq$ $C|log(n^n)|$ and in the end, n! $\leq$ C$n^n$ for some C and all n $\geq$ k; k, C $\in$ $\mathbb{Z}^+$. If we choose k=C=1, we will have\\
+            \\
+            log(n!) = log(n$\cdot$(n-1)...2$\cdot$1) \\
+            = log(1) + log(2) + ...+ log(n) $\leq$ log(n) + log(n) + ... + log(n) = n$\cdot$log(n) = $log(n^n)$\\
+            Therefore, $n! < n^n$ \:\:\: and n! is $O(n^n)$.\\\\
+            Now we will show that  log(n!) is $\Omega(n^n)$. If we can show $C|log(n^n)| \leq |log(n!)|$ for some C and all n$\leq$; k, C$\in$ $\mathbb{Z}^+$. We choose C=k=1.\\\\
+            log(n!) = log(1) + log(2) + ... + log(n/2) + ... + log(n) $\geq$ log(n/2) + ... + log(n) = n/2 $\cdot$log(n)\\
+            Then log(n!) $\geq$ $log(n^{n/2})$. When take exponent 10 of both sides, we can write this as,\\
+            n! $\geq$ $(n/2)^{n/2}$ \:\:\: so, n! is $\Omega(n^{n})$\\\\
+            Since n! is $O(n^n)$ and n! is $\Omega(n^{n/2})$ We can say that n! is $\Theta(n^n)$.\\
+            
+        \item
+            If we can show that $(n+a)^b$ is $O(n^b)$ and $(n+a)^b$ is $\Omega(n^b)$, then we can say $(n+a)^b$ is $\Theta(n^b)$.\\\\
+            for n $\geq |a|$ \:\:\:\: $(n+a)^b$ $\leq (2n)^b$ = $2^bn^b$ = $Cn^b$\\
+            Therefore, for C = $2^b$, we can say $(n+a)^b$ is $O(n^b)$\\\\
+            for n $\geq |a|$ \:\:\:\: $(n+a)^b \geq (n/2)^b$ = $2^{-b}n^b$ = $Cn^b$\\
+            Therefore, for C = $2^{-b}$, we can say $(n+a)^b$ is $\Omega(n^b)$\\\\
+            From these results, we concluded $(n+a)^b$ is $\Theta(n^b)$.\\
+
+    \end{enumerate}
+\newpage
+\section*{Answer 5}
+    \begin{enumerate}[(a)]
+        \item Let x = y$\cdot$q+r, and r = x(mod y). We know that $a^b-1 = (a-1)\cdot(a^{b-1}+a^{b-2}+...+1)$, $\forall k\: k\geq 1$.\\
+        Namely, $(a-1)|(a^b-1)$.\\\\
+        If we choose $2^y$ as "a" value, we get $(2^y-1)|(2^{y\cdot q}-1)$.\\
+        Therefore,\\
+        $(2^x-1)\: mod(2^y-1) = 2^r-1 = 2^{x mod(y)}-1$\\
+            
+        \item For the Bézout’s theorem, if a and b are positive integers, then there exist integers s and t such that gcd(a,b) = sa + tb\\
+        \\
+        Let $gcd(2^m-1,2^n-1) = k$\:\:\:(1), then,\\
+        $2^m$-1 $\equiv$ 0 (mod k) and $2^n$-1 $\equiv$ 0 (mod k)\\
+        $2^m$ $\equiv$ 1 (mod k) and $2^n$ $\equiv$ 1 (mod k)\\\\
+        and thus,\\
+        $2^{ms+nt} \equiv$ 1(mod k) \:\:\: $\forall s,t \in Z$\\\\
+        As we mentioned above, ms+nt = gcd(m,n)\\
+        $2^{ms+nt} \equiv$ 1(mod k) = $2^{gcd(m,n)} - 1 \equiv$ 0(mod k) \\Therefore, \\
+        $gcd(2^m-1,2^n-1)$ = $2^{gcd(m,n)} - 1$\\
+            
+
+    \end{enumerate}
+
+
+\end{document} 
