@@ -1,6 +1,6 @@
 # [METU-CENG](http://ceng.metu.edu.tr/)
 
-These are the courses that I have taken from department of computer engineering in MIddle East Technical University. 
+These are the courses that I have taken from department of computer engineering in Middle East Technical University. 
 
 
 ## [CENG-111](CENG-111)
