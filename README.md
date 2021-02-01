@@ -4,8 +4,8 @@ These are the courses that I have taken from department of computer engineering 
 
 
 ## [CENG-111](CENG-111)
-*Middle East Technical University CENG **Introduction to Computer Engineering Concepts** course.*<br>
-**TERM:** Fall 2019-2020<br>
-**Instructor:** Göktürk Üçoluk<br>
+*Middle East Technical University CENG **Introduction to Computer Engineering Concepts** course.*<br><br>
+**TERM:** Fall 2019-2020<br><br>
+**Instructor:** Göktürk Üçoluk<br><br>
 **Including**
 - Take Homa Exams that are given throughout the semester.
