@@ -1,0 +1,110 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{float}
+\usepackage{amsmath}
+
+
+\usepackage[hmargin=3cm,vmargin=6.0cm]{geometry}
+\topmargin=-2cm
+\addtolength{\textheight}{6.5cm}
+\addtolength{\textwidth}{2.0cm}
+\setlength{\oddsidemargin}{0.0cm}
+\setlength{\evensidemargin}{0.0cm}
+\usepackage{indentfirst}
+\usepackage{amsfonts}
+
+\begin{document}
+
+\section*{Student Information}
+
+Name : Mert Kaan YILMAZ\\
+
+ID : 2381093\\
+
+
+\section*{Answer 1}
+
+\subsection*{a)}
+Null hypothesis $H_0$ : $\mu$ = 7\\
+Alternative hypothesis $H_A$ : $\mu$ $>$  7\\
+The 95\% confidence interval for the average grade can be calculated with:\\
+$[ \overline{x} \pm z_{0.05/2}\cdot\frac{\sigma}{(n)^{0.5}}]$ where $z_{0.05/2}$ = 1.960\\
+We also know from question $\mu$ = 7.8 , $\sigma$ = 1.4, and n = 17\\
+Then, we calculate the boundaries as $[ 7.88 \pm 1.960\cdot\frac{1.4}{(17)^{0.5}}]$\\
+= $[ 7.8 \pm 0.666]$\\
+= $[ 7.134, 8466]$\\\\
+Since both upper and lower boundaries are greater than 7, we can say that the average grade is significantly higher than 7.\\
+At the end, we can say that the customer service is successful.
+
+\subsection*{b)}
+From the question text, we know that mean = 7.8, number of observations = 17.\\
+Then, sum of all observations = 7.8 $\cdot$ 17 = 132.6\\
+Giving 1 instead of 10 is giving 9 less.\\
+correct sum = 132.6 - 9 = 123.6\\
+Now the correct mean is equal to 123.6/17 = 7.271\\
+Then we can calculate the confidence interval as:\\
+= $[ 7.271 \pm 1.960\cdot\frac{1.4}{(17)^{0.5}}]$\\
+= $[ 7.271 \pm 0.666]$\\
+= = $[ 6.605, 7.936]$\\\\
+Now, our null hypothesized value is included in the confidence interval. We might not infer that the average grade is significantly greater then 7, so the customer service will not be regarded as successful.\\
+
+\newpage
+
+\subsection*{c)}
+For the value of n = 45, the confidence interval will be:\\
+= $[ 7.271 \pm 1.960\cdot\frac{1.4}{(45)^{0.5}}]$\\
+= $[ 7.271 \pm 0.409]$\\
+= $[ 6.862, 7.680]$\\
+Like in the part b, interval still includes the null hypothesized value, so we won't reject the null hypothesis and cannot conclude that average grade is significantly higher than 7.\\
+Then, we can say that mistake still affect the customer service’s success and the customer service might not be regarded as successful.\\
+
+\subsection*{d)}
+If we set the threshold of success as 8, for example the part c only includes the values which are less than 8 (threshold value). Then we cannot say that the average grade is greater significantly greater than 8. The customer service might not be regarded as successful.\\
+
+\section*{Answer 2}
+$H_0$ : $\mu_{new} = \mu_{old}$ or $\mu_{new} - \mu_{old} = 0$\\
+$H_A$ : $\mu_{new} > \mu_{old}$ or $\mu_{new} - \mu_{old} > 0$\\
+We can do one sided right tail test with $\alpha = 0.05$, $z_\alpha = 1.645$\\
+z =  $\frac{6.2 - 5.8}{(\frac{1.5^2}{55} + \frac{1.1^2}{55})^{0.05}} = 1.595$\\
+1.595 is in the acceptence region. Therefore we cannot reject the null hypothesis which means we do not have sufficient evidence that the new vaccine is better in terms of duration time.\\
+\section*{Answer 3} 
+For 95\% of confidence level $\alpha = 0.05$\\
+$z_{\alpha/2} = z_{0.025} = 1.960$ \\
+
+\subsection*{a)}
+Red Party Candidates: \\
+Sample proportion = 0.48\\
+Sample size m = 400\\
+$z_{0.025} = 1.960$ \\
+margin of error = $z_{0.025}\cdot(\frac{p\cdot(1-p)}{m})^{0.5}$\\
+= $z_{0.025}\cdot(\frac{0.48\cdot(0.52)}{400})^{0.5}$ = 0.049\\
+
+Blue Party Candidates: \\
+Sample proportion = 0.37\\
+Sample size n = 400\\
+$z_{0.025} = 1.960$ \\
+margin of error = $z_{0.025}\cdot(\frac{p\cdot(1-p)}{n})^{0.5}$\\
+= $z_{0.025}\cdot(\frac{0.37\cdot(0.63)}{400})^{0.5}$ = 0.047\\
+
+\subsection*{b)}
+Sample Proportion p = 0.11\\
+sample size k = 400\\
+$z_{0.025} = 1.960$ \\
+margin of error = $z_{0.025}\cdot(\frac{p\cdot(1-p)}{k})^{0.5}$\\
+= $z_{0.025}\cdot(\frac{0.11\cdot(0.89)}{400})^{0.5}$ = 0.031\\
+
+\subsection*{c)}
+margin of error for Reds = 0.049\\
+margin of error Blues = 0.047\\
+We can see that margin of error of Res is greater than Blues\\
+For both parties, sample sizes and confidence levels are equal to each other. Since the proportion of Reds greater, margin of error for that party is also greater.\\
+The, we can say that since the proportion of the Red Party is greater than the Blue Party, the margin of error of Red Party is also greater than the Blue Party.\\
+
+\subsection*{d)}
+We have to calculate margin of errors again with the sample size of 1800.\\
+Then,\\
+margin of error for Reds = $z_{0.025}\cdot(\frac{0.48\cdot(0.52)}{1800})^{0.5}$ = 0.023\\
+margin of error for Blues = $z_{0.025}\cdot(\frac{0.37\cdot(0.63)}{1800})^{0.5}$ = 0.022\\
+margin of error of estimated lead = $z_{0.025}\cdot(\frac{0.11\cdot(0.89)}{11800})^{0.5}$ = 0.015\\
+So, we can infer that, as the sample size increases, margin of error decreases.\\
+\end{document}

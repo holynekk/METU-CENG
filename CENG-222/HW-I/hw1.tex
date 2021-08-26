@@ -1,0 +1,92 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{float}
+\usepackage{amsmath}
+
+
+\usepackage[hmargin=3cm,vmargin=6.0cm]{geometry}
+\topmargin=-2cm
+\addtolength{\textheight}{6.5cm}
+\addtolength{\textwidth}{2.0cm}
+\setlength{\oddsidemargin}{0.0cm}
+\setlength{\evensidemargin}{0.0cm}
+\usepackage{indentfirst}
+\usepackage{amsfonts}
+
+\begin{document}
+
+\section*{Student Information}
+
+Name : Mert Kaan YILMAZ\\
+
+ID : 2381093\\
+
+
+\section*{Answer 1}
+\subsection*{a)}\noindent 
+Expected value for blue dice:\\
+2$\cdot$P(2) + 3$\cdot$P(3) + 4$\cdot$P(4)\\
+= 2$\cdot\frac{4}{6}$ + 3$\cdot\frac{1}{6}$ + 4$\cdot\frac{1}{6}$ = $\frac{15}{6}$ = 2.5\\\\
+Expected value for yellow dice:\\
+1$\cdot$P(1) + 2$\cdot$P(2) + 3$\cdot$P(3)\\
+= 1$\cdot\frac{2}{6}$ + 2$\cdot\frac{2}{6}$ + 3$\cdot\frac{2}{6}$ = $\frac{12}{6}$ = 2\\\\
+Expected value for red dice:\\
+1$\cdot$P(1) + 2$\cdot$P(2) + 3$\cdot$P(3) + 5$\cdot$P(5)\\
+= 1$\cdot\frac{2}{8}$ + 2$\cdot\frac{2}{8}$ + 3$\cdot\frac{3}{8}$ + 5$\cdot\frac{1}{8}$ = $\frac{20}{8}$ = 2.5\\
+\subsection*{b)}\noindent 
+By using expected values that are calculated in part a, Let's say expected values of blue, yellow, and red dice are $E_B, E_Y, E_R$ respectively. Then,\\\\
+Expected values of 2 red and 1 yellow dice is: 2$\cdot E_R$ + $E_Y$ = 2$\cdot$2.5 + 2 = 7\\
+Expected values of 2 yellow and 1 blue dice is: 2$\cdot E_Y$ + $E_B$ = 2$\cdot$2 + 2.5 = 6.5\\\\
+Since expected value of first option is higher than the second one, I would pick "2 red and 1 yellow" (first option) to maximize total value.
+
+\subsection*{c)}\noindent 
+Basically, we say $E_B$ = 4. Then, expected value of second option will be $E_Y$+4 .
+Since expected value of the second option will be 8, which is higher than the first one, choosing second option would give me the maximum total number.
+
+\subsection*{d)}\noindent 
+R, B, and Y are events of choosing red, blue and yellow dice respectively.\\
+We know that, we got outcome of 3 from a dice. Also, our sample space is "getting 3 from blue OR red OR yellow dice". Then, getting a 3 from a red dice probability can be calculated as:\\
+$\frac{P(R)\cdot P(3\vert R)}{P(B)\cdot P(3\vert B)+P(Y)\cdot P(3\vert Y)+P(R)\cdot P(3\vert R)}$ = $\frac{\frac{1}{3}\cdot \frac{3}{8}}{\frac{1}{3}\cdot \frac{1}{6}+\frac{1}{3}\cdot \frac{2}{6}+\frac{1}{3}\cdot \frac{3}{8}}$ = $\frac{3}{7}$
+
+\subsection*{e)}\noindent 
+Possibilities are:\\
+(Red: 3 , Yellow: 3) and (Red: 5 , Yellow: 1)\\
+$P_A(B)$ is the possibility of B outcome for dice A.\\
+Possibility of the total value 6: $P_R(3)\cdot P_Y(3)$ + $P_R(5)\cdot P_Y(1)$=$\frac{3}{8}\cdot\frac{2}{6}+\frac{1}{8}\cdot\frac{2}{6}=\frac{1}{6}$\\
+
+
+\section*{Answer 2}
+
+\subsection*{a)}\noindent 
+There are no electric outages in Ankara and two electric outages in Istanbul: a = 0 and i = 2. Therefore, \\
+P(A=0, I=2) = 0.17
+
+\subsection*{b)}\noindent 
+There are two electric outages in Ankara and no electric outages in Istanbul: a = 2, i = 0.\\
+Since 'a' value can take either 0 or 1, there is no possibility for 'a' to take 2. Therefore P(A=2, I=0) = 0
+
+\subsection*{c)}\noindent 
+There are two electric outages in total: a + i = 2\\
+Possible values of a and i = [ (a=0, i=2), (a=1, i=1) ]\\
+Therefore the result is summation of that two outcomes:\\
+P(A=0, I=2) + P(A=1, I=1) = 0.17 + 0.11 = 0.28
+
+\subsection*{d)}\noindent 
+Single electric outage in Ankara: Since a is 0 or 1, a can only take value 1 and i can be anything(0, 1, 2, 3). Therefore,\\
+the probability is: P(A=1, I=0) + P(A=1, I=1) + P(A=1, I=2) +P(A=1, I=3) = 0.12 + 0.11 + + 0.22 + 0.15 = 0.60
+
+\subsection*{e)}\noindent 
+All possible values of total number of outages is between 0 and 4(both are included). Let's say Y = A + I, then,\\
+$P_Y$(0) = P\{Y = 0\} = P(A=0, I=0) = 0.08\\
+$P_Y$(1) = P\{Y = 1\} = P(A=0, I=1) + P(A=1, I=0) = 0.13 + 0.12 = 0.25\\
+$P_Y$(2) = P\{Y = 2\} = P(A=0, I=2) + P(A=1, I=1) = 0.17 + 0.11 = 0.28\\
+$P_Y$(3) = P\{Y = 3\} = P(A=0, I=3) + P(A=1, I=2) = 0.02 + 0.22 = 0.24\\
+$P_Y$(4) = P\{Y = 4\} = P(A=1, I=3) = 0.15
+
+\subsection*{f)}\noindent 
+They are not independent and to show that, we need to find an example which holds P(A$\cap$I)$\neq$P(A)$\cdot$P(I).\\
+For example, let number of outages as A = 1 and I = 0. Then P(A=1 $\cap$ I=1) = 0.11 where P(A=1) = $\frac{1}{2}$ and P(I=1) = $\frac{1}{4}$ since there are 2 options for 'a' and 4 options for 'i'.\\
+Therefore, P(A=1)$\cdot$P(I=1) = $\frac{1}{2}\cdot\frac{1}{4} = \frac{1}{8} = 12.5$.\\\\
+Because P(A=1$\cap$I=1)$\neq$P(A=1)$\cdot$P(I=1), we can say that electric outages in Ankara and Istanbul are not independent.
+
+\end{document}

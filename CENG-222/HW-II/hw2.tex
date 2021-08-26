@@ -1,0 +1,88 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{float}
+\usepackage{amsmath}
+
+
+\usepackage[hmargin=3cm,vmargin=6.0cm]{geometry}
+\topmargin=-2cm
+\addtolength{\textheight}{6.5cm}
+\addtolength{\textwidth}{2.0cm}
+\setlength{\oddsidemargin}{0.0cm}
+\setlength{\evensidemargin}{0.0cm}
+\usepackage{indentfirst}
+\usepackage{amsfonts}
+
+\begin{document}
+
+\section*{Student Information}
+
+Name : Mert Kaan YILMAZ\\
+
+ID : 2381093\\
+
+
+\section*{Answer 1}
+\subsection*{a)}\noindent 
+The Uniform distribution has a constant density. On the interval (60, 180), its density equals to\\
+f(x) = $\frac{1}{180-60}$ = $\frac{1}{120}$, 60 $<$ x $<$ 180
+
+\subsection*{b)}\noindent 
+From textbook page 82, for that range (a, b) where a = 60 and b = 180 we know that,\\
+Mean value (expected value) = $\frac{a+b}{2}$ = $\frac{60+180}{2}$  = 120\\
+Variance = $\frac{(b-a)^2}{12}$ = $\frac{(180-60)^2}{12}$ = 1200\\
+Standard deviation = $(Variance)^{0.5}$ = $(1200)^{0.5}$ = 34.6410
+
+\subsection*{c)}\noindent 
+The probability P(90$<$X$<$120) is asked.\\
+That can be written as P(90$<$X$<$90+30) = $ \int_{90}^{90+30} \frac{1}{b-a} dx$ = $ \int_{90}^{90+30} \frac{1}{180-60} dx$ = $\frac{30}{120}$ = 0.25
+
+\subsection*{d)}\noindent 
+Probability of the homework will take more than 150 minutes = P(A) = $\frac{180-150}{180-60}$ = 0.25\\
+Probability of that he always takes more than 120 minutes to finish homework = P(B) = $\frac{180-120}{180-60}$ = 0.5\\
+P(A$|$B) = $\frac{P(A\:and\:B)}{P(B)}$ = $\frac{P(A)}{P(B)}$ = $\frac{0.25}{0.5}$ =0.5
+
+\newpage
+\section*{Answer 2}
+
+\subsection*{a)}\noindent 
+We know that, n = 500 and p = 0.02. Therefore, we can say that,\\
+Mean = n$\cdot$p = 500 $\cdot$ 0.02 = 10\\
+Standard Deviation = $(n\cdot p\cdot(1-p))^{0.5}$ = $(500\cdot 0.02\cdot0.98)^{0.5}$ = 3.1305\\
+
+\subsection*{b)}\noindent 
+We need to use continuity correction for this and other questions.\\
+$P\{X<8\} = P\{X<7.5\}$ = $P\{  \frac{X-10}{3.1305} < \frac{7.5-10}{3.1305} \}$ = $\Phi(-0.7985944737)$\\
+we can calculate this value in octave online as:\\
+normcdf(-0.7985944737) = 0.2123
+
+\subsection*{c)}\noindent 
+For this question we can simply subtract the non desired part from 1. Namely, if we subtract probability of less than 16 supporters from 1, we will get the result.\\\\
+$P\{X>15\} = 1-P\{X<15.5\}$ (continuity correction is applied. That's why I wrote 15.5)\\
+$P\{X<15.5\}$ = $1-P\{  \frac{X-10}{3.1305} < \frac{15.5-10}{3.1305} \}$ = $\Phi(1.661380456)$\\
+= 1 - normcdf(1.661380456) = 1 - 0.9517 = 0.0483
+
+\subsection*{d)}\noindent 
+For this question we can calculate the probability as:\\
+(Probability less than or equal to 14) - (Probability less than 7)\\
+In this way we can calculate the probability of desired range.\\
+$P\{X\leq7\} = P\{X<7.5\}$ = $P\{  \frac{X-10}{3.1305} < \frac{7.5-10}{3.1305} \}$ = $\Phi$(-0.7986)\\
+= normcdf(-0.7986) = 0.2123\\
+$P\{X\leq14\} = P\{X<14.5\}$ = $P\{  \frac{X-10}{3.1305} < \frac{14.5-10}{3.1305} \}$ = $\Phi$(1.4375)\\
+= normcdf(1.4375) = 0.9247\\
+$P\{X\leq14\} - P\{X\leq7\}$ = 0.9247 - 0.2123 = 0.7124\\
+
+\newpage
+\section*{Answer 3}
+
+\subsection*{a)}\noindent 
+Int this question, we can think like a building was hit and a new year begin after that. So question statement turns into "What is the probability that there will be no strike in the next year with the average strike count 1?". Therefore, we can calculate it with poisson distribution.\\\\
+f(x)=$\frac{\lambda^x}{x!}\cdot e^{-\lambda}$ where $\lambda = 1\:and\:x=0$\\
+The probability is f(0) = $\frac{1^0}{0!}\cdot e^{-1}$ = 0.3679
+
+\subsection*{b)}\noindent
+This part is also the same as the first part. Either there is a strike or not, for the next 365 days (1 year), it does not matter that there was a strike or not. So the probability can be calculated in the same way as part 1.\\\\
+f(x)=$\frac{\lambda^x}{x!}\cdot e^{-\lambda}$ where $\lambda = 1\:and\:x=0$\\
+The probability is f(0) = $\frac{1^0}{0!}\cdot e^{-1}$ = 0.3679
+
+\end{document}

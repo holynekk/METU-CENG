@@ -1,0 +1,139 @@
+
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{indentfirst}
+\usepackage{amsfonts}
+\usepackage{listings}
+\usepackage[hmargin=3cm,vmargin=6.0cm]{geometry}
+\usepackage{xcolor}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{255, 255, 255}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+\lstset{style=mystyle}
+
+\topmargin=-2cm
+\addtolength{\textheight}{6.5cm}
+\addtolength{\textwidth}{2.0cm}
+\setlength{\oddsidemargin}{0.0cm}
+\setlength{\evensidemargin}{0.0cm}
+
+\begin{document}
+
+\section*{Student Information}
+
+Name : Mert Kaan YILMAZ \\
+
+ID : 2381093 \\
+
+\section*{Homework 4 - Short Report}
+
+In order to conduct a Monte Carlo study, we should determine study size. We can use Normal Approximation as given in the text. For that purpose have used the formula from the textbook page 116.
+
+\begin{center}
+    $N \geq 0.25 (\dfrac{z_{\alpha / 2}}{\varepsilon})^2$
+\end{center}
+
+Again from the same page, we can use the formula $z_{\alpha} = \Phi^{-1}(1-\alpha)$. Therefore, if we take $\alpha = 0.02$ and $\varepsilon = 0.008$ as mentioned in the text, and both the reverse of the formula $ = \Phi(z_{\alpha}) = 1-\alpha$ and the table A4 from the textbook, we can take $z_{\alpha / 2} = 2.3263$.
+
+\begin{align*}
+    N &\geq 0.25 (\dfrac{2.32363}{0.008})^2 \\
+    N &\geq 21139.34254
+\end{align*}
+
+Thus, we can take $N$ as $21140$.
+
+~ \\
+
+\begin{lstlisting}[language=Octave]
+    Bino_n = 50;               %
+    Bino_p = 0.62;             % These are the given values in question text.
+    TotalWeight = zeros(N,1);  %
+\end{lstlisting}
+
+~ \\
+
+We first generate the total weight of the plastics producedby the factory in a week of five workdays by using sampling from binomial distribution.
+
+\begin{lstlisting}[language=Octave]
+    U = rand(5*Bino_n, 1); 
+    i = sum(U < Bino_p);
+    Y = i;  
+    weight = 0; 
+    
+    s = 0; t = 8; m = 0.22; % These are our boundaries for rejection sampling.
+\end{lstlisting}
+
+\newpage
+
+~ \\
+
+This is where rejection sampling occurs.
+
+\begin{lstlisting}[language=Octave]
+    for f=1:Y;                        % We sample Y number of fish.
+	    CX = 0; CY = m; F = 0;          % Initial coordinates.
+	    while (CY > F);                 % When it's under the curve, we accept it.
+	    	U = rand; V = rand;
+	    	CX = s+(t-s)*U; CY = m*V;
+	    	if CX <= 2
+	    		F = 0.07*CX;
+	    	elseif CX <=5
+	    		F = -0.02*(CX-4)^2 + 0.22;
+                        elseif CX <=7
+	    		F = 0.08*(5-CX) + 0.2;
+	    	else
+	    		F = -0.04*CX + 0.32;
+	    	end
+	    end;
+	    weight = weight + CX;	 % Generated weight is added to the total weight.
+    end;
+    TotalWeight(k) = weight; % We maintain accumulate these weights.
+\end{lstlisting}
+
+
+\section*{a)}
+    I have used \texttt{mean} function to estimate the probability that the total weight of the plastics producedby the factory in a week of five workdays exceeds 640 tons. In this case, it is \texttt{mean(TotalWeight>640)}. The result can be found below.
+    
+    \begin{center}
+        Estimated probability = $0.127389$
+    \end{center}
+    
+\section*{b)}
+    In this part, I have used \texttt{mean} function to estimate the total weight of the plastics produced in five days. In this case, it's \texttt{mean(TotalWeight)}.
+    
+    \begin{center}
+        Expected weight = $599.275894$
+    \end{center}
+    
+\section*{c)}
+    To calculate standart deviation, we can simply use \texttt{std} function as \texttt{std(TotalWeight)}. Since our expected weight is close to 599 and standard deviation is around 35, estimated probability is not a surprise. Therefore, we can say that our estimator is accurate.
+    
+    \begin{center}
+        Standard deviation = $35.736913$
+    \end{center}
+    
+\end{document}
