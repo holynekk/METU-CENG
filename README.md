@@ -33,3 +33,26 @@ These are the courses that I have taken from department of computer engineering 
 **Instructor:** Faruk Polat<br><br>
 **Including**
 - Take Home Exams that are given throughout the semester.
+
+## [CENG-222](CENG-222)
+*Middle East Technical University CENG **Statistical Methods For Computer Engineering** course.*<br><br>
+**Term:** Spring 2020-2021<br><br>
+**Instructor:**  Prof.Dr. TOLGA CAN<br><br>
+**Including**
+- Take Home Exams that are given throughout the semester.
+
+## [CENG-232](CENG-232)
+*Middle East Technical University CENG **Logic Design** course.*<br><br>
+**Term:** Spring 2020-2021<br><br>
+**Instructor:** Assist.Prof.Dr HANDE ALEMDAR<br><br>
+**Including**
+- Take Home Exams that are given throughout the semester.
+- Few lab works.
+
+## [CENG-242](CENG-242)
+*Middle East Technical University CENG **Programming Language Concepts** course.*<br><br>
+**Term:** Spring 2020-2021<br><br>
+**Instructor:** Prof.Dr. İSMAİL HAKKI TOROSLU<br><br>
+**Including**
+- Take Home Exams that are given throughout the semester.
+
