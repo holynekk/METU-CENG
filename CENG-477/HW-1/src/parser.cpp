@@ -277,8 +277,8 @@ parser::IntersectionData parser::Sphere::intersect(const Ray & ray) {
     Vec3f center_of_sphere = created_scene.vertex_data[center_vertex_id-1];
     // WRITTEN BY ME ----------------------
 
-    float b = dot_product(ray.direction, vector_subtract(ray.origin, center_of_sphere, 0)); // d.(o-c)
-    float c = dot_product(vector_subtract(ray.origin, center_of_sphere, 0), vector_subtract(ray.origin, center_of_sphere, 0)) - (radius * radius); // (o-c)^2 - R^2
+    float b = dot_product(ray.direction, vector_subtract(ray.origin, center_of_sphere)); // d.(o-c)
+    float c = dot_product(vector_subtract(ray.origin, center_of_sphere), vector_subtract(ray.origin, center_of_sphere)) - (radius * radius); // (o-c)^2 - R^2
 
     float discriminant = (b*b) - c;
 
@@ -291,7 +291,7 @@ parser::IntersectionData parser::Sphere::intersect(const Ray & ray) {
     if(t1 < verySmall && t2 < verySmall)
         return nullIntersect;
 
-    return {t1, normalize(vector_subtract(vector_sum(ray.origin, vector_multipleS(t1, ray.direction, 0), 0), center_of_sphere, 0)), material_id};
+    return {t1, normalize(vector_subtract(vector_sum(ray.origin, vector_multipleS(t1, ray.direction)), center_of_sphere)), material_id};
 }
 
 parser::IntersectionData parser::Triangle::intersect(const Ray & ray) {
@@ -323,7 +323,7 @@ parser::IntersectionData parser::Triangle::intersect(const Ray & ray) {
               / det;
 
     if (t > verySmall && beta + gamma <= 1 && 0 <= beta && 0 <= gamma)
-        return {t, normalize(cross_product(vector_subtract(p3, p2, 0), vector_subtract(p1, p2, 0))), material_id};
+        return {t, normalize(cross_product(vector_subtract(p3, p2), vector_subtract(p1, p2))), material_id};
 
     return nullIntersect;
 
@@ -359,7 +359,7 @@ parser::IntersectionData parser::Face::intersect(const Ray & ray, int material_i
               / det;
 
     if (t > verySmall && beta + gamma <= 1 && 0 <= beta && 0 <= gamma)
-        return {t, normalize(cross_product(vector_subtract(p3, p2, 0), vector_subtract(p1, p2, 0))), material_id};
+        return {t, normalize(cross_product(vector_subtract(p3, p2), vector_subtract(p1, p2))), material_id};
 
     return nullIntersect;
 
@@ -385,7 +385,7 @@ parser::Vec3f computeSpecular(const parser::Material * material, const parser::V
     // (cosAlpha)^ns
     float phongExponentCosAlpha = std::pow(std::max(0.0f, dot_product(normalVector, halfVector)), material->phong_exponent);
     // (cosAlpha)^ns * E(d)
-    parser::Vec3f specular = vector_multipleS(phongExponentCosAlpha, irradiance, 0);
+    parser::Vec3f specular = vector_multipleS(phongExponentCosAlpha, irradiance);
     // Multiplying with specular coeff
     specular.r *= material->specular.r;
     specular.g *= material->specular.g;
@@ -399,7 +399,7 @@ parser::Vec3f computeDiffuse(const parser::Material * material, const parser::Ve
     // cosTheta
     float cosTheta = std::max(0.0f, dot_product(normalizedLightDirection, normalVector));
     // cosTheta * E(d)
-    parser::Vec3f diffuse = vector_multipleS(cosTheta, irradiance, 0);
+    parser::Vec3f diffuse = vector_multipleS(cosTheta, irradiance);
     // Multiplying with diffuse coeff
     diffuse.r *= material->diffuse.r;
     diffuse.g *= material->diffuse.g;
@@ -423,19 +423,19 @@ parser::Vec3f computeRadiance(const parser::Ray & ray, const parser::Intersectio
     parser::Vec3f ambientContribution = computeAmbient(intersectionMaterial, scene->ambient_light);
     pixelColor = ambientContribution;
 
-    parser::Vec3f intersectionPoint = vector_sum(ray.origin, vector_multipleS(intersection.t, ray.direction, 0), 0);
+    parser::Vec3f intersectionPoint = vector_sum(ray.origin, vector_multipleS(intersection.t, ray.direction));
     // subtract intPoint from camera's position (origin) and find the vector that goes to eye
-    parser::Vec3f eyeVector =  vector_subtract(ray.origin, intersectionPoint, 0); //  w_0
+    parser::Vec3f eyeVector =  vector_subtract(ray.origin, intersectionPoint); //  w_0
     parser::Vec3f normalizedEyeVector = normalize(eyeVector);
 
     for (int i = 0; i < scene->point_lights.size(); ++i) {
-        parser::Vec3f lightDirection = vector_subtract(scene->point_lights[i].position, intersectionPoint, 0); // w_i
+        parser::Vec3f lightDirection = vector_subtract(scene->point_lights[i].position, intersectionPoint); // w_i
         parser::Vec3f normalizedLightDirection = normalize(lightDirection);
 
         // Generate the shadow ray s from intersection point to i
         parser::Ray shadowRay;
-        parser::Vec3f intOffset = vector_multipleS(scene->shadow_ray_epsilon, normalizedLightDirection, 0);
-        shadowRay.origin = vector_sum(intersectionPoint, intOffset, 0);
+        parser::Vec3f intOffset = vector_multipleS(scene->shadow_ray_epsilon, normalizedLightDirection);
+        shadowRay.origin = vector_sum(intersectionPoint, intOffset);
         shadowRay.direction = normalizedLightDirection;
 
         // Intersect s with all objects again to check if there is any obj between the light source and point
@@ -464,7 +464,7 @@ parser::Vec3f computeRadiance(const parser::Ray & ray, const parser::Intersectio
             pixelColor.b += diffuseContribution.b;
 
             // Compute Specular
-            parser::Vec3f normalizedHalfVector = normalize(vector_sum(normalizedLightDirection, normalizedEyeVector, 0));
+            parser::Vec3f normalizedHalfVector = normalize(vector_sum(normalizedLightDirection, normalizedEyeVector));
             parser::Vec3f specularContribution = computeSpecular(intersectionMaterial, intersection.normal,
                                                         irradiance, normalizedHalfVector);
             pixelColor.r += specularContribution.r;
@@ -486,8 +486,8 @@ parser::Vec3f computeRadiance(const parser::Ray & ray, const parser::Intersectio
         // Also move set its origin as intersectionPoint which is moved a bit further by shadowRayEps
         parser::Ray reflectedRay;
         float cosTheta = dot_product(intersection.normal, normalizedEyeVector);
-        reflectedRay.direction = vector_sum(vector_multipleS(-1, normalizedEyeVector, 0), vector_multipleS(2 * cosTheta, intersection.normal, 0), 0);
-        reflectedRay.origin = vector_sum(intersectionPoint, vector_multipleS(scene->shadow_ray_epsilon, reflectedRay.direction, 0), 0);
+        reflectedRay.direction = vector_sum(vector_multipleS(-1, normalizedEyeVector), vector_multipleS(2 * cosTheta, intersection.normal));
+        reflectedRay.origin = vector_sum(intersectionPoint, vector_multipleS(scene->shadow_ray_epsilon, reflectedRay.direction));
 
         // Again Calculate the nearest intersection of reflected Ray
         parser::IntersectionData reflectedIntersection = intersectRay(reflectedRay, scene->spheres, scene->triangles, scene->meshes);
@@ -579,13 +579,13 @@ parser::Ray parser::Camera::getPrimaryRay(int row, int col) {
     /* d = s - e */
 
     Vec3f origin = position; // e
-    Vec3f imageCenter = vector_sum(origin, vector_multipleS(near_distance, gaze, 0), 0); // m
-    Vec3f topLeft = vector_sum(vector_sum(imageCenter, vector_multipleS(near_plane.x, right, 0), 0), vector_multipleS(near_plane.w, up, 0), 0); // q
+    Vec3f imageCenter = vector_sum(origin, vector_multipleS(near_distance, gaze)); // m
+    Vec3f topLeft = vector_sum(vector_sum(imageCenter, vector_multipleS(near_plane.x, right)), vector_multipleS(near_plane.w, up)); // q
     float i = (near_plane.y - near_plane.x) * (col + 0.5) / image_width; // s_u
     float j = (near_plane.w - near_plane.z) * (row + 0.5) / image_height; // s_v
-    Vec3f targetPoint = vector_sum(topLeft, vector_subtract(vector_multipleS(i, right, 0), vector_multipleS(j, up, 0), 0), 0); // s
+    Vec3f targetPoint = vector_sum(topLeft, vector_subtract(vector_multipleS(i, right), vector_multipleS(j, up))); // s
     // We have to normalize the direction to the length of 1 so it doesn't skew our results
-    Vec3f rayDirection = normalize(vector_subtract(targetPoint, origin, 0)); // d = s - e
+    Vec3f rayDirection = normalize(vector_subtract(targetPoint, origin)); // d = s - e
 
     Ray ray = Ray(position, rayDirection);
 
@@ -593,94 +593,50 @@ parser::Ray parser::Camera::getPrimaryRay(int row, int col) {
 }
 
 parser::Vec3f parser::PointLight::computeLightContribution(const Vec3f& p) {
-    Vec3f lightDirection = vector_subtract(position, p, 0);
+    Vec3f lightDirection = vector_subtract(position, p);
     float lightDistance = vec_length(lightDirection);
-    Vec3f irradianceContribution =  vector_division((lightDistance * lightDistance), this->intensity, 0);
+    Vec3f irradianceContribution =  vector_division((lightDistance * lightDistance), this->intensity);
     return irradianceContribution;
 }
 
-parser::Vec3f parser::vector_sum(Vec3f first, Vec3f second, int type) { // Maybe I can make those parameters constan ??
+parser::Vec3f parser::vector_sum(Vec3f first, Vec3f second) {
     Vec3f res;
-
-	if(type == 1)
-	{
-		// res.r = first.r + second.r;
-		// res.g = first.g + second.g;
-		// res.b = first.b + second.b;
-	}
-	else 
-	{
-		res.x = first.x + second.x;
-		res.y = first.y + second.y;
-		res.z = first.z + second.z;
-	}
-
+    res.x = first.x + second.x;
+    res.y = first.y + second.y;
+    res.z = first.z + second.z;
 	return res;
 }
 
-parser::Vec3f parser::vector_subtract(Vec3f first, Vec3f second, int type) {
+parser::Vec3f parser::vector_subtract(Vec3f first, Vec3f second) {
     Vec3f res;
-
-	if(type == 1)
-	{
-		// res.r = first.r - second.r;
-		// res.g = first.g - second.g;
-		// res.b = first.b - second.b;
-	}
-	else 
-	{
-		res.x = first.x - second.x;
-		res.y = first.y - second.y;
-		res.z = first.z - second.z;
-	}
-
+    res.x = first.x - second.x;
+    res.y = first.y - second.y;
+    res.z = first.z - second.z;
 	return res;
 }
 
-parser::Vec3f parser::vector_multipleS(float scale, Vec3f vector, int type) {
+parser::Vec3f parser::vector_multipleS(float scale, Vec3f vector) {
     Vec3f res;
-
-	if(type == 1)
-	{
-		// res.r = scale * vector.r;
-		// res.g = scale * vector.g;
-		// res.b = scale * vector.b;
-	}
-	else 
-	{
-		res.x = scale * vector.x;
-		res.y = scale * vector.y;
-		res.z = scale * vector.z;
-	}
-
+    res.x = scale * vector.x;
+    res.y = scale * vector.y;
+    res.z = scale * vector.z;
 	return res;
 }
 
-parser::Vec3f parser::vector_division(float scale, const Vec3f & vector, int type) {
+parser::Vec3f parser::vector_division(float scale, const Vec3f & vector) {
     Vec3f res;
-
-    if(type == 1)
-    {
-        // res.r = vector.r / scale;
-        // res.g = vector.g / scale;
-        // res.b = vector.b / scale;
-    }
-    else
-    {
-        res.x = vector.x / scale;
-        res.y = vector.y / scale;
-        res.z = vector.z / scale;
-    }
-
+    res.x = vector.x / scale;
+    res.y = vector.y / scale;
+    res.z = vector.z / scale;
     return res;
 }
 
 parser::Vec3f parser::Ray::getPoint(float t) {
-    return vector_sum( origin, vector_multipleS(t, direction, 0), 0);
+    return vector_sum(origin, vector_multipleS(t, direction));
 }
 
 float parser::Ray::gett(const Vec3f & p) {
-    Vec3f diff = vector_subtract(p,this->origin, 0);
+    Vec3f diff = vector_subtract(p,this->origin);
     return (diff.x + diff.y + diff.z)  / (direction.x + direction.y + direction.z);
 }
 

@@ -36,7 +36,7 @@ parser::Vec3f normalize(parser::Vec3f vector) {
         zero_vector.z = 0;
         return zero_vector;
     }
-    vector = vector_division(vecLength, vector, 0);
+    vector = vector_division(vecLength, vector);
     return vector;
 }
 // --------------------------------------------------------------------------------------

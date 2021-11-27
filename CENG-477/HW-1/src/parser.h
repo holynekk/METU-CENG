@@ -35,14 +35,14 @@ namespace parser
         float x, y, z, w;
     };
 
-    typedef union Color {
+    union Color {
         struct {
             unsigned char red;
             unsigned char grn;
             unsigned char blu;
         };
         unsigned char channel[3];
-    } Color;
+    };
 
     struct IntersectionData {
         float t;
@@ -51,21 +51,19 @@ namespace parser
         int materialId;
     };
 
-    Vec3f vector_sum(Vec3f first, Vec3f second, int type);
-    Vec3f vector_subtract(Vec3f first, Vec3f second, int type);
-    Vec3f vector_multipleS(float scale, Vec3f vector, int type);
-    Vec3f vector_division(float scale, const Vec3f & vector, int type = 0);
+    Vec3f vector_sum(Vec3f vec1, Vec3f vec2);
+    Vec3f vector_subtract(Vec3f vec1, Vec3f vec2);
+    Vec3f vector_multipleS(float num, Vec3f vec);
+    Vec3f vector_division(float num, const Vec3f & vec);
 
-    typedef struct Ray {
-
+    struct Ray {
         Vec3f origin;
 	    Vec3f direction;
         Ray(){};
         Ray(const Vec3f& origin, const Vec3f& direction) : origin(origin), direction(direction){};
         Vec3f getPoint(float t);
         float gett(const Vec3f & p);
-
-    } Ray;
+    };
 
     struct Camera
     {
