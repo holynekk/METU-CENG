@@ -23,6 +23,7 @@ namespace parser
             float z;
             float b;
         };
+        // float x, y, z, r, g, b;
     };
 
     struct Vec3i
@@ -35,30 +36,25 @@ namespace parser
         float x, y, z, w;
     };
 
-    union Color {
-        struct {
-            unsigned char red;
-            unsigned char grn;
-            unsigned char blu;
-        };
+    struct Color {
         unsigned char channel[3];
     };
 
     struct IntersectionData {
         float t;
         Vec3f normal;
-        // Vec3f intersection;
         int materialId;
     };
 
     Vec3f vector_sum(Vec3f vec1, Vec3f vec2);
     Vec3f vector_subtract(Vec3f vec1, Vec3f vec2);
     Vec3f vector_multipleS(float num, Vec3f vec);
-    Vec3f vector_division(float num, const Vec3f & vec);
+    Vec3f vector_division(float num, Vec3f & vec);
 
     struct Ray {
         Vec3f origin;
 	    Vec3f direction;
+
         Ray(){};
         Ray(const Vec3f& origin, const Vec3f& direction) : origin(origin), direction(direction){};
         Vec3f getPoint(float t);
@@ -80,12 +76,12 @@ namespace parser
     };
 
     struct Image {
-        Color** data;
+        unsigned char* data;
         int width;
         int height;
 
         Image(int width, int height);
-        void setPixelValue(int col, int row, const Color& color);
+        void setPixelValue(int col, int row, Color& color, int width__val);
         void saveImage(std::string imageName);	
     };
 
