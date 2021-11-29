@@ -8,9 +8,8 @@
 
 #include <limits>  //
 #include <thread>  // Included by me
-#include <mutex>   //
 #define ONE_MILLIONTH 1e-6
-#define NO_INTERSECTION {DEFINED_INFINITY,{},-1}
+#define NO_INTERSECTION { DEFINED_INFINITY, {}, -1 }
 
 // Max float number is assigned as infinity to use in intersection functions
 const float DEFINED_INFINITY = std::numeric_limits<float>::max();
@@ -44,8 +43,8 @@ void parser::Scene::loadFromXml(const std::string &filepath)
     }
     stream >> background_color.x >> background_color.y >> background_color.z;
 
-    //Get ShadowRayEpsilon
-    element = root->FirstChildElement("ShadowRayEpsilon");
+    //Get shadow_rayEpsilon
+    element = root->FirstChildElement("shadow_rayEpsilon");
     if (element)
     {
         stream << element->GetText() << std::endl;
@@ -231,108 +230,127 @@ void parser::Scene::loadFromXml(const std::string &filepath)
 
 // INTERSECTION FUNCTIONS -----------------------------------------------------------------------------------
     // General ray intersection function
-parser::Return_Intersection intersect_obj(parser::Ray ray, std::vector<parser::Sphere> spheres, std::vector<parser::Triangle> triangles, std::vector<parser::Mesh> meshes) {
-    
-    parser::Return_Intersection closest_intersection = { DEFINED_INFINITY, {}, -1 };
+parser::Return_Intersection intersect_obj(parser::Ray &ray, std::vector<parser::Sphere> &spheres, std::vector<parser::Triangle> &triangles, std::vector<parser::Mesh> &meshes) {
+    // The closest intersection Return_Intersection info of this ray. Defined at infinity at the beginning
+    parser::Return_Intersection closest_intersection = NO_INTERSECTION;
+    // Return_Intersection about all intersections generated in for loops
+    parser::Return_Intersection current_intersection;
     // Since all objects are not together, this block iterate all objects (spheres, triangles, and meshes, respectively) one by one
     // and then sets the value of closest_intersection. At each for loop, object calls its own intersection method.
+
+    // Spheres
     for (int i = 0; i < spheres.size(); i++) {
-        parser::Return_Intersection current_intersection = spheres[i].intersect(ray);
-        if (current_intersection.t != DEFINED_INFINITY) {
-            if (current_intersection.t < closest_intersection.t) {
-                closest_intersection = current_intersection;
-            } else;
+        current_intersection = spheres[i].intersect(ray);
+        if (current_intersection.t < closest_intersection.t) {
+            closest_intersection = current_intersection;
         } else;
     }
+    // Triangles
     for (int i = 0; i < triangles.size(); i++) {
-        parser::Return_Intersection current_intersection = triangles[i].intersect(ray);
-        if (current_intersection.t != DEFINED_INFINITY) {
-            if (current_intersection.t < closest_intersection.t) {
-                closest_intersection = current_intersection;
-            } else;
+        current_intersection = triangles[i].intersect(ray);
+        if (current_intersection.t < closest_intersection.t) {
+            closest_intersection = current_intersection;
         } else;
     }
+    // Meshes
     for (int i = 0; i < meshes.size(); i++) {
-        parser::Return_Intersection current_intersection = meshes[i].intersect(ray);
-        if (current_intersection.t != DEFINED_INFINITY) {
-            if (current_intersection.t < closest_intersection.t) {
-                closest_intersection = current_intersection;
-            } else;
+        current_intersection = meshes[i].intersect(ray);
+        if (current_intersection.t < closest_intersection.t) {
+            closest_intersection = current_intersection;
         } else;
     }
     return closest_intersection;
 }
 
     // Sphere ray intersection function
-parser::Return_Intersection parser::Sphere::intersect(Ray & ray) {
+parser::Return_Intersection parser::Sphere::intersect(parser::Ray &ray) {
+    // Declaring intersection
+    parser::Return_Intersection intersection_point;
     // Get center point of sphere
     Vec3f center_of_sphere = created_scene.vertex_data[center_vertex_id-1];
+    Vec3f distance_centers = vector_subtract(ray.origin, center_of_sphere);
 
-    float b = dot_product(ray.direction, vector_subtract(ray.origin, center_of_sphere));
-    float c = dot_product(vector_subtract(ray.origin, center_of_sphere), vector_subtract(ray.origin, center_of_sphere)) - (radius * radius);
+    float b = dot_product(ray.direction, distance_centers);
+    float c = dot_product(vector_subtract(ray.origin, center_of_sphere), distance_centers) - pow(radius, 2);
     // Calculate discriminant
-    float dscrmnt_val = (b*b) - c;
-    // Determine whether there is a rot or not
-    if(dscrmnt_val < ONE_MILLIONTH) {
-        return NO_INTERSECTION;
-    } else;
+    float dscrmnt_val = pow(b, 2) - c;
 
     float t1 = -b - sqrt(dscrmnt_val);
     float t2 = -b + sqrt(dscrmnt_val);
 
-    if(t1 < ONE_MILLIONTH && t2 < ONE_MILLIONTH) {
+    // Determine whether there is a rot or not || check t1-t2 condition
+    if(dscrmnt_val < ONE_MILLIONTH || (t1 < ONE_MILLIONTH && t2 < ONE_MILLIONTH)) {
         return NO_INTERSECTION;
     } else;
-
-    return { t1, normalize(vector_subtract(vector_sum(ray.origin, vector_multipleS(t1, ray.direction)), center_of_sphere)), material_id };
+    intersection_point.t = t1;
+    intersection_point.materialId = material_id;
+    intersection_point.normal = normalize(vector_subtract(vector_sum(ray.origin, vector_multipleS(t1, ray.direction)), center_of_sphere));
+    return intersection_point;
 }
 
     // Triangle ray intersection function
-parser::Return_Intersection parser::Triangle::intersect(Ray & ray) {
+parser::Return_Intersection parser::Triangle::intersect(parser::Ray &ray) {
+    // Declaring intersection
+    parser::Return_Intersection intersection_point;
+    // Get vertices
     Vec3f vec_v0 = created_scene.vertex_data[indices.v0_id-1];
     Vec3f vec_v1 = created_scene.vertex_data[indices.v1_id-1];
     Vec3f vec_v2 = created_scene.vertex_data[indices.v2_id-1];
+    // Variables to use in determinant function
+    Vec3f p1_minus_p2 = vector_subtract(vec_v0, vec_v1);
+    Vec3f p1_minus_p3 = vector_subtract(vec_v0, vec_v2);
+    Vec3f p1_minus_origin = vector_subtract(vec_v0, ray.origin);
 
-    float dtrmnt_val = calc_determinant( vec_v0.x - vec_v1.x, vec_v0.x - vec_v2.x, ray.direction.x, vec_v0.y - vec_v1.y, vec_v0.y - vec_v2.y, ray.direction.y, vec_v0.z - vec_v1.z, vec_v0.z - vec_v2.z, ray.direction.z);
+    float dtrmnt_val = calc_determinant(p1_minus_p2, p1_minus_p3, ray.direction);
 
     if(dtrmnt_val < ONE_MILLIONTH && dtrmnt_val > -ONE_MILLIONTH) {
         return NO_INTERSECTION;
     } else;
         
     // TODO: Make that determinant function great again!!
-    float beta = calc_determinant( vec_v0.x - ray.origin.x, vec_v0.x - vec_v2.x, ray.direction.x, vec_v0.y - ray.origin.y, vec_v0.y - vec_v2.y, ray.direction.y, vec_v0.z - ray.origin.z, vec_v0.z - vec_v2.z, ray.direction.z) / dtrmnt_val;
-    float gamma = calc_determinant( vec_v0.x - vec_v1.x, vec_v0.x - ray.origin.x, ray.direction.x, vec_v0.y - vec_v1.y, vec_v0.y - ray.origin.y, ray.direction.y, vec_v0.z - vec_v1.z, vec_v0.z - ray.origin.z, ray.direction.z) / dtrmnt_val;
-    float t = calc_determinant( vec_v0.x - vec_v1.x, vec_v0.x - vec_v2.x, vec_v0.x - ray.origin.x, vec_v0.y - vec_v1.y, vec_v0.y - vec_v2.y, vec_v0.y - ray.origin.y, vec_v0.z - vec_v1.z, vec_v0.z - vec_v2.z, vec_v0.z - ray.origin.z) / dtrmnt_val;
+    float beta = calc_determinant(p1_minus_origin, p1_minus_p3, ray.direction) / dtrmnt_val;
+    float gamma = calc_determinant(p1_minus_p2, p1_minus_origin, ray.direction) / dtrmnt_val;
+    float t = calc_determinant(p1_minus_p2, p1_minus_p3, p1_minus_origin) / dtrmnt_val;
 
     if (t > ONE_MILLIONTH && 0 <= gamma && 0 <= beta && beta + gamma <= 1) {
-        return {t, normalize(cross_product(vector_subtract(vec_v2, vec_v1), vector_subtract(vec_v0, vec_v1))), material_id};
+        intersection_point.t = t;
+        intersection_point.materialId = material_id;
+        intersection_point.normal = normalize(cross_product(vector_subtract(vec_v2, vec_v1), vector_subtract(vec_v0, vec_v1)));
+        return intersection_point;
     } else;
-
     return NO_INTERSECTION;
 }
 
     // This is for Mesh faces. Completely same as the triangle one above.
-parser::Return_Intersection parser::Face::intersect(Ray & ray, int material_id) {
-
+parser::Return_Intersection parser::Face::intersect(parser::Ray &ray, int material_id) {
+    // Declaring intersection
+    parser::Return_Intersection intersection_point;
+    // Get vertices
     Vec3f vec_v0 = created_scene.vertex_data[v0_id-1];
     Vec3f vec_v1 = created_scene.vertex_data[v1_id-1];
     Vec3f vec_v2 = created_scene.vertex_data[v2_id-1];
-
-    float dtrmnt_val = calc_determinant( vec_v0.x - vec_v1.x, vec_v0.x - vec_v2.x, ray.direction.x, vec_v0.y - vec_v1.y, vec_v0.y - vec_v2.y, ray.direction.y, vec_v0.z - vec_v1.z, vec_v0.z - vec_v2.z, ray.direction.z);
+    // Variables to use in determinant function
+    Vec3f p1_minus_p2 = vector_subtract(vec_v0, vec_v1);
+    Vec3f p1_minus_p3 = vector_subtract(vec_v0, vec_v2);
+    Vec3f p1_minus_origin = vector_subtract(vec_v0, ray.origin);
+    // Calculating determinant
+    float dtrmnt_val = calc_determinant(p1_minus_p2, p1_minus_p3, ray.direction);
 
     if(dtrmnt_val < ONE_MILLIONTH && dtrmnt_val > -ONE_MILLIONTH) {
         return NO_INTERSECTION;
     } else;
+        
+    // TODO: Make that determinant function great again!!
+    float beta = calc_determinant(p1_minus_origin, p1_minus_p3, ray.direction) / dtrmnt_val;
+    float gamma = calc_determinant(p1_minus_p2, p1_minus_origin, ray.direction) / dtrmnt_val;
+    float t = calc_determinant(p1_minus_p2, p1_minus_p3, p1_minus_origin) / dtrmnt_val;
 
-    // TODO: Make that determinant function great again!
-    float beta = calc_determinant( vec_v0.x - ray.origin.x, vec_v0.x - vec_v2.x, ray.direction.x, vec_v0.y - ray.origin.y, vec_v0.y - vec_v2.y, ray.direction.y, vec_v0.z - ray.origin.z, vec_v0.z - vec_v2.z, ray.direction.z) / dtrmnt_val;
-    float gamma = calc_determinant( vec_v0.x - vec_v1.x, vec_v0.x - ray.origin.x, ray.direction.x, vec_v0.y - vec_v1.y, vec_v0.y - ray.origin.y, ray.direction.y, vec_v0.z - vec_v1.z, vec_v0.z - ray.origin.z, ray.direction.z) / dtrmnt_val;
-    float t = calc_determinant( vec_v0.x - vec_v1.x, vec_v0.x - vec_v2.x, vec_v0.x - ray.origin.x, vec_v0.y - vec_v1.y, vec_v0.y - vec_v2.y, vec_v0.y - ray.origin.y, vec_v0.z - vec_v1.z, vec_v0.z - vec_v2.z, vec_v0.z - ray.origin.z) / dtrmnt_val;
-
-    if (t > ONE_MILLIONTH && beta + gamma <= 1 && 0 <= beta && 0 <= gamma) {
-        return {t, normalize(cross_product(vector_subtract(vec_v2, vec_v1), vector_subtract(vec_v0, vec_v1))), material_id};
+    if (t > ONE_MILLIONTH && 0 <= gamma && 0 <= beta && beta + gamma <= 1) {
+        intersection_point.t = t;
+        intersection_point.materialId = material_id;
+        intersection_point.normal = normalize(cross_product(vector_subtract(vec_v2, vec_v1), vector_subtract(vec_v0, vec_v1)));
+        return intersection_point;
     } else;
-
     return NO_INTERSECTION;
 }
 
@@ -350,96 +368,77 @@ parser::Return_Intersection parser::Mesh::intersect(Ray & ray) {
     return current_min_inters;
 }
 
-parser::Vec3f calc_specular(parser::Material *material, parser::Vec3f &normal_vector, parser::Vec3f &irradiance, parser::Vec3f &half_vector) {
-    float pexpo_calpha = std::pow(std::max(0.0f, dot_product(normal_vector, half_vector)), material->phong_exponent);
-    parser::Vec3f spclr = vector_multipleS(pexpo_calpha, irradiance);
-
-    spclr.r *= material->specular.r;
-    spclr.g *= material->specular.g;
-    spclr.b *= material->specular.b;
-    return spclr;
+// Calculates ambient contribution
+parser::Vec3f calc_ambient(parser::Material &material, parser::Vec3f &ambient_light) {
+    return { material.ambient.x * ambient_light.x, material.ambient.y * ambient_light.y, material.ambient.z * ambient_light.z};
 }
 
-parser::Vec3f calc_diffuse(parser::Material *material, parser::Vec3f &normal_vector, parser::Vec3f &ligth_drctn_normlzd, parser::Vec3f &irradiance) {
-    float cos_tht = std::max(0.0f, dot_product(ligth_drctn_normlzd, normal_vector));
-    parser::Vec3f diffuse = vector_multipleS(cos_tht, irradiance);
-
-    diffuse.r *= material->diffuse.r;
-    diffuse.g *= material->diffuse.g;
-    diffuse.b *= material->diffuse.b;
-    return diffuse;
-}
-
-parser::Vec3f calc_ambient(parser::Material * material, parser::Vec3f & ambientLight) {
-    return { material->ambient.r * ambientLight.r, material->ambient.g * ambientLight.g, material->ambient.b * ambientLight.b};
+// Calculates light contribution
+parser::Vec3f parser::PointLight::calc_light_contribution(Vec3f &p) {
+    return vector_division((std::pow(vec_length(vector_subtract(position, p)), 2)), intensity);;
 }
 
 parser::Vec3f calc_radiance(parser::Scene *scene, parser::Ray &ray, parser::Return_Intersection &intersection, int remainingRecursion) {
-    // Vector for rgb of pixel
-    parser::Vec3f pixel_color = {};
-    parser::Material * obj_material = &scene->materials[intersection.materialId - 1];
+    // Get material struct from scene->materials
+    parser::Material obj_material = scene->materials[intersection.materialId - 1];
     // pixel_color += calc_ambient(x) (Since pixe color is empty, I directly asssigned it.)
-    parser::Vec3f ambient_contribution = calc_ambient(obj_material, scene->ambient_light);
-    pixel_color = ambient_contribution;
+    parser::Vec3f pixel_color = calc_ambient(obj_material, scene->ambient_light);
     parser::Vec3f intersection_point = vector_sum(ray.origin, vector_multipleS(intersection.t, ray.direction));
-    parser::Vec3f eye_vec =  vector_subtract(ray.origin, intersection_point);
-    parser::Vec3f normalized_eye_vec = normalize(eye_vec);
+    // Generating normalized eye vector -> normalize(eye_vector)
+    parser::Vec3f normalized_eye_vec = normalize(vector_subtract(ray.origin, intersection_point));
 
+    // Iterate through all light in the scene
     for (int i = 0; i < scene->point_lights.size(); ++i) {
+        // Calculating light directions
         parser::Vec3f light_drct = vector_subtract(scene->point_lights[i].position, intersection_point);
         parser::Vec3f ligth_drctn_normlzd = normalize(light_drct);
         // Generate shadow rays
-        parser::Ray shadowRay;
-        parser::Vec3f intOffset = vector_multipleS(scene->shadow_ray_epsilon, ligth_drctn_normlzd);
-        shadowRay.origin = vector_sum(intersection_point, intOffset);
-        shadowRay.direction = ligth_drctn_normlzd;
-        parser::Return_Intersection shadowIntersection = intersect_obj(shadowRay, scene->spheres, scene->triangles, scene->meshes);
+        parser::Vec3f int_offset = vector_multipleS(scene->shadow_ray_epsilon, ligth_drctn_normlzd);
+        parser::Ray shadow_ray = parser::Ray(vector_sum(intersection_point, int_offset), ligth_drctn_normlzd);
 
-        if (shadowIntersection.t >= vec_length(light_drct)) {
+        // if point not in shadow -> add dffs_contribute + spclr_contribute to pixel || else an object between light and point -> no contribution
+        if (intersect_obj(shadow_ray, scene->spheres, scene->triangles, scene->meshes).t >= vec_length(light_drct)) {
+            // Add light's contribution to pixel
             parser::Vec3f irradiance = scene->point_lights[i].calc_light_contribution(intersection_point);
-            // Calculate dffs_contribute
-            parser::Vec3f dffs_contribute = calc_diffuse(obj_material, intersection.normal, ligth_drctn_normlzd, irradiance);
-            pixel_color.r += dffs_contribute.r;
-            pixel_color.g += dffs_contribute.g;
-            pixel_color.b += dffs_contribute.b;
-            // Calculate spclr_contribute
+            // Calculate dffs_contribute and add to pixel_color
+            parser::Vec3f dffs_contribute = vector_multipleS(std::max(0.0f, dot_product(ligth_drctn_normlzd, intersection.normal)), irradiance);
+            pixel_color.x += dffs_contribute.x *= obj_material.diffuse.x;
+            pixel_color.y += dffs_contribute.y *= obj_material.diffuse.y;
+            pixel_color.z += dffs_contribute.z *= obj_material.diffuse.z;
+            // Calculate spclr_contribute and add to pixel_color
             parser::Vec3f normalized_half_vec = normalize(vector_sum(ligth_drctn_normlzd, normalized_eye_vec));
-            parser::Vec3f spclr_contribute = calc_specular(obj_material, intersection.normal, irradiance, normalized_half_vec);
-            pixel_color.r += spclr_contribute.r;
-            pixel_color.g += spclr_contribute.g;
-            pixel_color.b += spclr_contribute.b;
+            parser::Vec3f spclr_contribute = vector_multipleS(std::pow(std::max(0.0f, dot_product(intersection.normal, normalized_half_vec)), obj_material.phong_exponent), irradiance);
+            pixel_color.x += spclr_contribute.x *= obj_material.specular.x;
+            pixel_color.y += spclr_contribute.y *= obj_material.specular.y;
+            pixel_color.z += spclr_contribute.z *= obj_material.specular.z;
         } else;
     }
 
-    if ((obj_material->mirror.x > 0 || obj_material->mirror.y > 0 || obj_material->mirror.z > 0) && remainingRecursion > 0) {
+    if ((obj_material.mirror.x > 0 || obj_material.mirror.y > 0 || obj_material.mirror.z > 0) && remainingRecursion > 0) {
         parser::Ray reflectedRay;
-        float cos_tht = dot_product(intersection.normal, normalized_eye_vec);
-        reflectedRay.direction = vector_sum(vector_multipleS(-1, normalized_eye_vec), vector_multipleS(2 * cos_tht, intersection.normal));
+        reflectedRay.direction = vector_sum(vector_multipleS(-1, normalized_eye_vec), vector_multipleS(2 * dot_product(intersection.normal, normalized_eye_vec), intersection.normal));
         reflectedRay.origin = vector_sum(intersection_point, vector_multipleS(scene->shadow_ray_epsilon, reflectedRay.direction));
         parser::Return_Intersection reflection_intersect = intersect_obj(reflectedRay, scene->spheres, scene->triangles, scene->meshes);
 
         if (reflection_intersect.t != DEFINED_INFINITY) {
             parser::Vec3f reflection_radiance = calc_radiance(scene, reflectedRay, reflection_intersect, remainingRecursion - 1);
-            reflection_radiance.x *= obj_material->mirror.x;
-            reflection_radiance.y *= obj_material->mirror.y;
-            reflection_radiance.z *= obj_material->mirror.z;
-            pixel_color.r += reflection_radiance.r;
-            pixel_color.g += reflection_radiance.g;
-            pixel_color.b += reflection_radiance.b;
+            pixel_color.x += reflection_radiance.x *= obj_material.mirror.x;
+            pixel_color.y += reflection_radiance.y *= obj_material.mirror.y;
+            pixel_color.z += reflection_radiance.z *= obj_material.mirror.z;
         } else;
     } else;
-    pixel_color.r = std::min(std::max(0.0f, pixel_color.r), 255.0f);
-    pixel_color.g = std::min(std::max(0.0f, pixel_color.g), 255.0f);
-    pixel_color.b = std::min(std::max(0.0f, pixel_color.b), 255.0f);
+    pixel_color.x = std::min(std::max(0.0f, pixel_color.x), 255.0f);
+    pixel_color.y = std::min(std::max(0.0f, pixel_color.y), 255.0f);
+    pixel_color.z = std::min(std::max(0.0f, pixel_color.z), 255.0f);
     return pixel_color;
 }
 
-// Converting Vec3i into Vec3f
-parser::Vec3f converter(parser::Vec3i a) { // TODO: Check if it is working w/o a problem
+// Converting Vec3i into Vec3f || Vec3i<scene->background_color> --> Vec3f<scene->background_color>
+parser::Vec3f converter(parser::Vec3i a) {
     parser::Vec3f result_vec;
-    result_vec.r = a.x;
-    result_vec.g = a.y;
-    result_vec.b = a.z;
+    result_vec.x = a.x;
+    result_vec.y = a.y;
+    result_vec.z = a.z;
     return result_vec;
 }
 
@@ -449,33 +448,28 @@ parser::Color pixel_render(int col, int row, parser::Scene * scene, int camera_i
     parser::Ray primRay = scene->cameras[camera_indice].generate_prim_ray(row, col);
     // Returns intersection data (t value, normal vector, and material_id)
     parser::Return_Intersection intersection = intersect_obj(primRay, scene->spheres, scene->triangles, scene->meshes);
-    // if -> There is a determined t value (the ray hit an object); else -> no intersection;
+    // if -> There is a determined t value (the ray hit an object) -> render pixel; else -> no intersection -> render background_color;
     if (intersection.t != DEFINED_INFINITY) {
         parser::Vec3f pixel_color = calc_radiance(scene, primRay, intersection, scene->max_recursion_depth);
-        return { (unsigned char)(pixel_color.r), (unsigned char)(pixel_color.g), (unsigned char)(pixel_color.b)};
+        return { (unsigned char)(pixel_color.x), (unsigned char)(pixel_color.y), (unsigned char)(pixel_color.z)};
     } else {
         parser::Vec3f temp = converter(scene->background_color);
-        return { (unsigned char)(temp.r), (unsigned char)(temp.g), (unsigned char)(temp.b) };
+        return { (unsigned char)(temp.x), (unsigned char)(temp.y), (unsigned char)(temp.z) };
     }
 }
 
+// Generate primary rays emitted from camera
 parser::Ray parser::Camera::generate_prim_ray(int row, int col) {
-    Vec3f origin = position;
-    Vec3f img_mid = vector_sum(origin, vector_multipleS(near_distance, gaze));
-    Vec3f top_left_corner = vector_sum(vector_sum(img_mid, vector_multipleS(near_plane.x, right)), vector_multipleS(near_plane.w, up));
+    // Image middle + near_plane top-left info
+    Vec3f top_left_corner = vector_sum(vector_sum(vector_sum(position, vector_multipleS(near_distance, gaze)), vector_multipleS(near_plane.x, right)), vector_multipleS(near_plane.w, up));
+    // su & sv variables
     float i = (near_plane.y - near_plane.x) * (col + 0.5) / image_width;
     float j = (near_plane.w - near_plane.z) * (row + 0.5) / image_height;
-    Vec3f target = vector_sum(top_left_corner, vector_subtract(vector_multipleS(i, right), vector_multipleS(j, up)));
-    Vec3f ray_drct = normalize(vector_subtract(target, origin));
+    // Target - Position, then normalize 
+    Vec3f ray_drct = normalize(vector_subtract(vector_sum(top_left_corner, vector_subtract(vector_multipleS(i, right), vector_multipleS(j, up))), position));
+    // Generated primary ray
     Ray ray = Ray(position, ray_drct);
     return ray;
-}
-
-parser::Vec3f parser::PointLight::calc_light_contribution(Vec3f &p) {
-    Vec3f light_drct = vector_subtract(position, p);
-    float ligth_dist = vec_length(light_drct);
-    Vec3f irradiance_contribute =  vector_division((std::pow(ligth_dist, 2)), intensity);
-    return irradiance_contribute;
 }
 
 // VECTOR (Vec3f) RELATED CALCULATION FUNCTIONS --------------------------
@@ -494,7 +488,7 @@ parser::Vec3f parser::vector_subtract(Vec3f first, Vec3f second) {
     result_vec.z = first.z - second.z;
 	return result_vec;
 }
-    // TODO: make float arguments of vector_multipleS and vector_division second arguments of functions for better understanding
+    // TODO: replace float and Vec3f arguments of vector_multipleS and vector_division for better understanding
 parser::Vec3f parser::vector_multipleS(float scale, Vec3f vector) {
     Vec3f result_vec;
     result_vec.x = scale * vector.x;
@@ -512,10 +506,12 @@ parser::Vec3f parser::vector_division(float scale, Vec3f vector) {
 }
 // ----------------------------------------------------------------------
 
+// Calculates the position with a specific ray and a t value
 parser::Vec3f parser::Ray::on_point(float t) {
     return vector_sum(origin, vector_multipleS(t, direction));
 }
 
+// Calculates the t value for a specific point on a ray
 float parser::Ray::get(Vec3f & p) {
     Vec3f difference = vector_subtract(p, origin);
     return (difference.x + difference.y + difference.z) / (direction.x + direction.y + direction.z);
@@ -527,28 +523,27 @@ parser::Image::Image(int width, int height) : width(width), height(height) {
 }
 
 // Set the rgb value of a pixel according to current row-column position
-void parser::Image::pixel_rgb_set(int col, int row, Color &color, int width) {
+void parser::Image::pixel_rgb_set(Color &color, int col, int row, int width) {
     data[row*width*3 + 3*col] = color.rgb_val[0];
     data[row*width*3 + 3*col+1] = color.rgb_val[1];
     data[row*width*3 + 3*col+2] = color.rgb_val[2];
 }
 
-std::mutex mutex_row; // https://en.cppreference.com/w/cpp/thread/mutex check here once more
+// Global row value for threads to 
 int next_image_row;
 
+// Set all pixel rgb values in a single row for all columns
 void render_next_row(parser::Image *image, parser::Scene *scene, int camera_indice, const int row) {
     for (int col = 0; col < scene->cameras[camera_indice].image_width; ++col) {
         parser::Color pixel_color = pixel_render(col, row, scene, camera_indice);
-        image->pixel_rgb_set(col, row, pixel_color, image->width);
+        image->pixel_rgb_set(pixel_color, col, row, image->width);
     }
 }
 
-void threads_function(parser::Image *image, parser::Scene *scene, int camera_indice) {
+// Assign a row to a thread -> thread start to render row
+void thread_function(parser::Image *image, parser::Scene *scene, int camera_indice) {
     while (true) {
-        {
-            std::lock_guard<std::mutex> guard(mutex_row); // TODO: Should I create inner block to get rid of this guard???
-            next_image_row--;
-        }
+        next_image_row--;
         if (next_image_row >= 0) render_next_row(image, scene, camera_indice, next_image_row);
         else break;
     }
@@ -557,25 +552,28 @@ void threads_function(parser::Image *image, parser::Scene *scene, int camera_ind
 // Main render function of raytracing algorithm
 void parser::Scene::render_scene(void) {
     unsigned int core_count = std::thread::hardware_concurrency();
-    //For each cam in input, generate different ppm file
+    //For each cam in input, generate another ppm file
     for (int x = 0; x < cameras.size(); ++x) {
         cameras[x].right = cross_product(cameras[x].gaze, cameras[x].up);
         parser::Image * image = new Image(cameras[x].image_width, cameras[x].image_height);
+        // Set next_image_row global variable to image's highest point
         next_image_row = cameras[x].image_height;
+        // Check number of cores && image height is higher than core count to separate work between threads
         if (core_count && cameras[x].image_height >= core_count) {
             std::thread* threads = new std::thread[core_count];
             for (int i = 0; i < core_count; i++) {
-                threads[i] = std::thread(threads_function, image, this, x);
+                threads[i] = std::thread(thread_function, image, this, x);
             }
-            for (int i = 0; i < core_count; i++)
+            for (int i = 0; i < core_count; i++) {
                 threads[i].join();
+            }
             delete [] threads;
-        } else threads_function(image, this, x);
-        // Casting std::string filename to char*
+        } else thread_function(image, this, x);
+        // Casting std::string image_name to char*
         int n = cameras[x].image_name.length();
         char file_name[n + 1];
         strcpy(file_name, cameras[x].image_name.c_str());
-
+        // Create ppm image file
         write_ppm(file_name, image->data, cameras[x].image_width, cameras[x].image_height);
     }
 }

@@ -8,22 +8,7 @@ namespace parser
 {
     struct Vec3f
     {
-        union 
-        {
-            float x;
-            float r;
-        };
-        union
-        {
-            float y;
-            float g;
-        };
-        union
-        {
-            float z;
-            float b;
-        };
-        // float x, y, z, r, g, b;
+        float x, y, z;
     };
 
     struct Vec3i
@@ -42,8 +27,8 @@ namespace parser
 
     struct Return_Intersection {
         float t;
-        Vec3f normal;
         int materialId;
+        Vec3f normal;
     };
 
     Vec3f vector_sum(Vec3f vec1, Vec3f vec2);
@@ -55,8 +40,10 @@ namespace parser
         Vec3f origin;
 	    Vec3f direction;
 
+        // Constructors
         Ray(){};
         Ray(const Vec3f &origin, const Vec3f& direction) : origin(origin), direction(direction){};
+        // Functions
         float get(Vec3f &p);
         Vec3f on_point(float t);
     };
@@ -81,7 +68,7 @@ namespace parser
         int height;
 
         Image(int width, int height);
-        void pixel_rgb_set(int col, int row, Color &color, int width_val);
+        void pixel_rgb_set(Color &color, int col, int row, int width_val);
     };
 
     struct PointLight
