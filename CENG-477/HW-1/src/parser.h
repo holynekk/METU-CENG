@@ -37,10 +37,10 @@ namespace parser
     };
 
     struct Color {
-        unsigned char channel[3];
+        unsigned char rgb_val[3];
     };
 
-    struct IntersectionData {
+    struct Return_Intersection {
         float t;
         Vec3f normal;
         int materialId;
@@ -49,16 +49,16 @@ namespace parser
     Vec3f vector_sum(Vec3f vec1, Vec3f vec2);
     Vec3f vector_subtract(Vec3f vec1, Vec3f vec2);
     Vec3f vector_multipleS(float num, Vec3f vec);
-    Vec3f vector_division(float num, Vec3f & vec);
+    Vec3f vector_division(float num, Vec3f vec);
 
     struct Ray {
         Vec3f origin;
 	    Vec3f direction;
 
         Ray(){};
-        Ray(const Vec3f& origin, const Vec3f& direction) : origin(origin), direction(direction){};
-        Vec3f getPoint(float t);
-        float gett(const Vec3f & p);
+        Ray(const Vec3f &origin, const Vec3f& direction) : origin(origin), direction(direction){};
+        float get(Vec3f &p);
+        Vec3f on_point(float t);
     };
 
     struct Camera
@@ -72,7 +72,7 @@ namespace parser
         int image_width, image_height;
         std::string image_name;
 
-        Ray getPrimaryRay(int col, int row);
+        Ray generate_prim_ray(int col, int row);
     };
 
     struct Image {
@@ -81,8 +81,7 @@ namespace parser
         int height;
 
         Image(int width, int height);
-        void setPixelValue(int col, int row, Color& color, int width__val);
-        void saveImage(std::string imageName);	
+        void pixel_rgb_set(int col, int row, Color &color, int width_val);
     };
 
     struct PointLight
@@ -90,7 +89,7 @@ namespace parser
         Vec3f position;
         Vec3f intensity;
 
-        Vec3f computeLightContribution(const Vec3f& p);
+        Vec3f calc_light_contribution(Vec3f &p);
     };
 
     struct Material
@@ -110,7 +109,7 @@ namespace parser
         int v2_id;
 
         // This intersect function reached from Mesh object
-        IntersectionData intersect(const Ray & ray, int material_id);
+        Return_Intersection intersect(Ray &ray, int material_id);
     };
 
     struct Mesh
@@ -118,7 +117,7 @@ namespace parser
         int material_id;
         std::vector<Face> faces;
 
-        IntersectionData intersect(const Ray & ray);
+        Return_Intersection intersect(Ray & ray);
     };
 
     struct Triangle
@@ -126,7 +125,7 @@ namespace parser
         int material_id;
         Face indices;
 
-        IntersectionData intersect(const Ray & ray);
+        Return_Intersection intersect(Ray & ray);
     };
 
     struct Sphere
@@ -135,7 +134,7 @@ namespace parser
         int center_vertex_id;
         float radius;
 
-        IntersectionData intersect(const Ray & ray);
+        Return_Intersection intersect(Ray & ray);
     };
 
     struct Scene
@@ -155,7 +154,7 @@ namespace parser
 
         //Functions
         void loadFromXml(const std::string &filepath);
-        void renderScene(void);
+        void render_scene(void);
     };
 }
 

@@ -41,8 +41,8 @@ parser::Vec3f normalize(parser::Vec3f vector) {
 }
 // --------------------------------------------------------------------------------------
 
-float calc_determinant(float x_00, float x_01, float x_02, float x_10,float x_11,float x_12, float x_20,float x_21,float x_22) {
-    return (x_00 * (x_11 * x_22 - x_21 * x_12)) - (x_10 * (x_22 * x_01 - x_02 * x_21)) + (x_20 * (x_01 * x_12 - x_02 * x_11));
+float calc_determinant(float a, float b, float c, float m,float n,float k, float x,float y,float z) {
+    return (a * (n * z - y * k)) - (m * (z * b - c * y)) + (x * (b * k - c * n));
 }
 
 #endif

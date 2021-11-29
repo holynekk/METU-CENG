@@ -1,7 +1,5 @@
 all:
-	g++ *.cpp -o raytracer -std=c++11 -pthread
-	# ./raytracer ./../sample_scenes_v3/inputs/horse_and_mug.xml
-	# ./raytracer ./../sample_scenes_v3/inputs/killeroo.xml
+	g++ *.cpp -o raytracer -std=c++11 -Ofast -pthread
 
 
 # ./raytracer ./../sample_scenes_v3/inputs/simple.xml                  #DONE!!!
@@ -15,3 +13,7 @@ all:
 # ./raytracer ./../sample_scenes_v3/inputs/low_poly.xml                #DONE!!!
 # ./raytracer ./../sample_scenes_v3/inputs/dragon_lowres.xml           #DONE!!!
 # ./raytracer ./../sample_scenes_v3/inputs/car.xml                     #DONE!!!
+# ./raytracer ./../sample_scenes_v3/inputs/horse_and_mug.xml           #DONE!!!
+# ./raytracer ./../sample_scenes_v3/inputs/killeroo.xml                #????
+
+
