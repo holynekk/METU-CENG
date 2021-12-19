@@ -1,0 +1,10 @@
+
+lvl2.o:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+0000000000000000 <.text>:
+   0:	48 c7 c7 c5 39 76 7f 	mov    $0x7f7639c5,%rdi
+   7:	48 c7 c6 71 8e dd 1f 	mov    $0x1fdd8e71,%rsi
+   e:	c3                   	retq   
