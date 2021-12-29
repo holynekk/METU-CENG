@@ -1,0 +1,17 @@
+11	Pfizer–BioNTech	RNA_vaccines_and_DNA_vaccines
+21	Moderna	RNA_vaccines_and_DNA_vaccines
+31	ZyCoV-D	RNA_vaccines_and_DNA_vaccines
+41	Oxford–AstraZeneca	Adenovirus_vector_vaccines
+51	Janssen	Adenovirus_vector_vaccines
+61	Sputnik V	Adenovirus_vector_vaccines
+71	Sputnik Light	Adenovirus_vector_vaccines
+81	Convidecia	Adenovirus_vector_vaccines
+91	Sinopharm BIBP	Inactivated_virus_vaccines
+101	CoronaVac	Inactivated_virus_vaccines
+111	Covaxin	Inactivated_virus_vaccines
+121	Sinopharm WIBP	Inactivated_virus_vaccines
+131	Abdala	Subunit_vaccines
+141	ZF2001	Subunit_vaccines
+151	EpiVacCorona	Subunit_vaccines
+161	Novavax	Subunit_vaccines
+171	Soberana	Subunit_vaccines
