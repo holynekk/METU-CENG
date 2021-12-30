@@ -1,0 +1,12 @@
+1234	cough
+1245	sore_throat
+1466	loss_of_taste
+1672	loss_of_smell
+1888	a_rash_onskin
+1889	red_or_irritated_eyes
+2030	difficulty_breathing
+2049	loss_of_speech
+2101	confusion
+3001	loss_of_mobility
+3501	discolouration_of_fingers
+3502	discolouration_of_toes

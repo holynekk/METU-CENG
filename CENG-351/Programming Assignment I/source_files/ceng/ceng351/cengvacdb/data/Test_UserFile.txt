@@ -1,0 +1,20 @@
+1	Haldun Dincturk	66	Ayazaga/Istanbul	YQvZ7zkw6	Not_Eligible
+2	Tugce Dundar	25	Kadıkoy/Istanbul	vTCVpV55	Eligible
+3	Lale Ege	70	Merkez/Edirne	4vAdg88Er	Not_Eligible
+4	Elif Eroglu	24	Seferihisar/Izmir	Mx4CCjEK	Not_Eligible
+5	Deniz Gonul	37	Cankaya/Ankara	4WeNYhah9	Eligible
+6	Eylem Gunduz	30	Urgup/Nevsehir	sChLf2tZD	Eligible
+7	Tarik Guven	50	Tepebasi/Eskisehir	wPKYt7ED	Not_Eligible
+8	Sude Ilhan	21	Tarsus/Mersin	sGTA476p	Eligible
+9	Can Karacay	50	Ercis/Van	bpT97S6f	Not_Eligible
+10	Umit Kayali	34	Cerkezkoy/Tekirday	e5hQvFPU	Eligible
+11	Mert Kocak	66	Merkez/Kırıkkale	4T4XrwA7L	Not_Eligible
+12	Ilke Kose	24	Kemer/Antalya	qyGW5xmy	Eligible
+13	Ali Nalbantoglu	68	Sahinbey/Gaziantep	zZ9gSCNxn	Not_Eligible
+14	Kursat Oduncu	72	Safranbolu/Karabuk	JyPx4fk4V	Not_Eligible
+15	Ayse Ece Ozay	39	Bozcaada/Canakkale	XcPfG3U8s	Eligible
+16	Anil Ozgul	47	Beysehir/Konya	BMhZ6g2v1	Eligible
+17	Merve Ozturk	28	Persembe/Ordu	wqYSR8cB	Eligible
+18	Cagla Sacak	35	Amasra/Bartın	V7RqyT4fQ	Eligible
+19	Simge Saracgil	20	Karsiyaka/Izmirb	4yBL6mW	Not_Eligible
+20	Yasemin Surmeli	49	Surmene/Trabzon	P9Sk5uQmM	Eligible
