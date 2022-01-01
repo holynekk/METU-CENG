@@ -1,0 +1,3 @@
+import source_files.ceng.ceng351.cengvacdb.ICENGVACDB;
+
+public class CENGVACDB implements ICENGVACDB {}

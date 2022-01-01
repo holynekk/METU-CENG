@@ -15,17 +15,17 @@ import java.util.Vector;
 
 public class Evaluation {
     
-    private static String user = "e1234567"; // TODO: Your userName
-    private static String password = "password"; //  TODO: Your password
-    private static String host = "144.122.71.57"; // host name
-    private static String database = "db1234567"; // TODO: Your database name
-    private static int port = 8084; // port
+    private static String user = "e2381093"; // TODO: Your userName
+    private static String password = "oY!kvrj25$V3"; //  TODO: Your password
+    private static String host = "144.122.71.121"; // host name
+    private static String database = "db2381093"; // TODO: Your database name
+    private static int port = 8080; // port
     
     private static Connection connection = null;
 
     public static void connect() {
 		
-        String url = "jdbc:mysql://" + host + ":" + port + "/" + database;
+        String url = "jdbc:mysql://" + host + ":" + port + "/" + database + "?useSSL=false";
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -111,7 +111,7 @@ public class Evaluation {
 
        /***********************************************************/
        // TODO While running on your local machine, change musicdbDirectory accordingly
-       String cengvacdbDirectory = "src" + System.getProperty("file.separator") +
+       String cengvacdbDirectory = "source_files" + System.getProperty("file.separator") +
                "ceng" + System.getProperty("file.separator") +
                        "ceng351" + System.getProperty("file.separator") +
                        "cengvacdb";
@@ -130,7 +130,7 @@ public class Evaluation {
        String givendate = "2021-12-19";
        String startdate = "2021-01-01";
        String enddate = "2021-12-19";
-       String effectname = "loss of speech";
+       String effectname = "loss_of_speech";
        String vaccineName = "Convidecia";
 
        try {
