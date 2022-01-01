@@ -1,0 +1,44 @@
+# Prepare the stack pointer, the arguments, and call find_max
+.pos 0
+    irmovq Stack, %rsp
+    irmovq list_head, %rdi
+    call find_max
+    halt
+ 
+find_max:
+    xorq %rax, %rax         # max = 0
+    jmp check
+loop:
+    mrmovq (%rdi), %r8      # value = list->value
+    rrmovq %r8, %r9         # copy value into r9
+    subq %rax, %r9          # compare value with max
+    jle maxnotupdated       # skip if value <= max
+    rrmovq %r8, %rax        # max = value
+maxnotupdated:
+    mrmovq 8(%rdi), %rdi    # list = list->next
+check:
+    andq %rdi, %rdi         # list?
+    jne loop                # if list != NULL, continue the loop
+    ret                     # return if list == NULL
+
+# Example linked list data, byte 0x200 far from code
+.pos 0x200
+list_head:
+    .quad 3
+    .quad n1
+n2:
+    .quad 35
+    .quad n3
+n1:
+    .quad 7
+    .quad n2
+n3:
+    .quad 22
+    .quad n4
+n4:
+    .quad 17
+    .quad 0
+
+# Stack position, byte 0x800 far from data
+.pos 0x800
+Stack:
