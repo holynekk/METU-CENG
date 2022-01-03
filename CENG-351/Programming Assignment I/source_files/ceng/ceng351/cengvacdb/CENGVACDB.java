@@ -131,7 +131,7 @@ public class CENGVACDB implements ICENGVACDB {
                 "degree varchar(30)," +
                 "primary key (effectcode, code, userID)," +
                 "foreign key (effectcode) references AllergicSideEffect(effectcode)," +
-                "foreign key (code) references Vaccination(code)," +
+                "foreign key (code) references Vaccination(code) on delete cascade," +
                 "foreign key (userID) references User(userID))";
 
         try {
@@ -463,42 +463,53 @@ public class CENGVACDB implements ICENGVACDB {
 
     @Override
     public Vaccine[] getTwoRecentVaccinesDoNotContainVac() {
-//        ArrayList<Vaccine> rlist = new ArrayList<Vaccine>();
-//        Vaccine r[];
-//        Vaccine r_new;
-//        ResultSet rs;
-//
+        ArrayList<Vaccine> rlist = new ArrayList<Vaccine>();
+        Vaccine r[];
+        Vaccine r_new;
+        ResultSet rs;
+
 //        String query =
 //                "select V.code, V.vaccinename, V.type " +
 //                "from Vaccine V " +
 //                "where V.code in (select V1.code from Vaccination V1, Vaccine V2 where V2.vaccinename not like '%vac%' and V1.code = V2.code order by V1.vacdate desc)" +
 //                "order by V.code;";
-//
-//        try {
-//            Statement st = con.createStatement();
-//            rs = st.executeQuery(query);
-//
-//            while(rs.next()) {
-//
-//                int r_code= rs.getInt("code");
-//                String r_vaccinename = rs.getString("vaccinename");
-//                String r_type = rs.getString("type");
-//
-//                r_new = new Vaccine(r_code, r_vaccinename, r_type);
-//
-//                rlist.add(r_new) ;
-//
-//            }
-//            //Close
-//            st.close();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//
-//        r = new Vaccine[rlist.size()];
-//        r = rlist.toArray(r);
+        String query =
 
-        return new Vaccine[0];
+//                "select distinct (V1.code), V1.vacdate " +
+//                "from Vaccination V1, (select distinct (V1.code) from Vaccination V1, Vaccine V2 where V2.vaccinename not like '%vac%' and V1.code = V2.code) as VV1 " +
+//                "where V1.code = VV1.code " +
+//                "order by V1.vacdate;";
+
+                "select distinct V1.code, V2.vaccinename, V2.type " +
+                "from Vaccination V1, Vaccine V2 " +
+                "where V2.vaccinename not like '%vac%' and V1.code = V2.code " +
+                ";";
+
+        try {
+            Statement st = con.createStatement();
+            rs = st.executeQuery(query);
+
+            while(rs.next()) {
+
+                int r_code= rs.getInt("code");
+                String r_vaccinename = rs.getString("vaccinename");
+                String r_type = rs.getString("type");
+
+                r_new = new Vaccine(r_code, r_vaccinename, r_type);
+
+                rlist.add(r_new) ;
+
+            }
+            //Close
+            st.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        r = new Vaccine[rlist.size()];
+        r = rlist.toArray(r);
+
+        return r;
     }
 
     @Override
@@ -641,25 +652,86 @@ public class CENGVACDB implements ICENGVACDB {
 
     @Override
     public AllergicSideEffect[] getSideEffectsOfUserWhoHaveTwoDosesInLessThanTwentyDays() {
-        return new AllergicSideEffect[0];
+        ArrayList<AllergicSideEffect> rlist = new ArrayList<AllergicSideEffect>();
+        AllergicSideEffect r[];
+        AllergicSideEffect r_new;
+        ResultSet rs;
+
+        String query =
+                "select A.effectcode, A.effectname " +
+                "from User U, Seen S, AllergicSideEffect A " +
+                "where " +
+                    "S.userID = U.userID and " +
+                    "A.effectcode = S.effectcode and " +
+                    "U.userID in (" +
+                        "select V1.userID " +
+                        "from Vaccination V1, Vaccination V2 " +
+                        "where " +
+                            "V1.userID = V2.userID and " +
+                            "U.userID = V1.userID and " +
+                            "V1.dose = 1 and " +
+                            "V2.dose = 2 and " +
+                            "DATEDIFF(V2.vacdate, V1.vacdate) < 20 " +
+                    ")" +
+                "order by A.effectcode asc;";
+
+        try {
+            Statement st = con.createStatement();
+            rs = st.executeQuery(query);
+
+            while(rs.next()) {
+                int r_effectcode = rs.getInt("effectcode");
+                String r_effectname = rs.getString("effectname");
+
+
+                r_new = new AllergicSideEffect(r_effectcode, r_effectname);
+
+                rlist.add(r_new) ;
+
+            }
+            //Close
+            st.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        r = new AllergicSideEffect[rlist.size()];
+        r = rlist.toArray(r);
+
+        return r;
     }
 
     @Override
     public double averageNumberofDosesofVaccinatedUserOverSixtyFiveYearsOld() {
-        int result = 0 ;
+        double result = 0 ;
+        ResultSet rs;
 
 //        String query =
-//                "" +
-//                "";
-//
-//        try {
-//            Statement st = con.createStatement();
-//            result = st.executeUpdate(query);
-//
-//            st.close();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
+//                "select count(U.userID) as averageDose " +
+//                "from User U, Vaccination V " +
+//                "group by U.userID " +
+//                "having U.userID > 10 ;";
+        String query =
+                "select avg(X.maxDoses) as averageDose " +
+                "from (select max(V.dose) as maxDoses, U.age from User U, Vaccination V where U.userID = V.userID group by U.userID) as X " +
+                "where X.age > 65 " +
+                ";";
+
+        try {
+            Statement st = con.createStatement();
+            rs = st.executeQuery(query);
+
+            rs.next();
+
+            double s_code= rs.getDouble("averageDose");
+
+            result = rs.getDouble("averageDose");
+
+            //Close
+            st.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         return result;
     }
@@ -669,11 +741,10 @@ public class CENGVACDB implements ICENGVACDB {
         int result = 0 ;
 
         String query =
-                "UPDATE album A "+
-                "SET A.albumRating=A.albumRating*1.5 "+
-                "where A.releaseDate > \"" +
-                        givendate +
-                "\";" ;
+                "UPDATE User U, (select max(V1.vacdate) as maxDate, U1.userID from User U1, Vaccination V1 where U1.userID = V1.userID group by U1.userID) as X "+
+                "SET U.status = \"eligible\" " +
+                "where U.status <> \"eligible\" and U.userID = X.userID and ADDDATE(X.maxDate, INTERVAL 120 DAY) < \"" + givendate + "\"" +
+                ";" ;
 
         try {
             Statement st = con.createStatement();
@@ -689,6 +760,50 @@ public class CENGVACDB implements ICENGVACDB {
 
     @Override
     public Vaccine deleteVaccine(String vaccineName) {
-        return null;
+        Vaccine vac = null ;
+        ResultSet rs ;
+
+        String query =
+                "select * "+
+                "from Vaccine V "+
+                "where V.vaccinename = \"" +
+                vaccineName +
+                "\";" ;
+
+        try {
+            Statement st = con.createStatement();
+            rs = st.executeQuery(query);
+
+            rs.next();
+
+            int s_code= rs.getInt("code");
+            String s_name = rs.getString("vaccinename");
+            String s_type = rs.getString("type") ;
+
+            vac = new Vaccine(s_code, s_name, s_type);
+
+            //Close
+            st.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        query = "delete from Vaccine "+
+                "where vaccinename = \"" +
+                vaccineName +
+                "\";" ;
+
+        try {
+            Statement st = con.createStatement();
+            st.executeUpdate(query);
+
+            //Close
+            st.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return vac;
     }
 }
+
