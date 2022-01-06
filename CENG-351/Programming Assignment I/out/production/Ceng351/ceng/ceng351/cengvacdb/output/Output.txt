@@ -70,6 +70,8 @@ UserID	UserName	Address
 --------------------------------------------------------------
 *** List of the two recent vaccines applied to any user that do not contain ‘vac’ in their name ***
 Code	Vaccinename	Type
+11	Pfizer–BioNTech	RNA_vaccines_and_DNA_vaccines
+41	Oxford–AstraZeneca	Adenovirus_vector_vaccines
 
 --------------------------------------------------------------
 
@@ -89,6 +91,26 @@ UserID	UserName	Address
 --------------------------------------------------------------
 *** List users who have been vaccinated with all vaccines that can cause the given side effect ***
 UserID	UserName	Address
+1	Haldun Dincturk	Ayazaga/Istanbul
+2	Tugce Dundar	Kadıkoy/Istanbul
+3	Lale Ege	Merkez/Edirne
+4	Elif Eroglu	Seferihisar/Izmir
+5	Deniz Gonul	Cankaya/Ankara
+6	Eylem Gunduz	Urgup/Nevsehir
+7	Tarik Guven	Tepebasi/Eskisehir
+8	Sude Ilhan	Tarsus/Mersin
+9	Can Karacay	Ercis/Van
+10	Umit Kayali	Cerkezkoy/Tekirday
+11	Mert Kocak	Merkez/Kırıkkale
+12	Ilke Kose	Kemer/Antalya
+13	Ali Nalbantoglu	Sahinbey/Gaziantep
+14	Kursat Oduncu	Safranbolu/Karabuk
+15	Ayse Ece Ozay	Bozcaada/Canakkale
+16	Anil Ozgul	Beysehir/Konya
+17	Merve Ozturk	Persembe/Ordu
+18	Cagla Sacak	Amasra/Bartın
+19	Simge Saracgil	Karsiyaka/Izmirb
+20	Yasemin Surmeli	Surmene/Trabzon
 
 --------------------------------------------------------------
 
@@ -102,24 +124,27 @@ UserID	UserName	Address
 --------------------------------------------------------------
 *** List side effects experienced by users who have two doses of vaccine with less than 20 days between doses ***
 EffectCode	EffectName
+1672	loss_of_smell
+1888	a_rash_onskin
 
 --------------------------------------------------------------
 
 --------------------------------------------------------------
 *** Calculate the average number of doses of vaccinated users over the age of 65 ***
 Average
-0.00
+1.80
 
 --------------------------------------------------------------
 
 --------------------------------------------------------------
 *** Update his/her status to “eligible” after 120 days have passed since the user was vaccinated last time ***
-0 rows are changed.
+2 rows are changed.
 
 --------------------------------------------------------------
 
 --------------------------------------------------------------
 *** Given vaccine name, delete the vaccine(s) from the database ***
 Code	Vaccinename	Type
+81	Convidecia	Adenovirus_vector_vaccines
 
 --------------------------------------------------------------

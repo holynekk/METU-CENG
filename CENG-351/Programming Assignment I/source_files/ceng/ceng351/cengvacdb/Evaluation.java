@@ -14,30 +14,30 @@ import java.util.Vector;
 
 
 public class Evaluation {
-    
+
     private static String user = "e2381093"; // TODO: Your userName
     private static String password = "oY!kvrj25$V3"; //  TODO: Your password
     private static String host = "144.122.71.121"; // host name
     private static String database = "db2381093"; // TODO: Your database name
     private static int port = 8080; // port
-    
+
     private static Connection connection = null;
 
     public static void connect() {
-		
+
         String url = "jdbc:mysql://" + host + ":" + port + "/" + database + "?useSSL=false";
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             connection =  DriverManager.getConnection(url, user, password);
-        } 
+        }
         catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
-        } 
+        }
     }
-    
+
     public static void disconnect() {
-		
+
         if (connection != null) {
             try {
                 connection.close();
@@ -46,7 +46,7 @@ public class Evaluation {
             }
         }
     }
-    
+
     public static void addInputTitle(String title, BufferedWriter bufferedWriter) throws IOException {
         bufferedWriter.write("*** " + title + " ***" + System.getProperty("line.separator"));
     }
@@ -54,7 +54,7 @@ public class Evaluation {
     private static final DecimalFormat df = new DecimalFormat("0.00");
 
     public static void printAllTables(BufferedWriter bufferedWriter) throws IOException {
-		
+
         String sql1 = "show tables";
         String sql2 = "describe ";
 
@@ -79,7 +79,7 @@ public class Evaluation {
 
                 // Print field names and types
                 while(rs.next()) {
-                        bufferedWriter.write(rs.getString(1) + " " + rs.getString(2) + System.getProperty("line.separator"));
+                    bufferedWriter.write(rs.getString(1) + " " + rs.getString(2) + System.getProperty("line.separator"));
                 }
 
                 bufferedWriter.write(System.getProperty("line.separator"));
@@ -89,11 +89,11 @@ public class Evaluation {
             printException(e);
         }
     }
-    
+
     private static void printException(SQLException ex) {
         System.out.println(ex.getMessage() + "\n");
     }
-	
+
     public static void printLine(String result, BufferedWriter bufferedWriter) throws IOException {
         bufferedWriter.write(result + System.getProperty("line.separator"));
     }
@@ -101,39 +101,39 @@ public class Evaluation {
     public static void addDivider(BufferedWriter bufferedWriter) throws IOException {
         bufferedWriter.write( System.getProperty("line.separator")+ "--------------------------------------------------------------" + System.getProperty("line.separator"));
     }
-    
+
 
     public static void main(String[] args) {
 
-       int numberofInsertions = 0;
-       int numberofTablesCreated = 0;
-       int numberofTablesDropped = 0;
+        int numberofInsertions = 0;
+        int numberofTablesCreated = 0;
+        int numberofTablesDropped = 0;
 
-       /***********************************************************/
-       // TODO While running on your local machine, change musicdbDirectory accordingly
-       String cengvacdbDirectory = "source_files" + System.getProperty("file.separator") +
-               "ceng" + System.getProperty("file.separator") +
-                       "ceng351" + System.getProperty("file.separator") +
-                       "cengvacdb";
-       /***********************************************************/
+        /***********************************************************/
+        // TODO While running on your local machine, change musicdbDirectory accordingly
+        String cengvacdbDirectory = "source_files" + System.getProperty("file.separator") +
+                "ceng" + System.getProperty("file.separator") +
+                "ceng351" + System.getProperty("file.separator") +
+                "cengvacdb";
+        /***********************************************************/
 
-       FileWriter fileWriter = null;
-       BufferedWriter bufferedWriter = null;
+        FileWriter fileWriter = null;
+        BufferedWriter bufferedWriter = null;
 
-       //Connect to the database
-       connect();
+        //Connect to the database
+        connect();
 
-       // Create CENGVACDB object
-       CENGVACDB cengvacDB = null;
-       
-       String vacdate = "2021-10-01";
-       String givendate = "2021-12-19";
-       String startdate = "2021-01-01";
-       String enddate = "2021-12-19";
-       String effectname = "loss_of_speech";
-       String vaccineName = "Convidecia";
+        // Create CENGVACDB object
+        CENGVACDB cengvacDB = null;
 
-       try {
+        String vacdate = "2021-10-01";
+        String givendate = "2021-12-19";
+        String startdate = "2021-01-01";
+        String enddate = "2021-12-19";
+        String effectname = "loss of speech";
+        String vaccineName = "Convidecia";
+
+        try {
             // Create CENGVACDB object and initialize
             cengvacDB = new CENGVACDB();
             cengvacDB.initialize();
@@ -200,8 +200,8 @@ public class Evaluation {
             //insert User
             numberofInsertions = 0;
             User[] users = FileOperations.readUserFile(cengvacdbDirectory +
-                            System.getProperty("file.separator") + "data" + System.getProperty("file.separator") +
-                            "Test_UserFile.txt");
+                    System.getProperty("file.separator") + "data" + System.getProperty("file.separator") +
+                    "Test_UserFile.txt");
 
             numberofInsertions = cengvacDB.insertUser(users);
             printLine( numberofInsertions + " users are inserted.",bufferedWriter);
@@ -211,23 +211,23 @@ public class Evaluation {
             /***********************************************************/
 
 
-           /***********************************************************/
-           /*******************Insert INTO Vaccine starts*************/
-           /***********************************************************/
-           addDivider(bufferedWriter);
-           addInputTitle("Insert into Vaccine",bufferedWriter);
-           //insert vaccine
-           numberofInsertions = 0;
-           Vaccine[] vaccines = FileOperations.readVaccineFile(cengvacdbDirectory +
-                   System.getProperty("file.separator") + "data" + System.getProperty("file.separator") +
-                   "Test_VaccineFile.txt");
+            /***********************************************************/
+            /*******************Insert INTO Vaccine starts*************/
+            /***********************************************************/
+            addDivider(bufferedWriter);
+            addInputTitle("Insert into Vaccine",bufferedWriter);
+            //insert vaccine
+            numberofInsertions = 0;
+            Vaccine[] vaccines = FileOperations.readVaccineFile(cengvacdbDirectory +
+                    System.getProperty("file.separator") + "data" + System.getProperty("file.separator") +
+                    "Test_VaccineFile.txt");
 
-           numberofInsertions = cengvacDB.insertVaccine(vaccines);
-           printLine(numberofInsertions + " vaccines are inserted.",bufferedWriter);
-           addDivider(bufferedWriter);
-           /***********************************************************/
-           /*******************Insert INTO Vaccine ends***************/
-           /***********************************************************/
+            numberofInsertions = cengvacDB.insertVaccine(vaccines);
+            printLine(numberofInsertions + " vaccines are inserted.",bufferedWriter);
+            addDivider(bufferedWriter);
+            /***********************************************************/
+            /*******************Insert INTO Vaccine ends***************/
+            /***********************************************************/
 
             /***********************************************************/
             /*******************Insert INTO Vaccination starts*****************/
@@ -254,8 +254,8 @@ public class Evaluation {
             //insert AllergicSideEffect
             numberofInsertions = 0;
             AllergicSideEffect[] sideEffects = FileOperations.readAllergicSideEffectFile(cengvacdbDirectory +
-                            System.getProperty("file.separator") + "data" + System.getProperty("file.separator") +
-                            "Test_AllergicSideEffectFile.txt");
+                    System.getProperty("file.separator") + "data" + System.getProperty("file.separator") +
+                    "Test_AllergicSideEffectFile.txt");
 
             numberofInsertions = cengvacDB.insertAllergicSideEffect(sideEffects);
             printLine( numberofInsertions + " side effects are inserted.", bufferedWriter);
@@ -273,8 +273,8 @@ public class Evaluation {
             //insert Seen
             numberofInsertions = 0;
             Seen[] seens = FileOperations.readSeenFile(cengvacdbDirectory +
-                            System.getProperty("file.separator") + "data" + System.getProperty("file.separator") +
-                            "Test_SeenFile.txt");
+                    System.getProperty("file.separator") + "data" + System.getProperty("file.separator") +
+                    "Test_SeenFile.txt");
 
             numberofInsertions = cengvacDB.insertSeen(seens);
             printLine(numberofInsertions + " seens are inserted.",bufferedWriter);
@@ -282,7 +282,7 @@ public class Evaluation {
             /***********************************************************/
             /*******************Insert INTO Seen ends***************/
             /***********************************************************/
-            
+
             /***********************************************************/
             /***********************************************************/
             /***********************************************************/
@@ -298,7 +298,7 @@ public class Evaluation {
                 if(VaccineResultArray1 != null) {
                     for(Vaccine Vaccine : VaccineResultArray1){
                         printLine(Vaccine.toString(),bufferedWriter);
-                    }	
+                    }
                 }
 
 
@@ -309,7 +309,7 @@ public class Evaluation {
             /***********************************************************/
             /***********************************************************/
             /***********************************************************/
-            
+
             /***********************************************************/
             /***********************************************************/
             /***********************************************************/
@@ -335,7 +335,7 @@ public class Evaluation {
             /***********************************************************/
             /***********************************************************/
             /***********************************************************/
-   
+
             /***********************************************************/
             /***********************************************************/
             /***********************************************************/
@@ -362,8 +362,8 @@ public class Evaluation {
             /***********************************************************/
             /***********************************************************/
             /***********************************************************/
-            
-            
+
+
             /***********************************************************/
             /***********************************************************/
             /***********************************************************/
@@ -415,7 +415,7 @@ public class Evaluation {
             /***********************************************************/
             /***********************************************************/
             /***********************************************************/
-            
+
             /***********************************************************/
             /***********************************************************/
             /***********************************************************/
@@ -441,7 +441,7 @@ public class Evaluation {
             /***********************************************************/
             /***********************************************************/
             /***********************************************************/
-            
+
             /***********************************************************/
             /***********************************************************/
             /***********************************************************/
@@ -453,7 +453,7 @@ public class Evaluation {
                 AllergicSideEffect[] AllergicSideEffectArray = cengvacDB.getSideEffectsOfUserWhoHaveTwoDosesInLessThanTwentyDays();
                 //Header Line
                 printLine("EffectCode" + "\t" + "EffectName", bufferedWriter);
-                
+
                 if (AllergicSideEffectArray != null) {
                     for(AllergicSideEffect AllergicSideEffect : AllergicSideEffectArray){
                         printLine(AllergicSideEffect.toString(),bufferedWriter);
@@ -467,7 +467,7 @@ public class Evaluation {
             /***********************************************************/
             /***********************************************************/
             /***********************************************************/
-            
+
             /***********************************************************/
             /***********************************************************/
             /***********************************************************/
@@ -488,16 +488,16 @@ public class Evaluation {
             /***********************************************************/
             /***********************************************************/
             /***********************************************************/
-            
+
             /***********************************************************/
             /***********************************************************/
             /***********************************************************/
             addDivider(bufferedWriter);
             addInputTitle("Update his/her status to “eligible” after 120 days have passed since the user was vaccinated last time",bufferedWriter);
             try {
-                
+
                 int numberofChanged = cengvacDB.updateStatusToEligible(givendate);
-		printLine( numberofChanged + " rows are changed.", bufferedWriter);
+                printLine( numberofChanged + " rows are changed.", bufferedWriter);
 
             } catch(Exception e) {
                 printLine("Q3.11: Exception occured: \n\n" + e.toString(),bufferedWriter);
@@ -513,7 +513,7 @@ public class Evaluation {
             addDivider(bufferedWriter);
             addInputTitle("Given vaccine name, delete the vaccine(s) from the database",bufferedWriter);
             try {
-                
+
                 Vaccine vaccine = cengvacDB.deleteVaccine(vaccineName);
 
                 //Header Line
@@ -530,10 +530,10 @@ public class Evaluation {
             /***********************************************************/
             /***********************************************************/
 
-       } catch (IOException e) {
-               e.printStackTrace();
-       } finally {
-           try {
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
                 //Close Writer
                 if (bufferedWriter != null) {
                     bufferedWriter.close();
@@ -543,7 +543,7 @@ public class Evaluation {
             }
             //Close Connection
             disconnect();
-       }
+        }
     }
-    
+
 }

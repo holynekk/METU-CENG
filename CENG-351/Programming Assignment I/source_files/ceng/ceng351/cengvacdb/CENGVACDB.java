@@ -45,14 +45,9 @@ public class CENGVACDB implements ICENGVACDB {
                 "primary key (userID))";
 
         try {
-
             Statement statement = con.createStatement();
-
-            //User Table
             statement.executeUpdate(queryCreateUserTable);
             numberOfTablesCreated++;
-
-            //close
             statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -66,14 +61,9 @@ public class CENGVACDB implements ICENGVACDB {
                 "primary key (code))";
 
         try {
-
             Statement statement = con.createStatement();
-
-            //User Table
             statement.executeUpdate(queryCreateVaccineTable);
             numberOfTablesCreated++;
-
-            //close
             statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -90,14 +80,9 @@ public class CENGVACDB implements ICENGVACDB {
                 "foreign key (userID) references User(userID))";
 
         try {
-
             Statement statement = con.createStatement();
-
-            //User Table
             statement.executeUpdate(queryCreateVaccinationTable);
             numberOfTablesCreated++;
-
-            //close
             statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -110,14 +95,9 @@ public class CENGVACDB implements ICENGVACDB {
                 "primary key (effectcode))";
 
         try {
-
             Statement statement = con.createStatement();
-
-            //User Table
             statement.executeUpdate(queryCreateAllergicSideEffectTable);
             numberOfTablesCreated++;
-
-            //close
             statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -135,19 +115,13 @@ public class CENGVACDB implements ICENGVACDB {
                 "foreign key (userID) references User(userID))";
 
         try {
-
             Statement statement = con.createStatement();
-
-            //User Table
             statement.executeUpdate(queryCreateSeenTable);
             numberOfTablesCreated++;
-
-            //close
             statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return numberOfTablesCreated;
     }
 
@@ -160,14 +134,9 @@ public class CENGVACDB implements ICENGVACDB {
 
         try {
             Statement statement = con.createStatement();
-
-            //User
             statement.executeUpdate(queryDropSeenTable);
             numberOfTablesDropped++;
-
-            //close
             statement.close();
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -177,14 +146,9 @@ public class CENGVACDB implements ICENGVACDB {
 
         try {
             Statement statement = con.createStatement();
-
-            //User
             statement.executeUpdate(queryDropVaccinationTable);
             numberOfTablesDropped++;
-
-            //close
             statement.close();
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -194,14 +158,9 @@ public class CENGVACDB implements ICENGVACDB {
 
         try {
             Statement statement = con.createStatement();
-
-            //User
             statement.executeUpdate(queryDropUserTable);
             numberOfTablesDropped++;
-
-            //close
             statement.close();
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -228,18 +187,12 @@ public class CENGVACDB implements ICENGVACDB {
 
         try {
             Statement statement = con.createStatement();
-
-            //User
             statement.executeUpdate(queryDropAllergicSideEffectTable);
             numberOfTablesDropped++;
-
-            //close
             statement.close();
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return numberOfTablesDropped;
     }
 
@@ -261,15 +214,11 @@ public class CENGVACDB implements ICENGVACDB {
                 Statement st = con.createStatement();
                 st.executeUpdate(query);
                 numberOfRowsInserted++ ;
-
-                //Close
                 st.close();
-
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
-
         return numberOfRowsInserted ;
     }
 
@@ -287,15 +236,11 @@ public class CENGVACDB implements ICENGVACDB {
                 Statement st = con.createStatement();
                 st.executeUpdate(query);
                 numberOfRowsInserted++ ;
-
-                //Close
                 st.close();
-
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
-
         return numberOfRowsInserted ;
     }
 
@@ -314,15 +259,11 @@ public class CENGVACDB implements ICENGVACDB {
                 Statement st = con.createStatement();
                 st.executeUpdate(query);
                 numberOfRowsInserted++ ;
-
-                //Close
                 st.close();
-
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
-
         return numberOfRowsInserted ;
     }
 
@@ -342,15 +283,11 @@ public class CENGVACDB implements ICENGVACDB {
                 Statement st = con.createStatement();
                 st.executeUpdate(query);
                 numberOfRowsInserted++ ;
-
-                //Close
                 st.close();
-
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
-
         return numberOfRowsInserted ;
     }
 
@@ -371,15 +308,11 @@ public class CENGVACDB implements ICENGVACDB {
                 Statement st = con.createStatement();
                 st.executeUpdate(query);
                 numberOfRowsInserted++ ;
-
-                //Close
                 st.close();
-
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
-
         return numberOfRowsInserted ;
     }
 
@@ -400,25 +333,18 @@ public class CENGVACDB implements ICENGVACDB {
             rs = st.executeQuery(query);
 
             while(rs.next()) {
-
                 int r_code= rs.getInt("code");
                 String r_vaccinename = rs.getString("vaccinename");
                 String r_type = rs.getString("type");
-
                 r_new = new Vaccine(r_code, r_vaccinename, r_type);
-
                 rlist.add(r_new) ;
-
             }
-            //Close
             st.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         r = new Vaccine[rlist.size()];
         r = rlist.toArray(r);
-
         return r;
     }
 
@@ -439,25 +365,18 @@ public class CENGVACDB implements ICENGVACDB {
             rs = st.executeQuery(query);
 
             while( rs.next() ) {
-
                 int r_userID= rs.getInt("userID");
                 String r_userName = rs.getString("userName");
                 String r_address = rs.getString("address");
-
                 r_new = new QueryResult.UserIDuserNameAddressResult(Integer.toString(r_userID), r_userName, r_address);
-
                 rlist.add(r_new) ;
-
             }
-            //Close
             st.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         r = new QueryResult.UserIDuserNameAddressResult[rlist.size()];
         r = rlist.toArray(r);
-
         return r;
     }
 
@@ -468,47 +387,37 @@ public class CENGVACDB implements ICENGVACDB {
         Vaccine r_new;
         ResultSet rs;
 
-//        String query =
-//                "select V.code, V.vaccinename, V.type " +
-//                "from Vaccine V " +
-//                "where V.code in (select V1.code from Vaccination V1, Vaccine V2 where V2.vaccinename not like '%vac%' and V1.code = V2.code order by V1.vacdate desc)" +
-//                "order by V.code;";
         String query =
-
-//                "select distinct (V1.code), V1.vacdate " +
-//                "from Vaccination V1, (select distinct (V1.code) from Vaccination V1, Vaccine V2 where V2.vaccinename not like '%vac%' and V1.code = V2.code) as VV1 " +
-//                "where V1.code = VV1.code " +
-//                "order by V1.vacdate;";
-
-                "select distinct V1.code, V2.vaccinename, V2.type " +
-                "from Vaccination V1, Vaccine V2 " +
-                "where V2.vaccinename not like '%vac%' and V1.code = V2.code " +
-                ";";
+                "select distinct XX.code, XX.vaccinename, XX.type " +
+                "from (" +
+                    "select distinct X.code, X.vaccinename, X.type " +
+                    "from (" +
+                        "select distinct V1.code, V2.vaccinename, V2.type, V1.vacdate " +
+                        "from Vaccination V1, Vaccine V2 " +
+                        "where V2.vaccinename not like '%vac%' and V1.code = V2.code " +
+                        "order by V1.vacdate desc" +
+                    ") as X " +
+                    "limit 0, 2" +
+                ") as XX " +
+                "order by XX.code;";
 
         try {
             Statement st = con.createStatement();
             rs = st.executeQuery(query);
 
             while(rs.next()) {
-
                 int r_code= rs.getInt("code");
                 String r_vaccinename = rs.getString("vaccinename");
                 String r_type = rs.getString("type");
-
                 r_new = new Vaccine(r_code, r_vaccinename, r_type);
-
                 rlist.add(r_new) ;
-
             }
-            //Close
             st.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         r = new Vaccine[rlist.size()];
         r = rlist.toArray(r);
-
         return r;
     }
 
@@ -533,25 +442,18 @@ public class CENGVACDB implements ICENGVACDB {
             rs = st.executeQuery(query);
 
             while( rs.next() ) {
-
                 int r_userID= rs.getInt("userID");
                 String r_userName = rs.getString("userName");
                 String r_address = rs.getString("address");
-
                 r_new = new QueryResult.UserIDuserNameAddressResult(Integer.toString(r_userID), r_userName, r_address);
-
                 rlist.add(r_new) ;
-
             }
-            //Close
             st.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         r = new QueryResult.UserIDuserNameAddressResult[rlist.size()];
         r = rlist.toArray(r);
-
         return r;
     }
 
@@ -576,31 +478,23 @@ public class CENGVACDB implements ICENGVACDB {
                     ") )" +
                 "order by U.userID;";
 
-
         try {
             Statement st = con.createStatement();
             rs = st.executeQuery(query);
 
             while( rs.next() ) {
-
                 int r_userID= rs.getInt("userID");
                 String r_userName = rs.getString("userName");
                 String r_address = rs.getString("address");
-
                 r_new = new QueryResult.UserIDuserNameAddressResult(Integer.toString(r_userID), r_userName, r_address);
-
                 rlist.add(r_new) ;
-
             }
-            //Close
             st.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         r = new QueryResult.UserIDuserNameAddressResult[rlist.size()];
         r = rlist.toArray(r);
-
         return r;
     }
 
@@ -628,25 +522,18 @@ public class CENGVACDB implements ICENGVACDB {
             rs = st.executeQuery(query);
 
             while( rs.next() ) {
-
                 int r_userID= rs.getInt("userID");
                 String r_userName = rs.getString("userName");
                 String r_address = rs.getString("address");
-
                 r_new = new QueryResult.UserIDuserNameAddressResult(Integer.toString(r_userID), r_userName, r_address);
-
                 rlist.add(r_new) ;
-
             }
-            //Close
             st.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         r = new QueryResult.UserIDuserNameAddressResult[rlist.size()];
         r = rlist.toArray(r);
-
         return r;
     }
 
@@ -682,22 +569,16 @@ public class CENGVACDB implements ICENGVACDB {
             while(rs.next()) {
                 int r_effectcode = rs.getInt("effectcode");
                 String r_effectname = rs.getString("effectname");
-
-
                 r_new = new AllergicSideEffect(r_effectcode, r_effectname);
-
                 rlist.add(r_new) ;
-
             }
             //Close
             st.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         r = new AllergicSideEffect[rlist.size()];
         r = rlist.toArray(r);
-
         return r;
     }
 
@@ -706,11 +587,6 @@ public class CENGVACDB implements ICENGVACDB {
         double result = 0 ;
         ResultSet rs;
 
-//        String query =
-//                "select count(U.userID) as averageDose " +
-//                "from User U, Vaccination V " +
-//                "group by U.userID " +
-//                "having U.userID > 10 ;";
         String query =
                 "select avg(X.maxDoses) as averageDose " +
                 "from (select max(V.dose) as maxDoses, U.age from User U, Vaccination V where U.userID = V.userID group by U.userID) as X " +
@@ -720,14 +596,9 @@ public class CENGVACDB implements ICENGVACDB {
         try {
             Statement st = con.createStatement();
             rs = st.executeQuery(query);
-
             rs.next();
-
             double s_code= rs.getDouble("averageDose");
-
             result = rs.getDouble("averageDose");
-
-            //Close
             st.close();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -749,7 +620,6 @@ public class CENGVACDB implements ICENGVACDB {
         try {
             Statement st = con.createStatement();
             result = st.executeUpdate(query);
-
             st.close();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -773,15 +643,11 @@ public class CENGVACDB implements ICENGVACDB {
         try {
             Statement st = con.createStatement();
             rs = st.executeQuery(query);
-
             rs.next();
-
             int s_code= rs.getInt("code");
             String s_name = rs.getString("vaccinename");
             String s_type = rs.getString("type") ;
-
             vac = new Vaccine(s_code, s_name, s_type);
-
             //Close
             st.close();
         } catch (SQLException e) {
@@ -796,14 +662,10 @@ public class CENGVACDB implements ICENGVACDB {
         try {
             Statement st = con.createStatement();
             st.executeUpdate(query);
-
-            //Close
             st.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return vac;
     }
 }
-
