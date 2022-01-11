@@ -1,0 +1,189 @@
+#/* $begin absrev-ys */
+##################################################################
+# absrev.ys - Reverse a src block of len words to dst.
+# Return the sum of absolute values of words contained in src.
+#
+# Include your name and ID here.
+# Describe how and why you modified the baseline code.
+#
+# Name: Mert Kaan YILMAZ
+# Number: 2381093
+#
+#
+# In some places, I used lead instruction for register calculations.
+# Therefore I started by implementing ILEAQ in pipe-full.hcl file.
+# Adding it inside hcl file was almost same as the partB. Only difference
+# was some of the registerr names.
+# 
+# Afterward, I implemented a loop at Loop_with_8. It is simply a loop
+# unrolling with 8. In each step, it controls whether the amount of the
+# number that remain is greater equal than 8 or not. If it is, it goes into 
+# Loop_with_8, load values from memory to registers and and put them into 
+# destination. Then, program iterates through each register and add them into 
+# rax register by taking absolute values of them (if it needs to). At the end 
+# of the loop, program checks the amount of numbers to evaluate and if it is greater 
+# equal to 8 our loop works again. If not, remaining numbers are evaluated
+# one by one. (I tried to seperate them as 8 -> 4 -> 2 -> 1) so that it can work like 
+# O(nlgn) algorithm, but I couldn't get any performance increase.
+#
+# The remaining part is handled one by one and it continues until rdx register hit 0
+# (amount of numbers to be evauated) eventually directed to the "Done" label and returns
+# the rax as a result.
+#
+# One more importing thing about this implementation is, I take cautions not to have  
+# some load-use hazards. I tried to fill a few instructions betweem those load and
+# use instructions.
+#
+#
+##################################################################
+# Do not modify this portion
+# Function prologue.
+# %rdi = src, %rsi = dst, %rdx = len
+absrev:
+##################################################################
+# You can modify this portion
+    # Loop header
+
+
+# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+	xorq %rax, %rax 
+	
+	xorq %rbp, %rbp
+	addq %rdx, %rbp
+	addq %rbp, %rbp
+	addq %rbp, %rbp
+	addq %rbp, %rbp
+	addq %rbp, %rsi
+	leaq -8(%rsi), %rsi
+
+	andq %rdx, %rdx
+	je Done
+	icmpq $8,%rdx
+	jl try1
+
+Loop_with_8:
+
+	mrmovq (%rdi), %rcx	
+	mrmovq 8(%rdi), %r8	
+	mrmovq 16(%rdi), %r9	
+	mrmovq 24(%rdi), %r10	
+	mrmovq 32(%rdi), %r11	
+	mrmovq 40(%rdi), %r12	
+	mrmovq 48(%rdi), %r13	
+	mrmovq 56(%rdi), %r14	
+	rmmovq %rcx, (%rsi)	
+	rmmovq %r8, -8(%rsi)	
+	rmmovq %r9, -16(%rsi)	
+	rmmovq %r10, -24(%rsi)	
+	rmmovq %r11, -32(%rsi)	
+	rmmovq %r12, -40(%rsi)	
+	rmmovq %r13, -48(%rsi)	
+	rmmovq %r14, -56(%rsi)	
+	andq %rcx,%rcx
+	jge  N1
+	
+N0NEG:
+	rrmovq %rcx, %rbx
+	xorq %rcx, %rcx
+	subq %rbx,%rcx
+	
+N1:
+	icmpq $0,%r8
+	jge N2
+N1NEG:
+	rrmovq %r8, %rbx
+	xorq %r8, %r8
+	subq %rbx,%r8
+
+N2:
+	icmpq $0,%r9
+	jge N3
+N2NEG:
+	rrmovq %r9, %rbx
+	xorq %r9, %r9
+	subq %rbx,%r9
+	
+N3:
+	icmpq $0,%r10
+	jge N4
+N3NEG:
+	rrmovq %r10, %rbx
+	xorq %r10, %r10
+	subq %rbx,%r10
+	
+N4:
+	icmpq $0,%r11
+	jge N5
+N4NEG:
+	rrmovq %r11, %rbx
+	xorq %r11, %r11
+	subq %rbx,%r11
+
+N5:
+	icmpq $0,%r12
+	jge N6
+N5NEG:
+	rrmovq %r12, %rbx
+	xorq %r12, %r12
+	subq %rbx,%r12
+
+N6:
+	icmpq $0,%r13
+	jge N7
+N6NEG:
+	rrmovq %r13, %rbx
+	xorq %r13, %r13
+	subq %rbx,%r13
+	
+N7:
+	icmpq $0,%r14
+	jge loop_test
+N7NEG:
+	rrmovq %r14, %rbx
+	xorq %r14, %r14
+	subq %rbx,%r14
+
+
+loop_test:
+	addq %rcx,%rax
+	addq %r8,%rax
+	addq %r9,%rax
+	addq %r10,%rax
+	addq %r11,%rax
+	addq %r12,%rax
+	addq %r13,%rax
+	addq %r14,%rax
+	leaq 64(%rdi),%rdi
+	leaq -64(%rsi),%rsi
+	leaq -8(%rdx),%rdx
+	icmpq $8, %rdx
+	jge Loop_with_8	
+	andq %rdx, %rdx
+	je Done
+
+try1:
+	mrmovq (%rdi), %rcx	
+	rmmovq %rcx, (%rsi)		
+	icmpq $0,%rcx
+	jge  loop_test_1	
+N04NEG:
+	rrmovq %rcx, %rbx
+	xorq %rcx, %rcx
+	subq %rbx,%rcx
+loop_test_1:
+	addq %rcx,%rax
+	leaq 8(%rdi),%rdi
+	leaq -8(%rsi),%rsi
+	leaq -1(%rdx),%rdx
+	
+	andq %rdx, %rdx
+	jg try1
+##################################################################
+# Do not modify the following section of code
+# Function epilogue.
+Done:
+    ret
+##################################################################
+# Keep the following label at the end of your function
+End:
+#/* $end absrev-ys */

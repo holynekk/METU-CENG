@@ -1,0 +1,79 @@
+# Name: Mert Kaan YILMAZ
+# Number: 2381093
+
+# Execution begins at adress 0
+.pos 0
+	irmovq Stack, %rsp      # Set stack pointer
+	irmovq root, %rdi       # Set first parameter of the function
+	call max_btree          # Call max_btree(root)  
+	halt                    # Terminate the program
+
+max_btree:
+	xorq %rax, %rax
+	andq %rdi, %rdi
+	jne look_tree
+	ret
+look_tree:
+	pushq %rdi
+	mrmovq 8(%rdi), %rdi
+	call max_btree
+	popq %rdi
+	rrmovq %rax, %r8
+	rrmovq %r8, %r9
+	mrmovq (%rdi), %rax
+	subq %rax, %r9
+	cmovg %r8, %rax
+	pushq %rax
+	pushq %rdi
+	mrmovq 16(%rdi), %rdi
+	call max_btree
+	popq %rdi
+	rrmovq %rax, %r8
+	rrmovq %r8, %r9
+	popq %rax
+	subq %rax, %r9
+	cmovg %r8, %rax
+	ret	
+
+# A sample binary (not search!) tree
+
+.pos 0x200
+root:
+	.quad 5
+	.quad node7
+	.quad node12
+node7:
+	.quad 7
+	.quad node25
+	.quad node905
+node25:
+	.quad 25
+	.quad 0
+	.quad 0
+node905:
+	.quad 905
+	.quad nodem1
+	.quad 0
+nodem1:
+	.quad -1
+	.quad 0
+	.quad 0
+node12:
+	.quad 12
+	.quad node219
+	.quad nodem10
+node219:
+	.quad 219
+	.quad 0
+	.quad 0
+nodem10:
+	.quad -10
+	.quad 0
+	.quad node331
+node331:
+	.quad 331	
+	.quad 0
+	.quad 0
+
+.pos 0x800
+Stack:

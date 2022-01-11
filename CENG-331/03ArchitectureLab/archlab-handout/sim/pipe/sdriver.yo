@@ -1,0 +1,128 @@
+                            | #######################################################################
+                            | # Test for copying block of size 4;
+                            | #######################################################################
+0x000:                      | 	.pos 0
+0x000: 30f40002000000000000 | main:	irmovq Stack, %rsp  	# Set up stack pointer
+                            | 
+                            | 	# Set up arguments for copy function and then invoke it
+0x00a: 30f20400000000000000 | 	irmovq $4, %rdx		# src and dst have 4 elements
+0x014: 30f65801000000000000 | 	irmovq dest, %rsi	# dst array
+0x01e: 30f72001000000000000 | 	irmovq src, %rdi	# src array
+                            |     # corrupt all the unused registers to prevent assumptions
+0x028: 30f03103710500000000 |     irmovq $0x5710331, %rax
+0x032: 30f33103710500000000 |     irmovq $0x5710331, %rbx
+0x03c: 30f13103710500000000 |     irmovq $0x5710331, %rcx
+0x046: 30f53103710500000000 |     irmovq $0x5710331, %rbp
+0x050: 30f83103710500000000 |     irmovq $0x5710331, %r8
+0x05a: 30f93103710500000000 |     irmovq $0x5710331, %r9
+0x064: 30fa3103710500000000 |     irmovq $0x5710331, %r10
+0x06e: 30fb3103710500000000 |     irmovq $0x5710331, %r11
+0x078: 30fc3103710500000000 |     irmovq $0x5710331, %r12
+0x082: 30fd3103710500000000 |     irmovq $0x5710331, %r13
+0x08c: 30fe3103710500000000 |     irmovq $0x5710331, %r14
+0x096: 80a000000000000000   | 	call absrev		 
+0x09f: 00                   | 	halt			# should halt with abs sum in %rax
+0x0a0:                      | StartFun:
+                            | #/* $begin absrev-ys */
+                            | ##################################################################
+                            | # absrev.ys - Reverse a src block of len words to dst.
+                            | # Return the sum of absolute values of words contained in src.
+                            | #
+                            | # Include your name and ID here.
+                            | # Describe how and why you modified the baseline code.
+                            | ##################################################################
+                            | # Do not modify this portion
+                            | # Function prologue.
+                            | # %rdi = src, %rsi = dst, %rdx = len
+0x0a0:                      | absrev:
+                            | ##################################################################
+                            | # You can modify this portion
+                            |     # Loop header
+0x0a0: 6300                 |     xorq %rax,%rax    	# sum = 0;
+                            |     
+                            |     # all this for dst_rev = dst + len - 1
+0x0a2: 6311                 |     xorq %rcx, %rcx     # zero rcx
+0x0a4: 6021                 |     addq %rdx, %rcx     # add len eight times
+0x0a6: 6021                 |     addq %rdx, %rcx
+0x0a8: 6021                 |     addq %rdx, %rcx
+0x0aa: 6021                 |     addq %rdx, %rcx
+0x0ac: 6021                 |     addq %rdx, %rcx
+0x0ae: 6021                 |     addq %rdx, %rcx
+0x0b0: 6021                 |     addq %rdx, %rcx
+0x0b2: 6021                 |     addq %rdx, %rcx
+0x0b4: 30f80800000000000000 |     irmovq $8, %r8      # for subtracting 8
+0x0be: 6061                 |     addq %rsi, %rcx     # add dst
+0x0c0: 6181                 |     subq %r8, %rcx      # finally, rcx holds dst_rev
+                            | 
+0x0c2: 6222                 |     andq %rdx,%rdx    	# len <= 0?
+0x0c4: 711901000000000000   |     jle Done            # if so, goto Done:
+0x0cd:                      | Loop:    
+0x0cd: 50a70000000000000000 |     mrmovq (%rdi), %r10 # read val from src...
+0x0d7: 40a10000000000000000 |     rmmovq %r10, (%rcx) # ...and store it to dst
+0x0e1: 62aa                 |     andq %r10, %r10    	# val >= 0?
+0x0e3: 75f200000000000000   |     jge Positive        # if so, skip negating
+0x0ec: 20a9                 |     rrmovq %r10, %r9    # temporary move
+0x0ee: 63aa                 |     xorq %r10, %r10     # zero r10
+0x0f0: 619a                 |     subq %r9, %r10      # negation achieved!
+0x0f2:                      | Positive:
+0x0f2: 60a0                 |     addq %r10, %rax     # sum += absval
+0x0f4: 30fa0100000000000000 |     irmovq $1, %r10
+0x0fe: 61a2                 |     subq %r10, %rdx    	# len--
+0x100: 30fa0800000000000000 |     irmovq $8, %r10
+0x10a: 60a7                 |     addq %r10, %rdi    	# src++
+0x10c: 61a1                 |     subq %r10, %rcx    	# dst_rev--
+0x10e: 6222                 |     andq %rdx,%rdx    	# len > 0?
+0x110: 76cd00000000000000   |     jg Loop             # if so, goto Loop:
+                            | ##################################################################
+                            | # Do not modify the following section of code
+                            | # Function epilogue.
+0x119:                      | Done:
+0x119: 90                   |     ret
+                            | ##################################################################
+                            | # Keep the following label at the end of your function
+0x11a:                      | End:
+                            | #/* $end absrev-ys */
+0x11a:                      | EndFun:
+                            | 
+                            | ###############################
+                            | # Source and destination blocks 
+                            | ###############################
+0x120:                      | 	.align 8
+0x120:                      | src:
+0x120: ffffffffffffffff     | 	.quad -1
+0x128: feffffffffffffff     | 	.quad -2
+0x130: 0300000000000000     | 	.quad 3
+0x138: 0400000000000000     | 	.quad 4
+0x140: fadebc0000000000     | 	.quad 0xbcdefa # This shouldn't get moved
+                            | 
+0x150:                      | 	.align 16
+0x150:                      | Predest:
+0x150: fadebc0000000000     | 	.quad 0xbcdefa
+0x158:                      | dest:
+0x158: abefcd0000000000     | 	.quad 0xcdefab
+0x160: abefcd0000000000     | 	.quad 0xcdefab
+0x168: abefcd0000000000     | 	.quad 0xcdefab
+0x170: abefcd0000000000     | 	.quad 0xcdefab
+0x178:                      | Postdest:
+0x178: bcfade0000000000     | 	.quad 0xdefabc
+                            | 
+0x180:                      | .align 8
+                            | # Run time stack
+0x180: 0000000000000000     | 	.quad 0
+0x188: 0000000000000000     | 	.quad 0
+0x190: 0000000000000000     | 	.quad 0
+0x198: 0000000000000000     | 	.quad 0
+0x1a0: 0000000000000000     | 	.quad 0
+0x1a8: 0000000000000000     | 	.quad 0
+0x1b0: 0000000000000000     | 	.quad 0
+0x1b8: 0000000000000000     | 	.quad 0
+0x1c0: 0000000000000000     | 	.quad 0
+0x1c8: 0000000000000000     | 	.quad 0
+0x1d0: 0000000000000000     | 	.quad 0
+0x1d8: 0000000000000000     | 	.quad 0
+0x1e0: 0000000000000000     | 	.quad 0
+0x1e8: 0000000000000000     | 	.quad 0
+0x1f0: 0000000000000000     | 	.quad 0
+0x1f8: 0000000000000000     | 	.quad 0
+                            | 
+0x200:                      | Stack:

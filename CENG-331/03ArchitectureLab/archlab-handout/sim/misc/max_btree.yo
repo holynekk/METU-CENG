@@ -1,0 +1,79 @@
+                            | # Name: Mert Kaan YILMAZ
+                            | # Number: 2381093
+                            | 
+                            | # Execution begins at adress 0
+0x000:                      | .pos 0
+0x000: 30f40008000000000000 | 	irmovq Stack, %rsp      # Set stack pointer
+0x00a: 30f70002000000000000 | 	irmovq root, %rdi       # Set first parameter of the function
+0x014: 801e00000000000000   | 	call max_btree          # Call max_btree(root)  
+0x01d: 00                   | 	halt                    # Terminate the program
+                            | 
+0x01e:                      | max_btree:
+0x01e: 6300                 | 	xorq %rax, %rax
+0x020: 6277                 | 	andq %rdi, %rdi
+0x022: 742c00000000000000   | 	jne look_tree
+0x02b: 90                   | 	ret
+0x02c:                      | look_tree:
+0x02c: a07f                 | 	pushq %rdi
+0x02e: 50770800000000000000 | 	mrmovq 8(%rdi), %rdi
+0x038: 801e00000000000000   | 	call max_btree
+0x041: b07f                 | 	popq %rdi
+0x043: 2008                 | 	rrmovq %rax, %r8
+0x045: 2089                 | 	rrmovq %r8, %r9
+0x047: 50070000000000000000 | 	mrmovq (%rdi), %rax
+0x051: 6109                 | 	subq %rax, %r9
+0x053: 2680                 | 	cmovg %r8, %rax
+0x055: a00f                 | 	pushq %rax
+0x057: a07f                 | 	pushq %rdi
+0x059: 50771000000000000000 | 	mrmovq 16(%rdi), %rdi
+0x063: 801e00000000000000   | 	call max_btree
+0x06c: b07f                 | 	popq %rdi
+0x06e: 2008                 | 	rrmovq %rax, %r8
+0x070: 2089                 | 	rrmovq %r8, %r9
+0x072: b00f                 | 	popq %rax
+0x074: 6109                 | 	subq %rax, %r9
+0x076: 2680                 | 	cmovg %r8, %rax
+0x078: 90                   | 	ret	
+                            | 
+                            | # A sample binary (not search!) tree
+                            | 
+0x200:                      | .pos 0x200
+0x200:                      | root:
+0x200: 0500000000000000     | 	.quad 5
+0x208: 1802000000000000     | 	.quad node7
+0x210: 7802000000000000     | 	.quad node12
+0x218:                      | node7:
+0x218: 0700000000000000     | 	.quad 7
+0x220: 3002000000000000     | 	.quad node25
+0x228: 4802000000000000     | 	.quad node905
+0x230:                      | node25:
+0x230: 1900000000000000     | 	.quad 25
+0x238: 0000000000000000     | 	.quad 0
+0x240: 0000000000000000     | 	.quad 0
+0x248:                      | node905:
+0x248: 8903000000000000     | 	.quad 905
+0x250: 6002000000000000     | 	.quad nodem1
+0x258: 0000000000000000     | 	.quad 0
+0x260:                      | nodem1:
+0x260: ffffffffffffffff     | 	.quad -1
+0x268: 0000000000000000     | 	.quad 0
+0x270: 0000000000000000     | 	.quad 0
+0x278:                      | node12:
+0x278: 0c00000000000000     | 	.quad 12
+0x280: 9002000000000000     | 	.quad node219
+0x288: a802000000000000     | 	.quad nodem10
+0x290:                      | node219:
+0x290: db00000000000000     | 	.quad 219
+0x298: 0000000000000000     | 	.quad 0
+0x2a0: 0000000000000000     | 	.quad 0
+0x2a8:                      | nodem10:
+0x2a8: f6ffffffffffffff     | 	.quad -10
+0x2b0: 0000000000000000     | 	.quad 0
+0x2b8: c002000000000000     | 	.quad node331
+0x2c0:                      | node331:
+0x2c0: 4b01000000000000     | 	.quad 331	
+0x2c8: 0000000000000000     | 	.quad 0
+0x2d0: 0000000000000000     | 	.quad 0
+                            | 
+0x800:                      | .pos 0x800
+0x800:                      | Stack:

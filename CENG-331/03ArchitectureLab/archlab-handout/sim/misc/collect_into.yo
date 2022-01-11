@@ -1,0 +1,162 @@
+                            | # Name: Mert Kaan YILMAZ
+                            | # Number: 2381093
+                            | 
+                            | # Execution begins at adress 0
+0x000:                      | .pos 0
+0x000: 30f40008000000000000 | 	irmovq Stack, %rsp      # Set stack pointer
+0x00a: 30f70002000000000000 | 	irmovq root, %rdi       # Set first parameter of the function
+0x014: 30f60004000000000000 | 	irmovq array, %rsi      # Set rsi as second parameter 
+0x01e: 30f20800000000000000 | 	irmovq $8, %rdx         # Set rdx as third parameter 
+0x028: 803200000000000000   | 	call collect_into       # Call max_btree(root)  
+0x031: 00                   | 	halt                    # Terminate the program
+                            | 
+0x032:                      | collect_into:
+0x032: 6300                 | 	xorq %rax, %rax         # Initialize return value as 0.
+0x034: 6277                 | 	andq %rdi, %rdi         # Check if root is empty. 
+0x036: 730c01000000000000   | 	je if_return            # if it is check other condition. 
+                            | 	
+0x03f:                      | check_len:
+0x03f: 30fe0000000000000000 | 	irmovq $0, %r14         # Set register to compare.
+0x049: 612e                 | 	subq %rdx, %r14         # Check if array_len is <= 0.
+0x04b: 750c01000000000000   | 	jge if_return           # Return 0 if array_len <= 0.
+                            | 	                        # Else go into else part.
+                            | 	
+0x054:                      | inside_else:
+0x054: a07f                 | 	pushq %rdi
+0x056: 50770800000000000000 | 	mrmovq 8(%rdi), %rdi    # root = root->left
+0x060: 803200000000000000   | 	call collect_into
+0x069: b07f                 | 	popq %rdi
+0x06b: 200c                 | 	rrmovq %rax, %r12
+0x06d: 2028                 | 	rrmovq %rdx, %r8
+0x06f: 61c8                 | 	subq %r12, %r8
+0x071: 731701000000000000   | 	je return_left_len
+0x07a: 50870000000000000000 | 	mrmovq (%rdi), %r8
+                            | 	
+0x084: 63bb                 | 	xorq %r11, %r11         #
+0x086: 606b                 | 	addq %rsi, %r11         #
+0x088: 60cb                 | 	addq %r12, %r11         #
+0x08a: 60cb                 | 	addq %r12, %r11         #
+0x08c: 60cb                 | 	addq %r12, %r11         # (array + left_len)
+0x08e: 60cb                 | 	addq %r12, %r11         #
+0x090: 60cb                 | 	addq %r12, %r11         #
+0x092: 60cb                 | 	addq %r12, %r11         #
+0x094: 60cb                 | 	addq %r12, %r11         #
+0x096: 60cb                 | 	addq %r12, %r11         #
+                            | 	
+                            | 	
+0x098: 408b0000000000000000 | 	rmmovq %r8, (%r11)      # array[left_len] = root->value;
+                            | 	
+0x0a2: a07f                 | 	pushq %rdi
+0x0a4: a06f                 | 	pushq %rsi
+0x0a6: a02f                 | 	pushq %rdx
+                            | 	
+0x0a8: 50771000000000000000 | 	mrmovq 16(%rdi), %rdi
+                            | 	
+0x0b2: 60c6                 | 	addq %r12, %rsi
+0x0b4: 60c6                 | 	addq %r12, %rsi
+0x0b6: 60c6                 | 	addq %r12, %rsi
+0x0b8: 60c6                 | 	addq %r12, %rsi
+0x0ba: 60c6                 | 	addq %r12, %rsi
+0x0bc: 60c6                 | 	addq %r12, %rsi
+0x0be: 60c6                 | 	addq %r12, %rsi
+0x0c0: 60c6                 | 	addq %r12, %rsi
+                            | 	
+0x0c2: 30f80100000000000000 | 	irmovq $1, %r8
+                            | 	
+0x0cc: 6086                 | 	addq %r8, %rsi
+0x0ce: 6086                 | 	addq %r8, %rsi
+0x0d0: 6086                 | 	addq %r8, %rsi
+0x0d2: 6086                 | 	addq %r8, %rsi
+0x0d4: 6086                 | 	addq %r8, %rsi
+0x0d6: 6086                 | 	addq %r8, %rsi
+0x0d8: 6086                 | 	addq %r8, %rsi
+0x0da: 6086                 | 	addq %r8, %rsi
+                            | 	
+0x0dc: 61c2                 | 	subq %r12, %rdx
+0x0de: 6182                 | 	subq %r8, %rdx
+                            | 	
+0x0e0: 803200000000000000   | 	call collect_into
+0x0e9: 200d                 | 	rrmovq %rax, %r13
+0x0eb: b02f                 | 	popq %rdx
+0x0ed: b06f                 | 	popq %rsi # belki gerek yok??
+0x0ef: b07f                 | 	popq %rdi
+                            | 	
+0x0f1: 30f80100000000000000 | 	irmovq $1, %r8
+0x0fb: 30f00000000000000000 | 	irmovq $0, %rax
+0x105: 60c0                 | 	addq %r12, %rax
+0x107: 6080                 | 	addq %r8, %rax
+0x109: 60d0                 | 	addq %r13, %rax
+                            | 
+0x10b: 90                   | 	ret
+                            | 	
+0x10c:                      | if_return:
+0x10c: 30f00000000000000000 | 	irmovq $0, %rax
+0x116: 90                   | 	ret
+                            | 	
+0x117:                      | return_left_len:
+0x117: 20c0                 | 	rrmovq %r12, %rax
+0x119: 90                   | 	ret
+                            | 	
+                            | # A sample eleven-element BST.
+0x200:                      | .pos 0x200
+0x200:                      | root:
+0x200: 1100000000000000     | 	.quad 17
+0x208: 1802000000000000     | 	.quad node6
+0x210: a802000000000000     | 	.quad node24
+0x218:                      | node6:
+0x218: 0600000000000000     | 	.quad 6
+0x220: 3002000000000000     | 	.quad node4
+0x228: 7802000000000000     | 	.quad node11
+0x230:                      | node4:
+0x230: 0400000000000000     | 	.quad 4
+0x238: 4802000000000000     | 	.quad node3
+0x240: 6002000000000000     | 	.quad node5
+0x248:                      | node3:
+0x248: 0300000000000000     | 	.quad 3
+0x250: 0000000000000000     | 	.quad 0
+0x258: 0000000000000000     | 	.quad 0
+0x260:                      | node5:
+0x260: 0500000000000000     | 	.quad 5
+0x268: 0000000000000000     | 	.quad 0
+0x270: 0000000000000000     | 	.quad 0
+0x278:                      | node11:
+0x278: 0b00000000000000     | 	.quad 11
+0x280: 9002000000000000     | 	.quad node8
+0x288: 0000000000000000     | 	.quad 0
+0x290:                      | node8:
+0x290: 0800000000000000     | 	.quad 8
+0x298: 0000000000000000     | 	.quad 0
+0x2a0: 0000000000000000     | 	.quad 0
+0x2a8:                      | node24:
+0x2a8: 1800000000000000     | 	.quad 24
+0x2b0: c002000000000000     | 	.quad node19
+0x2b8: d802000000000000     | 	.quad node40
+0x2c0:                      | node19:
+0x2c0: 1300000000000000     | 	.quad 19
+0x2c8: 0000000000000000     | 	.quad 0
+0x2d0: 0000000000000000     | 	.quad 0
+0x2d8:                      | node40:
+0x2d8: 2800000000000000     | 	.quad 40
+0x2e0: 0000000000000000     | 	.quad 0
+0x2e8: f002000000000000     | 	.quad node52
+0x2f0:                      | node52:
+0x2f0: 3400000000000000     | 	.quad 52
+0x2f8: 0000000000000000     | 	.quad 0
+0x300: 0000000000000000     | 	.quad 0
+                            | 	
+                            | 
+                            | # A sample binary (not search!) tree
+0x400:                      | .pos 0x400
+0x400:                      | array:
+0x400: 0000000000000000     | 	.quad 0
+0x408: 0000000000000000     | 	.quad 0
+0x410: 0000000000000000     | 	.quad 0
+0x418: 0000000000000000     | 	.quad 0
+0x420: 0000000000000000     | 	.quad 0
+0x428: 0000000000000000     | 	.quad 0
+0x430: 0000000000000000     | 	.quad 0
+0x438: 0000000000000000     | 	.quad 0
+                            | 
+                            | 
+0x800:                      | .pos 0x800
+0x800:                      | Stack:
