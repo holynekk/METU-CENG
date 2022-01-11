@@ -1,0 +1,103 @@
+
+--------------------------------------------------------------
+*** Drop tables ***
+Dropped 0 tables.
+
+--------------------------------------------------------------
+
+--------------------------------------------------------------
+*** Create tables ***
+Created 1 tables.
+
+--------------------------------------------------------------
+
+--------------------------------------------------------------
+*** Insert into User ***
+0 users are inserted.
+
+--------------------------------------------------------------
+
+--------------------------------------------------------------
+*** Insert into Vaccine ***
+0 vaccines are inserted.
+
+--------------------------------------------------------------
+
+--------------------------------------------------------------
+*** Insert into Vaccination ***
+0 vaccinations are inserted.
+
+--------------------------------------------------------------
+
+--------------------------------------------------------------
+*** Insert into AllergicSideEffect ***
+0 side effects are inserted.
+
+--------------------------------------------------------------
+
+--------------------------------------------------------------
+*** Insert into Seen ***
+0 seens are inserted.
+
+--------------------------------------------------------------
+
+--------------------------------------------------------------
+*** Find vaccines that have not been applied to any user ***
+Code	Vaccinename	Type
+
+--------------------------------------------------------------
+
+--------------------------------------------------------------
+*** List users who have been vaccinated for two doses since the given date ***
+UserID	UserName	Address
+
+--------------------------------------------------------------
+
+--------------------------------------------------------------
+*** List of the two recent vaccines applied to any user that do not contain ‘vac’ in their name ***
+Code	Vaccinename	Type
+
+--------------------------------------------------------------
+
+--------------------------------------------------------------
+*** List users who have had at least two doses of vaccine and have experienced at most one side effect ***
+UserID	UserName	Address
+
+--------------------------------------------------------------
+
+--------------------------------------------------------------
+*** List users who have been vaccinated with all vaccines that can cause the given side effect ***
+UserID	UserName	Address
+
+--------------------------------------------------------------
+
+--------------------------------------------------------------
+*** List users who have been vaccinated with at least two different types of vaccines within the given time interval ***
+UserID	UserName	Address
+
+--------------------------------------------------------------
+
+--------------------------------------------------------------
+*** List side effects experienced by users who have two doses of vaccine with less than 20 days between doses ***
+EffectCode	EffectName
+
+--------------------------------------------------------------
+
+--------------------------------------------------------------
+*** Calculate the average number of doses of vaccinated users over the age of 65 ***
+Average
+0.00
+
+--------------------------------------------------------------
+
+--------------------------------------------------------------
+*** Update his/her status to “eligible” after 120 days have passed since the user was vaccinated last time ***
+0 rows are changed.
+
+--------------------------------------------------------------
+
+--------------------------------------------------------------
+*** Given vaccine name, delete the vaccine(s) from the database ***
+Code	Vaccinename	Type
+
+--------------------------------------------------------------
