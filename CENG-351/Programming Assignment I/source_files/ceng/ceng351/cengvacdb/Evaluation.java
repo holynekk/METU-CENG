@@ -130,7 +130,7 @@ public class Evaluation {
         String givendate = "2021-12-19";
         String startdate = "2021-01-01";
         String enddate = "2021-12-19";
-        String effectname = "loss of speech";
+        String effectname = "loss_of_speech";
         String vaccineName = "Convidecia";
 
         try {
