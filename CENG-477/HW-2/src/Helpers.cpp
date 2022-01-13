@@ -202,3 +202,20 @@ Vec4 multiplyMatrixWithVec4(Matrix4 m, Vec4 v)
 
     return Vec4(values[0], values[1], values[2], values[3], v.colorId);
 }
+
+// Helper for calculation f01, f12, f20 in triangle rasterization
+double calc_fxx(double x, double y, double x_n, double y_n, double x_m, double y_m){
+    return (x * (y_n - y_m)) + (y * (x_m - x_n)) + (x_n * y_m) - (y_n * x_m);
+}
+
+double f01(double x, double y, double x_0, double y_0, double x_1, double y_1) {
+    return x * (y_0 - y_1) + y * (x_1 - x_0) + x_0 * y_1 - y_0 * x_1;
+}
+
+double f12(double x, double y, double x_1, double y_1, double x_2, double y_2) {
+    return x * (y_1 - y_2) + y * (x_2 - x_1) + x_1 * y_2 - y_1 * x_2;
+}
+
+double f20(double x, double y, double x_2, double y_2, double x_0, double y_0) {
+    return x * (y_2 - y_0) + y * (x_0 - x_2) + x_2 * y_0 - y_2 * x_0;
+}

@@ -11,6 +11,8 @@ public:
     Color();
     Color(double r, double g, double b);
     Color(const Color &other);
+    Color round_to_closest_int();
+
     friend std::ostream& operator<<(std::ostream& os, const Color& c);
 };
 

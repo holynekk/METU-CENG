@@ -74,4 +74,10 @@ Matrix4 multiplyMatrixWithMatrix(Matrix4 m1, Matrix4 m2);
  */
 Vec4 multiplyMatrixWithVec4(Matrix4 m, Vec4 v);
 
+// bumbum
+double calc_fxx(double x, double y, double x_n, double y_n, double x_m, double y_m);
+double f01(double x, double y, double x_0, double y_0, double x_1, double y_1);
+double f12(double x, double y, double x_1, double y_1, double x_2, double y_2);
+double f20(double x, double y, double x_2, double y_2, double x_0, double y_0);
+
 #endif
