@@ -320,7 +320,7 @@ public class GUI {
 
 		System.out.println("delete\t" + selectedPoke.pokeKey());
 
-		CengPokeKeeper.deletePoke(selectedPoke);
+		CengPokeKeeper.deletePoke(selectedPoke.pokeKey());
 
 		addedPokes.remove(selectedPoke);
 

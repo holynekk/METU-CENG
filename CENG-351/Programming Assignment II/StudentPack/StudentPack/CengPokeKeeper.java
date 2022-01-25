@@ -58,10 +58,10 @@ public class CengPokeKeeper {
 		return CengPokeKeeper.bucketList;
 	}
 
-	public static void deletePoke(CengPoke poke)
+	public static void deletePoke(Integer pokeKey)
 	{
-		hashTable.deletePoke(poke);
-		bucketList.deletePoke(poke);
+		hashTable.deletePoke(pokeKey);
+		bucketList.deletePoke(pokeKey);
 
 		updateWindow();
 	}

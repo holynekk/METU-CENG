@@ -5,7 +5,7 @@ public class CengHashTable {
 		// TODO: Create a hash table with only 1 row.
 	}
 
-	public void deletePoke(CengPoke poke)
+	public void deletePoke(Integer pokeKey)
 	{
 		// TODO: Empty Implementation
 	}

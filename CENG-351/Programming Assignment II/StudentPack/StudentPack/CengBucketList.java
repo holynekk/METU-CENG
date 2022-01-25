@@ -7,7 +7,7 @@ public class CengBucketList {
 		// TODO: Empty Implementation
 	}
 
-	public void deletePoke(CengPoke poke)
+	public void deletePoke(Integer pokeKey)
 	{
 		// TODO: Empty Implementation
 	}
