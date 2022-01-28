@@ -6,9 +6,11 @@ public class CengBucket {
 	// These methods are required by GUI to work properly.
 
 	private ArrayList<CengPoke> poke_list;
+	private Integer local_depth;
 
 	public CengBucket() {
-		poke_list = new ArrayList<CengPoke>();
+		this.poke_list = new ArrayList<CengPoke>();
+		this.local_depth = 0;
 	}
 	
 	public int pokeCount()
@@ -26,7 +28,7 @@ public class CengBucket {
 	public int getHashPrefix()
 	{
 		// TODO: Return hash prefix length.
-		return poke_list.size();
+		return this.local_depth;
 	}
 	
 	public Boolean isVisited()

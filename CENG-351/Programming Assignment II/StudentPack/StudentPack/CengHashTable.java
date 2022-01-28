@@ -11,7 +11,7 @@ public class CengHashTable {
 		// TODO: Create a hash table with only 1 row.
 		this.global_depth = 0;
 		this.table = new ArrayList<CengHashRow>();
-		CengHashRow first_row = new CengHashRow("");
+		CengHashRow first_row = new CengHashRow("0");
 		first_row.setBucketIndex(0);
 		table.add(first_row);
 	}
@@ -26,8 +26,8 @@ public class CengHashTable {
 		// TODO: Empty Implementation
 		// String hash_val = Integer.toBinaryString(poke.pokeKey() % CengPokeKeeper.getHashMod());
 		int hash_val = calculate_hash(poke.pokeKey() % CengPokeKeeper.getHashMod());
-		CengHashRow proposed = this.table.get(hash_val);
-		table.get(hash_val).getBucket().add_poke(poke);
+
+		// table.get(hash_val).getBucket().add_poke(poke);
 	}
 	
 	public void searchPoke(Integer pokeKey)
