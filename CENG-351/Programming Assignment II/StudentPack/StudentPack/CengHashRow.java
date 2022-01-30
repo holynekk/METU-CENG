@@ -37,4 +37,8 @@ public class CengHashRow {
 	public void setBucketIndex(int new_index) {
 		this.bucket_index = new_index;
 	}
+
+	public int getBucketIndex() {
+		return bucket_index;
+	}
 }

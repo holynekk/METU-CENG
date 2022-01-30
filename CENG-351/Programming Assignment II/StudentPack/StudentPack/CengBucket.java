@@ -8,9 +8,9 @@ public class CengBucket {
 	private ArrayList<CengPoke> poke_list;
 	private Integer local_depth;
 
-	public CengBucket() {
+	public CengBucket(int local) {
 		this.poke_list = new ArrayList<CengPoke>();
-		this.local_depth = 0;
+		this.local_depth = local;
 	}
 	
 	public int pokeCount()
@@ -41,5 +41,13 @@ public class CengBucket {
 
 	public void add_poke(CengPoke poke) {
 		this.poke_list.add(poke);
+	}
+
+	public void inc_local_depth() {
+		this.local_depth++;
+	}
+
+	public void remove_all_pokes() {
+		poke_list.clear();
 	}
 }

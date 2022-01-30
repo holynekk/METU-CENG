@@ -8,9 +8,8 @@ public class CengBucketList {
 	public CengBucketList()
 	{
 		// TODO: Empty Implementation
-		bucket_count = 1;
 		this.all_buckets = new ArrayList<CengBucket>();
-		this.all_buckets.add(new CengBucket());
+		this.all_buckets.add(new CengBucket(0));
 	}
 
 	public void deletePoke(Integer pokeKey)
@@ -39,7 +38,7 @@ public class CengBucketList {
 	public int bucketCount()
 	{
 		// TODO: Return all bucket count.
-		return this.bucket_count;		
+		return all_buckets.size();		
 	}
 	
 	public static CengBucket bucketAtIndex(int index)
@@ -49,4 +48,12 @@ public class CengBucketList {
 	}
 	
 	// Own Methods
+
+	public static Integer find_bucket(CengBucket need_find) {
+		return all_buckets.indexOf(need_find);
+	}
+
+	public static void add_bucket(CengBucket new_bucket, int index) {
+		all_buckets.add(index, new_bucket);
+	}
 }
