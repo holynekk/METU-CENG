@@ -1,0 +1,299 @@
+"table": {
+	"row": {
+		"hashPref": 0,
+		"bucket": {
+			"hashLength": 0,
+			"pokes": [
+			]
+		}
+	}
+}
+"table": {
+	"row": {
+		"hashPref": 0,
+		"bucket": {
+			"hashLength": 0,
+			"pokes": [
+				"poke": {
+					"hash": 001,
+					"pokeKey": 1,
+					"pokeName": Pikachu,
+					"pokePower": 100,
+					"pokeType": Electric
+				}
+			]
+		}
+	}
+}
+"table": {
+	"row": {
+		"hashPref": 00,
+		"bucket": {
+			"hashLength": 1,
+			"pokes": [
+				"poke": {
+					"hash": 001,
+					"pokeKey": 1,
+					"pokeName": Pikachu,
+					"pokePower": 100,
+					"pokeType": Electric
+				}
+			]
+		}
+	},
+	"row": {
+		"hashPref": 01,
+		"bucket": {
+			"hashLength": 1,
+			"pokes": [
+				"poke": {
+					"hash": 001,
+					"pokeKey": 1,
+					"pokeName": Pikachu,
+					"pokePower": 100,
+					"pokeType": Electric
+				}
+			]
+		}
+	},
+	"row": {
+		"hashPref": 10,
+		"bucket": {
+			"hashLength": 2,
+			"pokes": [
+				"poke": {
+					"hash": 100,
+					"pokeKey": 4,
+					"pokeName": Charizard,
+					"pokePower": 200,
+					"pokeType": Fire
+				},
+				"poke": {
+					"hash": 101,
+					"pokeKey": 5,
+					"pokeName": Squirtle,
+					"pokePower": 120,
+					"pokeType": Water
+				}
+			]
+		}
+	},
+	"row": {
+		"hashPref": 11,
+		"bucket": {
+			"hashLength": 2,
+			"pokes": [
+				"poke": {
+					"hash": 111,
+					"pokeKey": 7,
+					"pokeName": Raichu,
+					"pokePower": 250,
+					"pokeType": Electric
+				}
+			]
+		}
+	}
+}
+"table": {
+	"row": {
+		"hashPref": 000,
+		"bucket": {
+			"hashLength": 2,
+			"pokes": [
+				"poke": {
+					"hash": 001,
+					"pokeKey": 1,
+					"pokeName": Pikachu,
+					"pokePower": 100,
+					"pokeType": Electric
+				},
+				"poke": {
+					"hash": 000,
+					"pokeKey": 8,
+					"pokeName": Pichu,
+					"pokePower": 10,
+					"pokeType": Electric
+				}
+			]
+		}
+	},
+	"row": {
+		"hashPref": 001,
+		"bucket": {
+			"hashLength": 2,
+			"pokes": [
+				"poke": {
+					"hash": 001,
+					"pokeKey": 1,
+					"pokeName": Pikachu,
+					"pokePower": 100,
+					"pokeType": Electric
+				},
+				"poke": {
+					"hash": 000,
+					"pokeKey": 8,
+					"pokeName": Pichu,
+					"pokePower": 10,
+					"pokeType": Electric
+				}
+			]
+		}
+	},
+	"row": {
+		"hashPref": 010,
+		"bucket": {
+			"hashLength": 2,
+			"pokes": [
+				"poke": {
+					"hash": 010,
+					"pokeKey": 2,
+					"pokeName": Bulbasaur,
+					"pokePower": 300,
+					"pokeType": Grass
+				}
+			]
+		}
+	},
+	"row": {
+		"hashPref": 011,
+		"bucket": {
+			"hashLength": 2,
+			"pokes": [
+				"poke": {
+					"hash": 010,
+					"pokeKey": 2,
+					"pokeName": Bulbasaur,
+					"pokePower": 300,
+					"pokeType": Grass
+				}
+			]
+		}
+	},
+	"row": {
+		"hashPref": 100,
+		"bucket": {
+			"hashLength": 3,
+			"pokes": [
+				"poke": {
+					"hash": 100,
+					"pokeKey": 4,
+					"pokeName": Charizard,
+					"pokePower": 200,
+					"pokeType": Fire
+				},
+				"poke": {
+					"hash": 100,
+					"pokeKey": 20,
+					"pokeName": Blastoise,
+					"pokePower": 450,
+					"pokeType": Water
+				}
+			]
+		}
+	},
+	"row": {
+		"hashPref": 101,
+		"bucket": {
+			"hashLength": 3,
+			"pokes": [
+				"poke": {
+					"hash": 101,
+					"pokeKey": 5,
+					"pokeName": Squirtle,
+					"pokePower": 120,
+					"pokeType": Water
+				}
+			]
+		}
+	},
+	"row": {
+		"hashPref": 110,
+		"bucket": {
+			"hashLength": 2,
+			"pokes": [
+				"poke": {
+					"hash": 111,
+					"pokeKey": 7,
+					"pokeName": Raichu,
+					"pokePower": 250,
+					"pokeType": Electric
+				}
+			]
+		}
+	},
+	"row": {
+		"hashPref": 111,
+		"bucket": {
+			"hashLength": 2,
+			"pokes": [
+				"poke": {
+					"hash": 111,
+					"pokeKey": 7,
+					"pokeName": Raichu,
+					"pokePower": 250,
+					"pokeType": Electric
+				}
+			]
+		}
+	}
+}
+"search": {
+	"row": {
+		"hashPref": 010,
+		"bucket": {
+			"hashLength": 2,
+			"pokes": [
+				"poke": {
+					"hash": 010,
+					"pokeKey": 2,
+					"pokeName": Bulbasaur,
+					"pokePower": 300,
+					"pokeType": Grass
+				}
+			]
+		}
+	},
+	"row": {
+		"hashPref": 011,
+		"bucket": {
+			"hashLength": 2,
+			"pokes": [
+				"poke": {
+					"hash": 010,
+					"pokeKey": 2,
+					"pokeName": Bulbasaur,
+					"pokePower": 300,
+					"pokeType": Grass
+				}
+			]
+		}
+	}
+}
+"search": {
+	"row": {
+		"hashPref": 101,
+		"bucket": {
+			"hashLength": 3,
+			"pokes": [
+				"poke": {
+					"hash": 101,
+					"pokeKey": 5,
+					"pokeName": Squirtle,
+					"pokePower": 120,
+					"pokeType": Water
+				}
+			]
+		}
+	}
+}
+"search": {
+}
+"delete": {
+	"emptyBucketNum": 0
+}
+"delete": {
+	"emptyBucketNum": 1
+}
+"search": {
+}
+

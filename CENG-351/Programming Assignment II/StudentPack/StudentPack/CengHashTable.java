@@ -9,7 +9,6 @@ public class CengHashTable {
 
 	public CengHashTable()
 	{
-		// TODO: Create a hash table with only 1 row.
 		this.global_depth = 0;
 		this.global_tab = 0;
 		this.table = new ArrayList<CengHashRow>();
@@ -20,11 +19,10 @@ public class CengHashTable {
 
 	public void deletePoke(Integer pokeKey)
 	{
-		// TODO: Empty Implementation
 		int hash_val = calculate_hash(pokeKey % CengPokeKeeper.getHashMod(), this.global_depth);
 		CengBucket delete_from = table.get(hash_val).getBucket();
 		delete_from.delete_poke(pokeKey);
-
+		// Printing deletion info
 		System.out.print("\"delete\": {\n");
 		System.out.print("\temptyBucketNum: " + CengBucketList.get_num_of_empty() + '\n');
 		System.out.print("}\n");
@@ -32,18 +30,18 @@ public class CengHashTable {
 
 	public void addPoke(CengPoke poke)
 	{			
-		// TODO: Empty Implementation
+		// Calculate hash value for corresponding poke
 		int hash_val = calculate_hash(poke.pokeKey() % CengPokeKeeper.getHashMod(), this.global_depth);
+		// Find its suggeted bucket inside hashtable
 		CengBucket sugg_bucket = table.get(hash_val).getBucket();
+		// if it's not full -> add it directly | else -> split && maybe double hash table
 		if (sugg_bucket.pokeCount() < CengPokeKeeper.getBucketSize()) {
 			sugg_bucket.add_poke(poke);
 		} else {
 			// 1 - increment local depth
 			sugg_bucket.inc_local_depth();
-
 			// 2 - allocate new page with local depth
 			CengBucket new_bucket = new CengBucket(sugg_bucket.getHashPrefix());
-
 			// 3 - re-distribute records of original page
 			// Store all to redistribute ----------------------------------
 			ArrayList<CengPoke> to_be_added = new ArrayList<CengPoke>();
@@ -52,9 +50,9 @@ public class CengHashTable {
 			}
 			to_be_added.add(poke);
 			// ------------------------------------------------------------
-
+			// Empty bucket to fill it later
 			sugg_bucket.remove_all_pokes();
-
+			// Fill splitted buckets
 			for(int k = 0; k < to_be_added.size() - 1; k++) {
 				int ex_hash = calculate_hash(to_be_added.get(k).pokeKey() % CengPokeKeeper.getHashMod(), sugg_bucket.getHashPrefix());
 				String binary_string = Integer.toBinaryString(ex_hash);
@@ -74,8 +72,7 @@ public class CengHashTable {
 				if (global_depth == 0) {
 					table.get(0).setHashPrefix("");
 				} else;
-
-
+				// Doubling HashRows
 				for(int i = 0; i < rowCount()*2; i+=2) {
 					CengHashRow temp = new CengHashRow(table.get(i).hashPrefix() + "1");
 					table.get(i).setHashPrefix(table.get(i).hashPrefix() + "0");
@@ -85,6 +82,7 @@ public class CengHashTable {
 				this.global_depth++;
 			} else;
 
+			// Setting arrows between HashRows and Buckets
 			hash_val = calculate_hash(poke.pokeKey() % CengPokeKeeper.getHashMod(), this.global_depth);
 			String xx = Integer.toBinaryString(hash_val);
 			if (xx.charAt(xx.length() - 1) == '0') {
@@ -95,14 +93,14 @@ public class CengHashTable {
 			for(int k = hash_val + 1; k < (int)Math.pow(2, this.global_depth); k++) {
 				table.get(k).setBucketIndex(table.get(k).getBucketIndex() + 1);
 			}
-
+			// Add the poke recursively. (Addition is happening recursively here. That's because we don't
+			// know if suggested bucket will be full again even after doubling HashRows)
 			addPoke(poke);
 		}
 	}
 	
 	public void searchPoke(Integer pokeKey)
 	{
-		// TODO: Empty Implementation
 		int hash_val = calculate_hash(pokeKey % CengPokeKeeper.getHashMod(), this.global_depth);
 		CengBucket found_bucket = table.get(hash_val).getBucket();
 		boolean flag = false;
@@ -112,7 +110,7 @@ public class CengHashTable {
 				break;
 			} else;
 		}
-
+		// Printing search info
 		System.out.print("\"search\": {\n");
 		if (flag) {
 			for(int i = 0; i < rowCount(); i++) {
@@ -140,33 +138,44 @@ public class CengHashTable {
 				} else;
 			}
 		} else;
-		
 		System.out.print("}\n");
 	}
 	
 	public void print()
 	{
-		// TODO: Empty Implementation
+		boolean first = true, second = true;
 		System.out.print("\"table\": {\n");
 		for(int i = 0; i < rowCount(); i++) {
+			if (first) {
+				first = false;
+			} else {
+				System.out.print("\t},\n");
+			}
 			System.out.print("\t\"row\": {\n");
 			System.out.print("\t\t\"hashPref\": " + table.get(i).hashPrefix() + ",\n");
 			System.out.print("\t\t\"bucket\": {\n");
 			System.out.print("\t\t\t\"hashLength\": " + table.get(i).getBucket().getHashPrefix() + ",\n");
 			System.out.print("\t\t\t\"pokes\": [\n");
 			for(int j = 0; j < table.get(i).getBucket().pokeCount(); j++) {
+				if (second) {
+					second = false;
+				} else {
+					System.out.print("\t\t\t\t},\n");
+				}
 				System.out.print("\t\t\t\t\"poke\": {\n");
 				System.out.print("\t\t\t\t\t\"hash\": " + string_hash(table.get(i).getBucket().pokeAtIndex(j).pokeKey()) + ",\n");
 				System.out.print("\t\t\t\t\t\"pokeKey\": " + table.get(i).getBucket().pokeAtIndex(j).pokeKey() + ",\n");
 				System.out.print("\t\t\t\t\t\"pokeName\": " + table.get(i).getBucket().pokeAtIndex(j).pokeName() + ",\n");
 				System.out.print("\t\t\t\t\t\"pokePower\": " + table.get(i).getBucket().pokeAtIndex(j).pokePower() + ",\n");
 				System.out.print("\t\t\t\t\t\"pokeType\": " + table.get(i).getBucket().pokeAtIndex(j).pokeType() + "\n");
-				System.out.print("\t\t\t\t}\n");
+				
 			}
+			System.out.print("\t\t\t\t}\n");
+
 			System.out.print("\t\t\t]\n");
 			System.out.print("\t\t}\n");
-			System.out.print("\t}\n");
 		}
+		System.out.print("\t}\n");
 		System.out.print("}\n");
 	}
 
@@ -175,19 +184,16 @@ public class CengHashTable {
 	
 	public int prefixBitCount()
 	{
-		// TODO: Return table's hash prefix length.
 		return this.global_depth;
 	}
 	
 	public int rowCount()
 	{
-		// TODO: Return the count of HashRows in table.
 		return (int)Math.pow(2, this.global_depth);		
 	}
 	
 	public CengHashRow rowAtIndex(int index)
 	{
-		// TODO: Return corresponding hashRow at index.
 		return table.get(index);
 	}
 	
