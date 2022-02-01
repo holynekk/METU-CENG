@@ -53,7 +53,7 @@ public class CengPokeParser {
 				CengPokeKeeper.addPoke(newPoke);
 			} else if ((myLine.toLowerCase()).startsWith("delete")) {
 				String[] array1 = myLine.split("\\t");
-
+				CengPokeKeeper.deletePoke(Integer.parseInt(array1[1]));
 			} else if ((myLine.toLowerCase()).startsWith("search")) {
 				String[] array1 = myLine.split("\\t");
 				CengPokeKeeper.searchPoke(Integer.parseInt(array1[1]));

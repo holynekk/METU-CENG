@@ -103,10 +103,43 @@ public class CengHashTable {
 	{
 		// TODO: Empty Implementation
 		int hash_val = calculate_hash(pokeKey % CengPokeKeeper.getHashMod(), this.global_depth);
+		CengBucket found_bucket = table.get(hash_val).getBucket();
+		boolean flag = false;
+		for(int i = 0; i < found_bucket.pokeCount(); i++) {
+			if (found_bucket.pokeAtIndex(i).pokeKey() == pokeKey) {
+				flag = true;
+				break;
+			} else;
+		}
+
 		System.out.print("\"search\": {\n");
-		System.out.print("\t\"row\": {\n");
-		System.out.print("\t\"hashPref\": {\n");
-		System.out.print("\t}\n");
+		if (flag) {
+			for(int i = 0; i < rowCount(); i++) {
+				CengBucket tmp = table.get(i).getBucket();
+				if (tmp == found_bucket) {
+					System.out.print("\t\"row\": {\n");
+					System.out.print("\t\t\"hashPref\": " + table.get(i).hashPrefix() + ",\n");
+					System.out.print("\t\t\"bucket\": {\n");
+					System.out.print("\t\t\t\"hashLength\": " + tmp.getHashPrefix() + ",\n");
+					System.out.print("\t\t\t\"pokes\": [\n");
+					for(int k = 0; k < tmp.pokeCount(); k++) {
+						if (tmp.pokeAtIndex(k).pokeKey() == pokeKey) {
+							System.out.print("\t\t\t\t\"poke\": {\n");
+							System.out.print("\t\t\t\t\t\"hash\": " + string_hash(pokeKey) + ",\n");
+							System.out.print("\t\t\t\t\t\"pokeKey\": " + pokeKey + ",\n");
+							System.out.print("\t\t\t\t\t\"pokeName\": " + tmp.pokeAtIndex(k).pokeName() + ",\n");
+							System.out.print("\t\t\t\t\t\"pokePower\": " + tmp.pokeAtIndex(k).pokePower() + ",\n");
+							System.out.print("\t\t\t\t\t\"pokeType\": " + tmp.pokeAtIndex(k).pokeType() + "\n");
+							System.out.print("\t\t\t\t}\n");
+						} else;
+					}
+					System.out.print("\t\t\t]\n");
+					System.out.print("\t\t}\n");
+					System.out.print("\t}\n");
+				} else;
+			}
+		} else;
+		
 		System.out.print("}\n");
 	}
 	
