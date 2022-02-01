@@ -24,7 +24,7 @@ public class CengHashTable {
 		delete_from.delete_poke(pokeKey);
 		// Printing deletion info
 		System.out.print("\"delete\": {\n");
-		System.out.print("\temptyBucketNum: " + CengBucketList.get_num_of_empty() + '\n');
+		System.out.print("\t\"emptyBucketNum\": " + CengBucketList.get_num_of_empty() + '\n');
 		System.out.print("}\n");
 	}
 
@@ -62,11 +62,8 @@ public class CengHashTable {
 					new_bucket.add_poke(to_be_added.get(k));
 				}
 			}
-
 			// 4 - add entry for the new page to the directory
 			CengBucketList.add_bucket(new_bucket, CengBucketList.find_bucket(sugg_bucket) + 1);
-
-
 			// 5 - double the directory if necessary
 			if (sugg_bucket.getHashPrefix() > global_depth) {
 				if (global_depth == 0) {
@@ -103,7 +100,7 @@ public class CengHashTable {
 	{
 		int hash_val = calculate_hash(pokeKey % CengPokeKeeper.getHashMod(), this.global_depth);
 		CengBucket found_bucket = table.get(hash_val).getBucket();
-		boolean flag = false, for_row = true;
+		boolean flag = false, for_row = true, for_pokey = true;
 		for(int i = 0; i < found_bucket.pokeCount(); i++) {
 			if (found_bucket.pokeAtIndex(i).pokeKey() == pokeKey) {
 				flag = true;
@@ -127,16 +124,20 @@ public class CengHashTable {
 					System.out.print("\t\t\t\"hashLength\": " + tmp.getHashPrefix() + ",\n");
 					System.out.print("\t\t\t\"pokes\": [\n");
 					for(int k = 0; k < tmp.pokeCount(); k++) {
-						if (tmp.pokeAtIndex(k).pokeKey() == pokeKey) {
-							System.out.print("\t\t\t\t\"poke\": {\n");
-							System.out.print("\t\t\t\t\t\"hash\": " + string_hash(pokeKey) + ",\n");
-							System.out.print("\t\t\t\t\t\"pokeKey\": " + pokeKey + ",\n");
-							System.out.print("\t\t\t\t\t\"pokeName\": " + tmp.pokeAtIndex(k).pokeName() + ",\n");
-							System.out.print("\t\t\t\t\t\"pokePower\": " + tmp.pokeAtIndex(k).pokePower() + ",\n");
-							System.out.print("\t\t\t\t\t\"pokeType\": " + tmp.pokeAtIndex(k).pokeType() + "\n");
-							System.out.print("\t\t\t\t}\n");
-						} else;
+						if (for_pokey) {
+							for_pokey = false;
+						} else {
+							System.out.print("\t\t\t\t},\n");
+						}
+						System.out.print("\t\t\t\t\"poke\": {\n");
+						System.out.print("\t\t\t\t\t\"hash\": " + string_hash(tmp.pokeAtIndex(k).pokeKey()) + ",\n");
+						System.out.print("\t\t\t\t\t\"pokeKey\": " + tmp.pokeAtIndex(k).pokeKey() + ",\n");
+						System.out.print("\t\t\t\t\t\"pokeName\": " + tmp.pokeAtIndex(k).pokeName() + ",\n");
+						System.out.print("\t\t\t\t\t\"pokePower\": " + tmp.pokeAtIndex(k).pokePower() + ",\n");
+						System.out.print("\t\t\t\t\t\"pokeType\": " + tmp.pokeAtIndex(k).pokeType() + "\n");
 					}
+					for_pokey = true;
+					System.out.print("\t\t\t\t}\n");
 					System.out.print("\t\t\t]\n");
 					System.out.print("\t\t}\n");
 					// System.out.print("\t}\n");
