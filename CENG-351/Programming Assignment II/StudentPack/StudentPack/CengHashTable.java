@@ -36,7 +36,6 @@ public class CengHashTable {
 		int hash_val = calculate_hash(poke.pokeKey() % CengPokeKeeper.getHashMod(), this.global_depth);
 		CengBucket sugg_bucket = table.get(hash_val).getBucket();
 		if (sugg_bucket.pokeCount() < CengPokeKeeper.getBucketSize()) {
-			// System.out.print("ahash");
 			sugg_bucket.add_poke(poke);
 		} else {
 			// 1 - increment local depth
@@ -56,7 +55,7 @@ public class CengHashTable {
 
 			sugg_bucket.remove_all_pokes();
 
-			for(int k = 0; k < to_be_added.size(); k++) {
+			for(int k = 0; k < to_be_added.size() - 1; k++) {
 				int ex_hash = calculate_hash(to_be_added.get(k).pokeKey() % CengPokeKeeper.getHashMod(), sugg_bucket.getHashPrefix());
 				String binary_string = Integer.toBinaryString(ex_hash);
 				if (binary_string.charAt(binary_string.length() - 1) == '0') {
@@ -96,6 +95,8 @@ public class CengHashTable {
 			for(int k = hash_val + 1; k < (int)Math.pow(2, this.global_depth); k++) {
 				table.get(k).setBucketIndex(table.get(k).getBucketIndex() + 1);
 			}
+
+			addPoke(poke);
 		}
 	}
 	
