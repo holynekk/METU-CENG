@@ -47,19 +47,20 @@ public class CengPokeParser {
 		String myLine = null;
 		
 		while ((myLine = in.nextLine()) != null) {
-			if (myLine.startsWith("add") || myLine.startsWith("Add")|| myLine.startsWith("aDd")|| myLine.startsWith("adD")|| myLine.startsWith("ADd")|| myLine.startsWith("aDD")|| myLine.startsWith("ADD")) {
+			if ((myLine.toLowerCase()).startsWith("add")) {
 				String[] array1 = myLine.split("\\t");
 				CengPoke newPoke = new CengPoke(Integer.parseInt(array1[1]), array1[2], array1[3], array1[4]);
 				CengPokeKeeper.addPoke(newPoke);
-			} else if (myLine.startsWith("delete")) {
+			} else if ((myLine.toLowerCase()).startsWith("delete")) {
 				String[] array1 = myLine.split("\\t");
 
-			} else if (myLine.startsWith("search")) {
+			} else if ((myLine.toLowerCase()).startsWith("search")) {
 				String[] array1 = myLine.split("\\t");
+				CengPokeKeeper.searchPoke(Integer.parseInt(array1[1]));
 
-			} else if (myLine.startsWith("print")) {
-				
-			} else if (myLine.startsWith("quit")) {
+			} else if ((myLine.toLowerCase()).startsWith("print")) {
+				CengPokeKeeper.printEverything();
+			} else if ((myLine.toLowerCase()).startsWith("quit")) {
 				return;
 			} else;
 			

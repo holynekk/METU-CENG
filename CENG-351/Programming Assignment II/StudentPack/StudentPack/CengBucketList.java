@@ -56,4 +56,12 @@ public class CengBucketList {
 	public static void add_bucket(CengBucket new_bucket, int index) {
 		all_buckets.add(index, new_bucket);
 	}
+
+	public static Integer get_num_of_empty() {
+		Integer result = 0;
+		for(int i = 0; i < all_buckets.size(); i++) {
+			if (all_buckets.get(i).pokeCount() == 0) result++;
+		}
+		return result;
+	}
 }

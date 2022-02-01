@@ -50,4 +50,13 @@ public class CengBucket {
 	public void remove_all_pokes() {
 		poke_list.clear();
 	}
+
+	public void delete_poke(Integer pokeKey) {
+		for(int i = 0; i < CengPokeKeeper.getBucketSize(); i++) {
+			if(poke_list.get(i).pokeKey() == pokeKey) {
+				poke_list.remove(i);
+				break;
+			} else;
+		}
+	}
 }

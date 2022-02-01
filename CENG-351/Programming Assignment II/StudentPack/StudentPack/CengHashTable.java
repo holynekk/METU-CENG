@@ -5,11 +5,13 @@ public class CengHashTable {
 
 	private Integer global_depth;
 	private ArrayList<CengHashRow> table;
+	private Integer global_tab;
 
 	public CengHashTable()
 	{
 		// TODO: Create a hash table with only 1 row.
 		this.global_depth = 0;
+		this.global_tab = 0;
 		this.table = new ArrayList<CengHashRow>();
 		CengHashRow first_row = new CengHashRow("0");
 		first_row.setBucketIndex(0);
@@ -19,16 +21,19 @@ public class CengHashTable {
 	public void deletePoke(Integer pokeKey)
 	{
 		// TODO: Empty Implementation
+		int hash_val = calculate_hash(pokeKey % CengPokeKeeper.getHashMod(), this.global_depth);
+		CengBucket delete_from = table.get(hash_val).getBucket();
+		delete_from.delete_poke(pokeKey);
+
+		System.out.print("\"delete\": {\n");
+		System.out.print("\temptyBucketNum: " + CengBucketList.get_num_of_empty() + '\n');
+		System.out.print("}\n");
 	}
 
 	public void addPoke(CengPoke poke)
 	{			
 		// TODO: Empty Implementation
-		// String hash_val = Integer.toBinaryString(poke.pokeKey() % CengPokeKeeper.getHashMod());
 		int hash_val = calculate_hash(poke.pokeKey() % CengPokeKeeper.getHashMod(), this.global_depth);
-		// System.out.print(hash_val);
-		// System.out.print('\n');
-		// System.out.print(hash_val);
 		CengBucket sugg_bucket = table.get(hash_val).getBucket();
 		if (sugg_bucket.pokeCount() < CengPokeKeeper.getBucketSize()) {
 			// System.out.print("ahash");
@@ -88,7 +93,6 @@ public class CengHashTable {
 			} else {
 				table.get(hash_val).setBucketIndex(CengBucketList.find_bucket(sugg_bucket) + 1);
 			}
-			System.out.print(hash_val);
 			for(int k = hash_val + 1; k < (int)Math.pow(2, this.global_depth); k++) {
 				table.get(k).setBucketIndex(table.get(k).getBucketIndex() + 1);
 			}
@@ -98,11 +102,38 @@ public class CengHashTable {
 	public void searchPoke(Integer pokeKey)
 	{
 		// TODO: Empty Implementation
+		int hash_val = calculate_hash(pokeKey % CengPokeKeeper.getHashMod(), this.global_depth);
+		System.out.print("\"search\": {\n");
+		System.out.print("\t\"row\": {\n");
+		System.out.print("\t\"hashPref\": {\n");
+		System.out.print("\t}\n");
+		System.out.print("}\n");
 	}
 	
 	public void print()
 	{
 		// TODO: Empty Implementation
+		System.out.print("\"table\": {\n");
+		for(int i = 0; i < rowCount(); i++) {
+			System.out.print("\t\"row\": {\n");
+			System.out.print("\t\t\"hashPref\": " + table.get(i).hashPrefix() + ",\n");
+			System.out.print("\t\t\"bucket\": {\n");
+			System.out.print("\t\t\t\"hashLength\": " + table.get(i).getBucket().getHashPrefix() + ",\n");
+			System.out.print("\t\t\t\"pokes\": [\n");
+			for(int j = 0; j < table.get(i).getBucket().pokeCount(); j++) {
+				System.out.print("\t\t\t\t\"poke\": {\n");
+				System.out.print("\t\t\t\t\t\"hash\": " + string_hash(table.get(i).getBucket().pokeAtIndex(j).pokeKey()) + ",\n");
+				System.out.print("\t\t\t\t\t\"pokeKey\": " + table.get(i).getBucket().pokeAtIndex(j).pokeKey() + ",\n");
+				System.out.print("\t\t\t\t\t\"pokeName\": " + table.get(i).getBucket().pokeAtIndex(j).pokeName() + ",\n");
+				System.out.print("\t\t\t\t\t\"pokePower\": " + table.get(i).getBucket().pokeAtIndex(j).pokePower() + ",\n");
+				System.out.print("\t\t\t\t\t\"pokeType\": " + table.get(i).getBucket().pokeAtIndex(j).pokeType() + "\n");
+				System.out.print("\t\t\t\t}\n");
+			}
+			System.out.print("\t\t\t]\n");
+			System.out.print("\t\t}\n");
+			System.out.print("\t}\n");
+		}
+		System.out.print("}\n");
 	}
 
 	// GUI-Based Methods
@@ -140,12 +171,19 @@ public class CengHashTable {
 			}
 		}
         String result_hash = hash.substring(0, depth);
-		// System.out.print(result_hash);
-		// System.out.print('\n');
         return Integer.parseInt(result_hash, 2);
     }
 
-	public void double_hash_table() {
-
+	public String string_hash(int poke_key) {
+		String converted = Integer.toBinaryString(poke_key % CengPokeKeeper.getHashMod());
+		int expected_hash_length = (int)(Math.log(CengPokeKeeper.getHashMod())/Math.log(2));
+		while (true) {
+			if (converted.length() == expected_hash_length) {
+				break;
+			} else {
+				converted = "0" + converted;
+			}
+		}
+		return converted;
 	}
 }
