@@ -103,7 +103,7 @@ public class CengHashTable {
 	{
 		int hash_val = calculate_hash(pokeKey % CengPokeKeeper.getHashMod(), this.global_depth);
 		CengBucket found_bucket = table.get(hash_val).getBucket();
-		boolean flag = false;
+		boolean flag = false, for_row = true;
 		for(int i = 0; i < found_bucket.pokeCount(); i++) {
 			if (found_bucket.pokeAtIndex(i).pokeKey() == pokeKey) {
 				flag = true;
@@ -116,6 +116,11 @@ public class CengHashTable {
 			for(int i = 0; i < rowCount(); i++) {
 				CengBucket tmp = table.get(i).getBucket();
 				if (tmp == found_bucket) {
+					if (for_row) {
+						for_row = false;
+					} else {
+						System.out.print("\t},\n");
+					}
 					System.out.print("\t\"row\": {\n");
 					System.out.print("\t\t\"hashPref\": " + table.get(i).hashPrefix() + ",\n");
 					System.out.print("\t\t\"bucket\": {\n");
@@ -134,9 +139,10 @@ public class CengHashTable {
 					}
 					System.out.print("\t\t\t]\n");
 					System.out.print("\t\t}\n");
-					System.out.print("\t}\n");
+					// System.out.print("\t}\n");
 				} else;
 			}
+			System.out.print("\t}\n");
 		} else;
 		System.out.print("}\n");
 	}
@@ -170,10 +176,10 @@ public class CengHashTable {
 				System.out.print("\t\t\t\t\t\"pokeType\": " + table.get(i).getBucket().pokeAtIndex(j).pokeType() + "\n");
 				
 			}
-			System.out.print("\t\t\t\t}\n");
-
+			if (table.get(i).getBucket().pokeCount() > 0) System.out.print("\t\t\t\t}\n");
 			System.out.print("\t\t\t]\n");
 			System.out.print("\t\t}\n");
+			second = true;
 		}
 		System.out.print("\t}\n");
 		System.out.print("}\n");
