@@ -72,6 +72,8 @@ void EclipseMap::Render(const char *coloredTexturePath, const char *greyTextureP
         // TODO: Manipulate rotation variables
         
         // TODO: Bind textures
+
+        /************* MOON **************/
         
         // TODO: Use moonShaderID program
         
@@ -82,8 +84,12 @@ void EclipseMap::Render(const char *coloredTexturePath, const char *greyTextureP
         // TODO: Bind moon vertex array        
 
         // TODO: Draw moon object
+
+        /************ MOON **************/
         
-        /*************************/
+
+
+        /* ------------ EARTH ------------ */
 
         // TODO: Use worldShaderID program
         
@@ -94,6 +100,8 @@ void EclipseMap::Render(const char *coloredTexturePath, const char *greyTextureP
         // TODO: Bind world vertex array
         
         // TODO: Draw world object
+
+        /* ------------ EARTH ------------ */
         
 
         // Swap buffers and poll events
