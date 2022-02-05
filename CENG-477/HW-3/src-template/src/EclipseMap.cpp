@@ -36,9 +36,9 @@ void EclipseMap::Render(const char *coloredTexturePath, const char *greyTextureP
     initMoonColoredTexture(moonTexturePath, moonShaderID);
 
     
-    // TODO: Set moonVertices
+    // TODO: Set moonVertices ----------------------------------------------------------------------------------------
     
-    // TODO: Configure Buffers
+    // TODO: Configure Buffers ----------------------------------------------------------------------------------------
     
 
     // World commands
@@ -48,12 +48,9 @@ void EclipseMap::Render(const char *coloredTexturePath, const char *greyTextureP
     initColoredTexture(coloredTexturePath, worldShaderID);
     initGreyTexture(greyTexturePath, worldShaderID);
 
-    // TODO: Set worldVertices
-    
-    // TODO: Configure Buffers
-    
-    // Enable depth test
-    glEnable(GL_DEPTH_TEST);
+    // TODO: Set worldVertices ----------------------------------------------------------------------------------------
+
+    // TODO: Configure Buffers ----------------------------------------------------------------------------------------
 
     // Main rendering loop
     do {
@@ -66,24 +63,24 @@ void EclipseMap::Render(const char *coloredTexturePath, const char *greyTextureP
 
 
 
-        // TODO: Handle key presses
+        // TODO: Handle key presses ----------------------------------------------------------------------------------------
         handleKeyPress(window);
 
-        // TODO: Manipulate rotation variables
+        // TODO: Manipulate rotation variables -----------------------------------------------------------------------------
         
-        // TODO: Bind textures
+        // TODO: Bind textures ---------------------------------------------------------------------------------------------
 
         /************* MOON **************/
         
-        // TODO: Use moonShaderID program
+        // TODO: Use moonShaderID program ----------------------------------------------------------------------------------
         
-        // TODO: Update camera at every frame
+        // TODO: Update camera at every frame ------------------------------------------------------------------------------
         
-        // TODO: Update uniform variables at every frame
+        // TODO: Update uniform variables at every frame -------------------------------------------------------------------
         
-        // TODO: Bind moon vertex array        
+        // TODO: Bind moon vertex array ------------------------------------------------------------------------------------
 
-        // TODO: Draw moon object
+        // TODO: Draw moon object ------------------------------------------------------------------------------------------
 
         /************ MOON **************/
         
@@ -91,15 +88,16 @@ void EclipseMap::Render(const char *coloredTexturePath, const char *greyTextureP
 
         /* ------------ EARTH ------------ */
 
-        // TODO: Use worldShaderID program
+        // TODO: Use worldShaderID program ---------------------------------------------------------------------------------
+        glUseProgram(worldShaderID);
         
-        // TODO: Update camera at every frame
+        // TODO: Update camera at every frame ------------------------------------------------------------------------------
 
-        // TODO: Update uniform variables at every frame
+        // TODO: Update uniform variables at every frame -------------------------------------------------------------------
         
-        // TODO: Bind world vertex array
+        // TODO: Bind world vertex array -----------------------------------------------------------------------------------
         
-        // TODO: Draw world object
+        // TODO: Draw world object -----------------------------------------------------------------------------------------
 
         /* ------------ EARTH ------------ */
         
@@ -131,7 +129,6 @@ void EclipseMap::handleKeyPress(GLFWwindow *window) {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, GLFW_TRUE);
     }
-
 }
 
 GLFWwindow *EclipseMap::openWindow(const char *windowName, int width, int height) {
