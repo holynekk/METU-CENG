@@ -71,8 +71,74 @@ void EclipseMap::Render(const char *coloredTexturePath, const char *greyTextureP
     initGreyTexture(greyTexturePath, worldShaderID);
 
     // TODO: Set worldVertices
+
+    float x, y, z, xy, u, v, alpha, beta;
+	for (int i = 0; i <= verticalSplitCount; i++) {
+		beta = M_PI / 2 - (i * M_PI / verticalSplitCount); // pi/2 to -pi/2
+		xy = radius * cosf(beta);
+		z = radius * sinf(beta);
+		for (int j = 0; j <= horizontalSplitCount; j++) {
+			alpha = j * 2 * M_PI / horizontalSplitCount;  // 0 to 2pi
+			x = xy * cosf(alpha);
+			y = xy * sinf(alpha);
+			u = (float)j / horizontalSplitCount;
+			v = (float)i / verticalSplitCount;
+
+			vertex vertex;
+			vertex.position = glm::vec3(x, y, z);
+			vertex.normal = glm::normalize(glm::vec3(x/radius, y/radius, z/radius));
+			vertex.texture = glm::vec2(u, v);
+
+			worldVertices.push_back(vertex.position.x);
+            worldVertices.push_back(vertex.position.y);
+            worldVertices.push_back(vertex.position.z);
+
+            worldNormals.push_back(vertex.normal.x);
+            worldNormals.push_back(vertex.normal.y);
+            worldNormals.push_back(vertex.normal.z);
+		}
+	}
+
+    // Initialize indices
+    int k1, k2;
+	for(int i = 0; i < verticalSplitCount; ++i) {
+		k1 = i * (horizontalSplitCount + 1);
+		k2 = k1 + horizontalSplitCount + 1;
+		for(int j = 0; j < horizontalSplitCount; ++j, ++k1, ++k2) {
+			// 2 triangles per sector excluding first and last stacks
+			/* Provide indices for the first triangle with a correct winding order that suits RH-rule */
+			if(i != 0) {
+				worldIndices.push_back(k1);
+				worldIndices.push_back(k2);
+				worldIndices.push_back(k1 + 1);
+			}
+			/* Provide indices for the second triangle with a correct winding order that suits RH-rule */
+			if(i != (horizontalSplitCount - 1)) {
+				worldIndices.push_back(k1 + 1);
+				worldIndices.push_back(k2);
+				worldIndices.push_back(k2 + 1);
+			}
+		}
+	}
+    cout << worldVertices.size();
     
     // TODO: Configure Buffers
+
+    glGenBuffers(1, &VAO);
+	glGenBuffers(1, &VBO);
+	glGenBuffers(1, &EBO);
+
+    glBindBuffer(GL_ARRAY_BUFFER, VAO);
+	glBufferData(GL_ARRAY_BUFFER, worldVertices.size() * 3 * sizeof(float), &worldVertices, GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, worldNormals.size() * 3 * sizeof(float), &worldNormals, GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, worldIndices.size() * 3 * sizeof(unsigned int), &worldIndices, GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     
     // Enable depth test
     glEnable(GL_DEPTH_TEST);
@@ -94,18 +160,8 @@ void EclipseMap::Render(const char *coloredTexturePath, const char *greyTextureP
         // TODO: Manipulate rotation variables
         
         // TODO: Bind textures
-        
-        // TODO: Use moonShaderID program
-        
-        // TODO: Update camera at every frame
-        
-        // TODO: Update uniform variables at every frame
-        
-        // TODO: Bind moon vertex array        
 
-        // TODO: Draw moon object
-        
-        /*************************/
+        /************** WORLD **************/
 
         // TODO: Use worldShaderID program
         
@@ -116,6 +172,32 @@ void EclipseMap::Render(const char *coloredTexturePath, const char *greyTextureP
         // TODO: Bind world vertex array
         
         // TODO: Draw world object
+
+        glEnableClientState(GL_VERTEX_ARRAY);
+		glEnableClientState(GL_NORMAL_ARRAY);
+        glBindBuffer(GL_ARRAY_BUFFER, VAO);
+        glVertexPointer(3,GL_FLOAT, 0, 0);
+        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+		glNormalPointer(GL_FLOAT, 0, 0);
+
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+
+        /************** WORLD **************/
+
+
+        /************** MOON **************/
+        
+        // TODO: Use moonShaderID program
+        
+        // TODO: Update camera at every frame
+        
+        // TODO: Update uniform variables at every frame
+        
+        // TODO: Bind moon vertex array        
+
+        // TODO: Draw moon object
+
+        /************** MOON **************/
         
 
         // Swap buffers and poll events

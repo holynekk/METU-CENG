@@ -53,7 +53,9 @@ private:
 public:
     unsigned int textureColor;
     unsigned int textureGrey;
+    // Vertex Array Object
     unsigned int VAO;
+    // VBO Normal, EBO Index
     unsigned int VBO, EBO;
     float imageHeight;
     float imageWidth;
@@ -69,6 +71,7 @@ public:
     float moonRadius = 162;
 
     vector<float> worldVertices;
+    vector<float> worldNormals;
     vector<unsigned int> worldIndices;
 
     vector<float> moonVertices;
