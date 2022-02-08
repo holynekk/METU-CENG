@@ -53,9 +53,7 @@ private:
 public:
     unsigned int textureColor;
     unsigned int textureGrey;
-    // Vertex Array Object
     unsigned int VAO;
-    // VBO Normal, EBO Index
     unsigned int VBO, EBO;
     float imageHeight;
     float imageWidth;

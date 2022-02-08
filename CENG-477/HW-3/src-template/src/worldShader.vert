@@ -31,24 +31,19 @@ out Data
 out vec3 LightVector;// Vector from Vertex to Light;
 out vec3 CameraVector;// Vector from Vertex to Camera;
 
-
-float get_height(in vec2 xy) {
-    vec4 value = texture(TexGrey, xy);
-    float height = value.r;
-    return height * heightFactor;
-}
-
-
 void main()
 {
     
     // Calculate texture coordinate based on data.TexCoord
-    data.TexCoord = VertexTex;
-    data.TexCoord.x += textureOffset * (1.0 / 250.0);
-    data.Normal = VertexNormal;
-    vec3 heightOffset = VertexNormal * get_height(data.TexCoord);
-    vec3 calculated_pos = VertexPosition + heightOffset;
-    CameraVector = normalize(cameraPosition - calculated_pos);
-    LightVector = normalize(lightPosition - calculated_pos);
-    gl_Position = MVP * vec4(calculated_pos.xyz, 1.0f);
+    vec2 textureCoordinate = vec2(0, 0);
+    vec4 texColor = texture(TexGrey, textureCoordinate);
+
+    // get texture value, compute height
+    // compute normal vector
+
+
+   // set gl_Position variable correctly to give the transformed vertex position
+
+
+    gl_Position = vec4(0,0,0,0); // this is a placeholder. It does not correctly set the position
 }

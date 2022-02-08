@@ -2,28 +2,6 @@
 
 using namespace std;
 
-bool increase_heightFactor = false, 
-    decrease_heightFactor = false, 
-    increase_pitch = false, 
-    decrease_pitch = false, 
-    increase_yaw = false, 
-    decrease_yaw = false,
-    increase_speed = false, 
-    decrease_speed = false,
-    stop_cam = false,
-    return_initial = false, 
-    switch_full_screen = false;
-
-    // move_map_left = false, 
-    // move_map_right = false, 
-    // move_light_left = false, 
-    // move_light_right = false, 
-    // move_light_up = false, 
-    // move_light_down = false, 
-    // light_y_increase = false, 
-    // light_y_decrease = false, 
-    // isFullscreen = false;
-
 struct vertex {
     glm::vec3 position;
     glm::vec3 normal;
@@ -58,9 +36,9 @@ void EclipseMap::Render(const char *coloredTexturePath, const char *greyTextureP
     initMoonColoredTexture(moonTexturePath, moonShaderID);
 
     
-    // TODO: Set moonVertices
+    // TODO: Set moonVertices ----------------------------------------------------------------------
     
-    // TODO: Configure Buffers
+    // TODO: Configure Buffers ----------------------------------------------------------------------
     
 
     // World commands
@@ -70,8 +48,7 @@ void EclipseMap::Render(const char *coloredTexturePath, const char *greyTextureP
     initColoredTexture(coloredTexturePath, worldShaderID);
     initGreyTexture(greyTexturePath, worldShaderID);
 
-    // TODO: Set worldVertices
-
+    // TODO: Set worldVertices ----------------------------------------------------------------------
     float x, y, z, xy, u, v, alpha, beta;
 	for (int i = 0; i <= verticalSplitCount; i++) {
 		beta = M_PI / 2 - (i * M_PI / verticalSplitCount); // pi/2 to -pi/2
@@ -89,9 +66,9 @@ void EclipseMap::Render(const char *coloredTexturePath, const char *greyTextureP
 			vertex.normal = glm::normalize(glm::vec3(x/radius, y/radius, z/radius));
 			vertex.texture = glm::vec2(u, v);
 
-			worldVertices.push_back(vertex.position.x);
-            worldVertices.push_back(vertex.position.y);
-            worldVertices.push_back(vertex.position.z);
+			worldVertices.push_back(x);
+            worldVertices.push_back(y);
+            worldVertices.push_back(z);
 
             worldNormals.push_back(vertex.normal.x);
             worldNormals.push_back(vertex.normal.y);
@@ -99,7 +76,6 @@ void EclipseMap::Render(const char *coloredTexturePath, const char *greyTextureP
 		}
 	}
 
-    // Initialize indices
     int k1, k2;
 	for(int i = 0; i < verticalSplitCount; ++i) {
 		k1 = i * (horizontalSplitCount + 1);
@@ -120,25 +96,29 @@ void EclipseMap::Render(const char *coloredTexturePath, const char *greyTextureP
 			}
 		}
 	}
-    cout << worldVertices.size();
     
-    // TODO: Configure Buffers
+    // TODO: Configure Buffers ----------------------------------------------------------------------
 
+    // vboVertex
     glGenBuffers(1, &VAO);
+    // vboNormal
 	glGenBuffers(1, &VBO);
+    // vboIndex
 	glGenBuffers(1, &EBO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, VAO);
-	glBufferData(GL_ARRAY_BUFFER, worldVertices.size() * 3 * sizeof(float), &worldVertices, GL_STATIC_DRAW);
+	
+	glBindBuffer(GL_ARRAY_BUFFER, VAO);
+	glBufferData(GL_ARRAY_BUFFER, worldVertices.size() * 3 * sizeof(float), worldVertices.data(), GL_STATIC_DRAW);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, worldNormals.size() * 3 * sizeof(float), &worldNormals, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, worldNormals.size() * 3 * sizeof(GLfloat), worldNormals.data(), GL_STATIC_DRAW);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, worldIndices.size() * 3 * sizeof(unsigned int), &worldIndices, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, worldIndices.size() * 3 * sizeof(GLuint), worldIndices.data(), GL_STATIC_DRAW);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+    // Set Uniform Variables
     
     // Enable depth test
     glEnable(GL_DEPTH_TEST);
@@ -154,50 +134,52 @@ void EclipseMap::Render(const char *coloredTexturePath, const char *greyTextureP
 
 
 
-        // TODO: Handle key presses
+        // TODO: Handle key presses ----------------------------------------------------------------------
         handleKeyPress(window);
 
-        // TODO: Manipulate rotation variables
+        // TODO: Manipulate rotation variables ----------------------------------------------------------------------
         
         // TODO: Bind textures
 
-        /************** WORLD **************/
+        /************* WORLD *************/
 
-        // TODO: Use worldShaderID program
+        // TODO: Use worldShaderID program ----------------------------------------------------------------------
+        glUseProgram(worldShaderID);
         
-        // TODO: Update camera at every frame
+        // TODO: Update camera at every frame ----------------------------------------------------------------------
 
-        // TODO: Update uniform variables at every frame
+        // TODO: Update uniform variables at every frame ----------------------------------------------------------------------
         
-        // TODO: Bind world vertex array
-        
-        // TODO: Draw world object
-
+        // TODO: Bind world vertex array ----------------------------------------------------------------------
         glEnableClientState(GL_VERTEX_ARRAY);
 		glEnableClientState(GL_NORMAL_ARRAY);
         glBindBuffer(GL_ARRAY_BUFFER, VAO);
-        glVertexPointer(3,GL_FLOAT, 0, 0);
+		glVertexPointer(3, GL_FLOAT, 0, 0);
         glBindBuffer(GL_ARRAY_BUFFER, VBO);
 		glNormalPointer(GL_FLOAT, 0, 0);
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+        // TODO: Draw world object ----------------------------------------------------------------------
+        glColor3f(0.1, 0.2, 0.9); 
+        glDrawElements(GL_TRIANGLES, worldIndices.size(), GL_UNSIGNED_INT, nullptr);
+        /************* WORLD *************/
 
-        /************** WORLD **************/
 
 
-        /************** MOON **************/
+
+        /************* MOON *************/
         
-        // TODO: Use moonShaderID program
+        // TODO: Use moonShaderID program ----------------------------------------------------------------------
         
-        // TODO: Update camera at every frame
+        // TODO: Update camera at every frame ----------------------------------------------------------------------
         
-        // TODO: Update uniform variables at every frame
+        // TODO: Update uniform variables at every frame ----------------------------------------------------------------------
         
-        // TODO: Bind moon vertex array        
+        // TODO: Bind moon vertex array ----------------------------------------------------------------------
 
-        // TODO: Draw moon object
-
-        /************** MOON **************/
+        // TODO: Draw moon object ----------------------------------------------------------------------
+        
+        /************* MOON *************/
         
 
         // Swap buffers and poll events
@@ -226,83 +208,6 @@ void EclipseMap::Render(const char *coloredTexturePath, const char *greyTextureP
 void EclipseMap::handleKeyPress(GLFWwindow *window) {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, GLFW_TRUE);
-    }
-    // Increase heightFactor
-    if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS) {
-        increase_heightFactor = true;
-    }
-	if (glfwGetKey(window, GLFW_KEY_R) == GLFW_RELEASE) {
-        increase_heightFactor = false;
-    }
-    // Decrease heightFactor
-    if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS) {
-        decrease_heightFactor = true;
-    }
-	if (glfwGetKey(window, GLFW_KEY_F) == GLFW_RELEASE) {
-        decrease_heightFactor = false;
-    }
-    // Increase pitch
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-        increase_pitch = true;
-    }
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_RELEASE) {
-        increase_pitch = false;
-    }
-    // Decrease pitch
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-        decrease_pitch = true;
-    }
-	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_RELEASE) {
-        decrease_pitch = false;
-    }
-    // Increase yaw
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-        increase_yaw = true;
-    }
-	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_RELEASE) {
-        increase_yaw = false;
-    }
-    // Decrease yaw
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-        decrease_yaw = true;
-    }
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_RELEASE) {
-        decrease_yaw = false;
-    }
-    // Increase speed
-    if (glfwGetKey(window, GLFW_KEY_Y) == GLFW_PRESS) {
-        increase_speed = true;
-    }
-	if (glfwGetKey(window, GLFW_KEY_Y) == GLFW_RELEASE) {
-        increase_speed = false;
-    }
-    // Decrease speed
-    if (glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS) {
-        decrease_speed = true;
-    }
-	if (glfwGetKey(window, GLFW_KEY_H) == GLFW_RELEASE) {
-        decrease_speed = false;
-    }	
-    // Stop camera (speed = 0)
-    if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS) {
-        stop_cam = true;
-    }
-	if (glfwGetKey(window, GLFW_KEY_X) == GLFW_RELEASE) {
-        stop_cam = false;
-    }
-    // Return back to initial cam position
-    if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS) {
-        return_initial = true;
-    }
-	if (glfwGetKey(window, GLFW_KEY_I) == GLFW_RELEASE) {
-        return_initial = false;
-    }
-    // Full screen mode on/off
-    if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS) {
-        switch_full_screen = true;
-    }
-	if (glfwGetKey(window, GLFW_KEY_P) == GLFW_RELEASE) {
-        switch_full_screen = false;
     }
 
 }
