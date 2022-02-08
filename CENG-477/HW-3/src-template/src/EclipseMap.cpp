@@ -142,6 +142,7 @@ void EclipseMap::Render(const char *coloredTexturePath, const char *greyTextureP
         
         // TODO: Bind textures
 
+
         /************* WORLD *************/
 
         // TODO: Use worldShaderID program ----------------------------------------------------------------------
@@ -153,13 +154,8 @@ void EclipseMap::Render(const char *coloredTexturePath, const char *greyTextureP
         glUniform3fv(glGetUniformLocation(worldShaderID, "lightPosition"), 1, glm::value_ptr(lightPos));
         glUniform3fv(glGetUniformLocation(worldShaderID, "cameraPosition"), 1, glm::value_ptr(cameraPosition));
 	    glUniformMatrix4fv(glGetUniformLocation(worldShaderID, "MVP"), 1, GL_FALSE, glm::value_ptr(MVP));
-        // ????????????????????????????????????????????????
-	    glUniform1i(glGetUniformLocation(worldShaderID, "TexGrey"), 0);
-        // ????????????????????????????????????????????????
 	    glUniform1i(glGetUniformLocation(worldShaderID, "textureOffset"), textureOffset);
 	    glUniform1f(glGetUniformLocation(worldShaderID, "heightFactor"), heightFactor);
-
-	    glUniform1i(glGetUniformLocation(worldShaderID, "TexColor"), 1);
 
         // TODO: Bind world vertex array ----------------------------------------------------------------------
         glEnableClientState(GL_VERTEX_ARRAY);
