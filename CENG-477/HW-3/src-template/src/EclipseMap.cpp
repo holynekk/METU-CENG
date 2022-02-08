@@ -2,6 +2,8 @@
 
 using namespace std;
 
+glm::mat4 MVP, M_model, M_view, M_projection;
+
 struct vertex {
     glm::vec3 position;
     glm::vec3 normal;
@@ -148,7 +150,17 @@ void EclipseMap::Render(const char *coloredTexturePath, const char *greyTextureP
         // TODO: Update camera at every frame ----------------------------------------------------------------------
 
         // TODO: Update uniform variables at every frame ----------------------------------------------------------------------
-        
+        glUniform3fv(glGetUniformLocation(worldShaderID, "lightPosition"), 1, glm::value_ptr(lightPos));
+        glUniform3fv(glGetUniformLocation(worldShaderID, "cameraPosition"), 1, glm::value_ptr(cameraPosition));
+	    glUniformMatrix4fv(glGetUniformLocation(worldShaderID, "MVP"), 1, GL_FALSE, glm::value_ptr(MVP));
+        // ????????????????????????????????????????????????
+	    glUniform1i(glGetUniformLocation(worldShaderID, "TexGrey"), 0);
+        // ????????????????????????????????????????????????
+	    glUniform1i(glGetUniformLocation(worldShaderID, "textureOffset"), textureOffset);
+	    glUniform1f(glGetUniformLocation(worldShaderID, "heightFactor"), heightFactor);
+
+	    glUniform1i(glGetUniformLocation(worldShaderID, "TexColor"), 1);
+
         // TODO: Bind world vertex array ----------------------------------------------------------------------
         glEnableClientState(GL_VERTEX_ARRAY);
 		glEnableClientState(GL_NORMAL_ARRAY);
