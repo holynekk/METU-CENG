@@ -17,24 +17,31 @@ uniform float textureOffset;
 
 out vec4 FragColor;
 
-vec3 ambientReflectenceCoefficient = vec3(1.0f);
-vec3 ambientLightColor = vec3(1.0f);
-vec3 specularReflectenceCoefficient= vec3(1.0f);
-vec3 specularLightColor = vec3(1.0f);
-float SpecularExponent = 1;
-vec3 diffuseReflectenceCoefficient= vec3(1.0f);
-vec3 diffuseLightColor = vec3(1.0f);
+vec4 ambientReflectenceCoefficient = vec4(0.5f, 0.5f, 0.5f, 1.0f);
+vec4 ambientLightColor = vec4(0.6f, 0.6f, 0.6f, 1.0f);
+vec4 specularReflectenceCoefficient= vec4(1.0f, 1.0f, 1.0f, 1.0f);
+vec4 specularLightColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);
+float SpecularExponent = 10;
+vec4 diffuseReflectenceCoefficient= vec4(1.0f);
+vec4 diffuseLightColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);
 
 
 void main()
 {
     // Calculate texture coordinate based on data.TexCoord
-    vec2 textureCoordinate = vec2(0, 0);
+    vec2 textureCoordinate = data.TexCoord;
     vec4 texColor = texture(TexColor, textureCoordinate);
+    diffuseReflectenceCoefficient = vec4(texColor.x, texColor.y, texColor.z, 1.0f);
 
-    vec3 ambient = vec3(0, 0, 0);    
-    vec3 diffuse = vec3(0, 0, 0);
-    vec3 spec = vec3(0, 0, 0);
+    vec3 ambient = (ambientReflectenceCoefficient * ambientLightColor).xyz;
 
-    FragColor = vec4(ambient+diffuse+spec, 1.0f);
+    float cosTheta = max(dot(data.Normal, LightVector), 0.0f);
+    vec3 diffuse = cosTheta * (diffuseLightColor * diffuseReflectenceCoefficient).xyz;
+
+    vec3 reflected = reflect(-normalize(LightVector - 0.5), data.Normal);
+    float cosAlpha = pow(max(dot(reflected, normalize(CameraVector + 5)), 0.0f), SpecularExponent);
+    vec3 spec = cosAlpha * (specularLightColor * specularReflectenceCoefficient).xyz;
+
+    vec3 computedSurfaceColor = ambient + diffuse + spec;
+    FragColor = vec4(clamp(texColor.xyz * computedSurfaceColor, 0.0, 1.0), 1.0);
 }

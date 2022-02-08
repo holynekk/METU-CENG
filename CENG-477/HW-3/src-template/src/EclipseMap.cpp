@@ -118,7 +118,6 @@ void EclipseMap::Render(const char *coloredTexturePath, const char *greyTextureP
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-    // Set Uniform Variables
     
     // Enable depth test
     glEnable(GL_DEPTH_TEST);
@@ -160,7 +159,6 @@ void EclipseMap::Render(const char *coloredTexturePath, const char *greyTextureP
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
         // TODO: Draw world object ----------------------------------------------------------------------
-        glColor3f(0.1, 0.2, 0.9); 
         glDrawElements(GL_TRIANGLES, worldIndices.size(), GL_UNSIGNED_INT, nullptr);
         /************* WORLD *************/
 
