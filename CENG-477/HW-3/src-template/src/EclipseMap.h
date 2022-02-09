@@ -12,10 +12,32 @@
 #include <jpeglib.h>
 #include <GL/glew.h>
 
-#define BUFFER_OFFSET(i) ((char*)NULL + (i))
 #define PI 3.14159265359
 using namespace std;
 
+
+struct vertex {
+    glm::vec3 position;
+    glm::vec3 normal;
+    glm::vec2 texture;
+
+    vertex() {}
+
+    vertex(const glm::vec3 &position, const glm::vec3 &normal, const glm::vec2 &texture) : position(position),
+                                                                                           normal(normal),
+                                                                                           texture(texture) {}
+};
+
+struct triangle {
+    int vertex1;
+    int vertex2;
+    int vertex3;
+
+    triangle() {}
+
+    triangle(const int &vertex1, const int &vertex2, const int &vertex3) : vertex1(vertex1), vertex2(vertex2),
+                                                                           vertex3(vertex3) {}
+};
 
 class EclipseMap {
 private:
@@ -70,8 +92,7 @@ public:
     float moonImageWidth;
     float moonRadius = 162;
 
-    vector<float> worldVertices;
-    vector<float> worldNormals;
+    vector<vertex> worldVertices;
     vector<unsigned int> worldIndices;
 
     vector<float> moonVertices;

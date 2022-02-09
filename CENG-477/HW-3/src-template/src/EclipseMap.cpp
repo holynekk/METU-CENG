@@ -16,28 +16,7 @@ bool increase_heightFactor = false,
     return_initial = false, 
     switch_full_screen = false;
 
-struct vertex {
-    glm::vec3 position;
-    glm::vec3 normal;
-    glm::vec2 texture;
 
-    vertex() {}
-
-    vertex(const glm::vec3 &position, const glm::vec3 &normal, const glm::vec2 &texture) : position(position),
-                                                                                           normal(normal),
-                                                                                           texture(texture) {}
-};
-
-struct triangle {
-    int vertex1;
-    int vertex2;
-    int vertex3;
-
-    triangle() {}
-
-    triangle(const int &vertex1, const int &vertex2, const int &vertex3) : vertex1(vertex1), vertex2(vertex2),
-                                                                           vertex3(vertex3) {}
-};
 
 void EclipseMap::Render(const char *coloredTexturePath, const char *greyTexturePath, const char *moonTexturePath) {
     // Open window
@@ -80,13 +59,7 @@ void EclipseMap::Render(const char *coloredTexturePath, const char *greyTextureP
 			vertex.normal = glm::normalize(glm::vec3(x/radius, y/radius, z/radius));
 			vertex.texture = glm::vec2(u, v);
 
-			worldVertices.push_back(x);
-            worldVertices.push_back(y);
-            worldVertices.push_back(z);
-
-            worldNormals.push_back(vertex.normal.x);
-            worldNormals.push_back(vertex.normal.y);
-            worldNormals.push_back(vertex.normal.z);
+			worldVertices.push_back(vertex);
 		}
 	}
 
@@ -113,28 +86,31 @@ void EclipseMap::Render(const char *coloredTexturePath, const char *greyTextureP
     
     // TODO: Configure Buffers ----------------------------------------------------------------------
 
-    // vboVertex
     glGenVertexArrays(1, &VAO);
-    glBindVertexArray(VAO);
+	glBindVertexArray(VAO);
 
-    glEnableVertexAttribArray(0);
-	glEnableVertexAttribArray(1);
-    // vboNormal
+	/* Init VBOs */
 	glGenBuffers(1, &VBO);
-    // vboIndex
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+	/* Construct Terrain primitive data on CPU memory and pass it onto GPU memory */
+	glBufferData(GL_ARRAY_BUFFER, worldVertices.size() * sizeof(vertex), worldVertices.data(), GL_STATIC_DRAW);
+
 	glGenBuffers(1, &EBO);
-    
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 
-    glBufferData(GL_ARRAY_BUFFER, worldVertices.size() * 3 * sizeof(float) + worldNormals.size() * 3 * sizeof(GLfloat), 0, GL_STATIC_DRAW);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, worldVertices.size() * 3 * sizeof(float), worldVertices.data());
-	glBufferSubData(GL_ARRAY_BUFFER, worldVertices.size() * 3 * sizeof(float), worldNormals.size() * 3 * sizeof(GLfloat), worldNormals.data());
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, worldIndices.size() * 3 * sizeof(float), worldIndices.data(), GL_STATIC_DRAW);
+	/* Construct Terrain primitives index data on CPU memory and pass it onto GPU memory */
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, worldIndices.size() * sizeof(int), worldIndices.data(), GL_STATIC_DRAW);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(worldVertices.size() * 3 * sizeof(float)));
+	/* glVertexAttribPointer(array_index, #_of_coods_per_Vertex, type, need_normalization?,
+	 * Byte_offset_between_consecutive_vertices, offset_of_fields_in_vertex_structure) */
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *) nullptr);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *) offsetof(vertex, normal));
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *) (offsetof(vertex, texture)));
+
+	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
+	glEnableVertexAttribArray(2);
 
     
     // Enable depth test
@@ -180,17 +156,13 @@ void EclipseMap::Render(const char *coloredTexturePath, const char *greyTextureP
 	    glUniform1i(glGetUniformLocation(worldShaderID, "textureOffset"), textureOffset);
 	    glUniform1f(glGetUniformLocation(worldShaderID, "heightFactor"), heightFactor);
 
-	    // glUniform1i(glGetUniformLocation(worldShaderID, "TexGrey"), textureGrey);
-        // glUniform1i(glGetUniformLocation(worldShaderID, "TexColor"), textureColor);
-        // glUniform1i(glGetUniformLocation(worldShaderID, "MoonTexColor"), 0);
-
 
         // TODO: Bind world vertex array ----------------------------------------------------------------------
-        glBindBuffer(GL_ARRAY_BUFFER, VAO);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+        // glBindBuffer(GL_ARRAY_BUFFER, VAO);
+        // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(worldVertices.size() * 3 * sizeof(float)));
+        // glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+        // glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(worldVertices.size() * 3 * sizeof(float)));
 
 	
         // TODO: Draw world object ----------------------------------------------------------------------
