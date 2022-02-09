@@ -4,6 +4,18 @@ using namespace std;
 
 glm::mat4 MVP, M_model, M_view, M_projection;
 
+bool increase_heightFactor = false, 
+    decrease_heightFactor = false, 
+    increase_pitch = false, 
+    decrease_pitch = false, 
+    increase_yaw = false, 
+    decrease_yaw = false,
+    increase_speed = false, 
+    decrease_speed = false,
+    stop_cam = false,
+    return_initial = false, 
+    switch_full_screen = false;
+
 struct vertex {
     glm::vec3 position;
     glm::vec3 normal;
@@ -203,6 +215,10 @@ void EclipseMap::Render(const char *coloredTexturePath, const char *greyTextureP
         /************* MOON *************/
         
 
+        if (stop_cam) {
+            speed = 0.0;
+        }
+		
         // Swap buffers and poll events
         glfwSwapBuffers(window);
         glfwPollEvents();
@@ -229,6 +245,90 @@ void EclipseMap::Render(const char *coloredTexturePath, const char *greyTextureP
 void EclipseMap::handleKeyPress(GLFWwindow *window) {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, GLFW_TRUE);
+    }
+    // Increase heightFactor
+    if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS) {
+        increase_heightFactor = true;
+    }
+	if (glfwGetKey(window, GLFW_KEY_R) == GLFW_RELEASE) {
+        increase_heightFactor = false;
+    }
+    // Decrease heightFactor
+    if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS) {
+        decrease_heightFactor = true;
+    }
+	if (glfwGetKey(window, GLFW_KEY_F) == GLFW_RELEASE) {
+        decrease_heightFactor = false;
+    }
+    // Increase pitch
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+        increase_pitch = true;
+    }
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_RELEASE) {
+        increase_pitch = false;
+    }
+    // Decrease pitch
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+        decrease_pitch = true;
+    }
+	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_RELEASE) {
+        decrease_pitch = false;
+    }
+    // Increase yaw
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+        increase_yaw = true;
+    }
+	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_RELEASE) {
+        increase_yaw = false;
+    }
+    // Decrease yaw
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+        decrease_yaw = true;
+    }
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_RELEASE) {
+        decrease_yaw = false;
+    }
+    // Increase speed
+    if (glfwGetKey(window, GLFW_KEY_Y) == GLFW_PRESS) {
+        increase_speed = true;
+    }
+	if (glfwGetKey(window, GLFW_KEY_Y) == GLFW_RELEASE) {
+        increase_speed = false;
+    }
+    // Decrease speed
+    if (glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS) {
+        decrease_speed = true;
+    }
+	if (glfwGetKey(window, GLFW_KEY_H) == GLFW_RELEASE) {
+        decrease_speed = false;
+    }	
+    // Stop camera (speed = 0)
+    if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS) {
+        stop_cam = true;
+    }
+	if (glfwGetKey(window, GLFW_KEY_X) == GLFW_RELEASE) {
+        stop_cam = false;
+    }
+    // Return back to initial cam position
+    if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS) {
+        return_initial = true;
+    }
+	if (glfwGetKey(window, GLFW_KEY_I) == GLFW_RELEASE) {
+        return_initial = false;
+    }
+    // Full screen mode on/off
+    if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS) {
+        if (switch_full_screen) {
+            switch_full_screen = false;
+            screenWidth = 1000;
+            screenHeight = 1000;
+            const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+            glfwSetWindowMonitor(window, nullptr, 0, 0, screenWidth, screenHeight, mode->refreshRate);
+        } else {
+            switch_full_screen = true;
+            const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+            glfwSetWindowMonitor(window, glfwGetPrimaryMonitor(), 0, 0, mode->width, mode->height, mode->refreshRate);
+        }
     }
 
 }
