@@ -28,17 +28,6 @@ struct vertex {
                                                                                            texture(texture) {}
 };
 
-struct triangle {
-    int vertex1;
-    int vertex2;
-    int vertex3;
-
-    triangle() {}
-
-    triangle(const int &vertex1, const int &vertex2, const int &vertex3) : vertex1(vertex1), vertex2(vertex2),
-                                                                           vertex3(vertex3) {}
-};
-
 class EclipseMap {
 private:
     float heightFactor = 80;
