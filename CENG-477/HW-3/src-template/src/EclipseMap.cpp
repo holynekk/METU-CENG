@@ -44,7 +44,7 @@ void EclipseMap::Render(const char *coloredTexturePath, const char *greyTextureP
 			v = (float)i / verticalSplitCount;
 
 			vertex vertex;
-			vertex.position = glm::vec3(x, y + 2600, z);
+			vertex.position = glm::vec3(x, y + 3200, z);
 			vertex.normal = glm::normalize(glm::vec3(x/moonRadius, y/moonRadius, z/moonRadius));
 			vertex.texture = glm::vec2(u, v);
 
@@ -119,7 +119,7 @@ void EclipseMap::Render(const char *coloredTexturePath, const char *greyTextureP
 			v = (float)i / verticalSplitCount;
 
 			vertex vertex;
-			vertex.position = glm::vec3(x, y, z);
+			vertex.position = glm::vec3(1.5*x, 1.5*y, 1.5*z);
 			vertex.normal = glm::normalize(glm::vec3(x/radius, y/radius, z/radius));
 			vertex.texture = glm::vec2(u, v);
 
@@ -188,7 +188,9 @@ void EclipseMap::Render(const char *coloredTexturePath, const char *greyTextureP
         glClearColor(0, 0, 0, 1);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-
+        // glEnable(GL_LIGHTING);
+        // glEnable(GL_LIGHT0);
+        // glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
 
         // TODO: Handle key presses ----------------------------------------------------------------------
         handleKeyPress(window);
@@ -212,7 +214,7 @@ void EclipseMap::Render(const char *coloredTexturePath, const char *greyTextureP
         
         // TODO: Update camera at every frame ----------------------------------------------------------------------
         cameraPosition += speed * cameraDirection;
-        float rotation_speed = 0.5/horizontalSplitCount;
+        float rotation_speed = 3.0/horizontalSplitCount;
         M_model = glm::rotate(M_model, rotation_speed, glm::vec3(0, 0, 1));
         M_view = glm::lookAt(cameraPosition, cameraPosition + cameraDirection, cameraUp);
         M_projection = glm::perspective(projectionAngle, aspectRatio, near, far);
@@ -244,7 +246,7 @@ void EclipseMap::Render(const char *coloredTexturePath, const char *greyTextureP
         // TODO: Update camera at every frame ----------------------------------------------------------------------
         // cameraPosition += speed * cameraDirection;
         // rotation_speed = 0.5/horizontalSplitCount;
-        // float aa = -60;
+        // float aa = -2/250.0;
         // M_model = glm::rotate(M_model, aa, glm::vec3(0, 0, 1));
         // M_view = glm::lookAt(cameraPosition, cameraPosition + cameraDirection, cameraUp);
         // M_projection = glm::perspective(projectionAngle, aspectRatio, near, far);

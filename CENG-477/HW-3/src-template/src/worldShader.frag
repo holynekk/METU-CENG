@@ -28,12 +28,8 @@ vec4 diffuseLightColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);
 
 void main()
 {
-    // Calculate texture coordinate based on data.TexCoord
-    vec2 textureCoordinate = data.TexCoord;
-    // vec2 textureCoordinate = vec2(500, 320);
-    vec4 texColor = texture(TexColor, textureCoordinate);
-    // vec4 texColor = vec4(0.5f, 0.5f, 0.5f, 0.5f);
-    diffuseReflectenceCoefficient = vec4(texColor.x, texColor.y, texColor.z, 1.0f);
+    vec4 texColor = texture(TexColor, data.TexCoord);
+    // diffuseReflectenceCoefficient = vec4(texColor.x, texColor.y, texColor.z, 1.0f);
 
     vec3 ambient = (ambientReflectenceCoefficient * ambientLightColor).xyz;
 
