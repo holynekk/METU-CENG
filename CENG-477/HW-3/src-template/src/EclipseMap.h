@@ -95,7 +95,7 @@ public:
     vector<vertex> worldVertices;
     vector<unsigned int> worldIndices;
 
-    vector<float> moonVertices;
+    vector<vertex> moonVertices;
     vector<unsigned int> moonIndices;
 
     GLFWwindow *openWindow(const char *windowName, int width, int height);

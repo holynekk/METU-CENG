@@ -28,11 +28,76 @@ void EclipseMap::Render(const char *coloredTexturePath, const char *greyTextureP
 
     initMoonColoredTexture(moonTexturePath, moonShaderID);
 
-    
+    float x, y, z, xy, u, v, alpha, beta;
+    int k1, k2;
     // TODO: Set moonVertices ----------------------------------------------------------------------
     
-    // TODO: Configure Buffers ----------------------------------------------------------------------
+	for (int i = 0; i <= verticalSplitCount; i++) {
+		beta = M_PI / 2 - (i * M_PI / verticalSplitCount); // pi/2 to -pi/2
+		xy = moonRadius * cosf(beta);
+		z = moonRadius * sinf(beta);
+		for (int j = 0; j <= horizontalSplitCount; j++) {
+			alpha = j * 2 * M_PI / horizontalSplitCount;  // 0 to 2pi
+			x = xy * cosf(alpha);
+			y = xy * sinf(alpha);
+			u = (float)j / horizontalSplitCount;
+			v = (float)i / verticalSplitCount;
+
+			vertex vertex;
+			vertex.position = glm::vec3(x, y + 2600, z);
+			vertex.normal = glm::normalize(glm::vec3(x/moonRadius, y/moonRadius, z/moonRadius));
+			vertex.texture = glm::vec2(u, v);
+
+			moonVertices.push_back(vertex);
+		}
+	}
+
+	for(int i = 0; i < verticalSplitCount; ++i) {
+		k1 = i * (horizontalSplitCount + 1);
+		k2 = k1 + horizontalSplitCount + 1;
+		for(int j = 0; j < horizontalSplitCount; ++j, ++k1, ++k2) {
+			// 2 triangles per sector excluding first and last stacks
+			/* Provide indices for the first triangle with a correct winding order that suits RH-rule */
+			if(i != 0) {
+				moonIndices.push_back(k1);
+				moonIndices.push_back(k2);
+				moonIndices.push_back(k1 + 1);
+			}
+			/* Provide indices for the second triangle with a correct winding order that suits RH-rule */
+			if(i != (horizontalSplitCount - 1)) {
+				moonIndices.push_back(k1 + 1);
+				moonIndices.push_back(k2);
+				moonIndices.push_back(k2 + 1);
+			}
+		}
+	}
     
+    // TODO: Configure Buffers ----------------------------------------------------------------------
+    glGenVertexArrays(1, &moonVAO);
+	glBindVertexArray(moonVAO);
+
+	/* Init VBOs */
+	glGenBuffers(1, &moonVBO);
+	glBindBuffer(GL_ARRAY_BUFFER, moonVBO);
+
+	/* Construct Terrain primitive data on CPU memory and pass it onto GPU memory */
+	glBufferData(GL_ARRAY_BUFFER, moonVertices.size() * sizeof(vertex), moonVertices.data(), GL_STATIC_DRAW);
+
+	glGenBuffers(1, &moonEBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, moonEBO);
+
+	/* Construct Terrain primitives index data on CPU memory and pass it onto GPU memory */
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, moonIndices.size() * sizeof(int), moonIndices.data(), GL_STATIC_DRAW);
+
+	/* glVertexAttribPointer(array_index, #_of_coods_per_Vertex, type, need_normalization?,
+	 * Byte_offset_between_consecutive_vertices, offset_of_fields_in_vertex_structure) */
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *) nullptr);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *) offsetof(vertex, normal));
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *) (offsetof(vertex, texture)));
+
+	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
+	glEnableVertexAttribArray(2);
 
     // World commands
     // Load shaders
@@ -42,7 +107,6 @@ void EclipseMap::Render(const char *coloredTexturePath, const char *greyTextureP
     initGreyTexture(greyTexturePath, worldShaderID);
 
     // TODO: Set worldVertices ----------------------------------------------------------------------
-    float x, y, z, xy, u, v, alpha, beta;
 	for (int i = 0; i <= verticalSplitCount; i++) {
 		beta = M_PI / 2 - (i * M_PI / verticalSplitCount); // pi/2 to -pi/2
 		xy = radius * cosf(beta);
@@ -63,7 +127,6 @@ void EclipseMap::Render(const char *coloredTexturePath, const char *greyTextureP
 		}
 	}
 
-    int k1, k2;
 	for(int i = 0; i < verticalSplitCount; ++i) {
 		k1 = i * (horizontalSplitCount + 1);
 		k2 = k1 + horizontalSplitCount + 1;
@@ -139,6 +202,9 @@ void EclipseMap::Render(const char *coloredTexturePath, const char *greyTextureP
         glActiveTexture(GL_TEXTURE0 + 1); // Texture unit 1
         glBindTexture(GL_TEXTURE_2D, textureGrey);
 
+        glActiveTexture(GL_TEXTURE0 + 2); // Texture unit 1
+        glBindTexture(GL_TEXTURE_2D, moonTextureColor);
+
         /************* WORLD *************/
 
         // TODO: Use worldShaderID program ----------------------------------------------------------------------
@@ -162,6 +228,7 @@ void EclipseMap::Render(const char *coloredTexturePath, const char *greyTextureP
 
         // TODO: Bind world vertex array ----------------------------------------------------------------------
         // Did it before getting into main loop
+        glBindVertexArray(VAO);
 	
         // TODO: Draw world object ----------------------------------------------------------------------
         glDrawElements(GL_TRIANGLES, worldIndices.size(), GL_UNSIGNED_INT, nullptr);
@@ -173,15 +240,26 @@ void EclipseMap::Render(const char *coloredTexturePath, const char *greyTextureP
         /************* MOON *************/
         
         // TODO: Use moonShaderID program ----------------------------------------------------------------------
-        
+        glUseProgram(moonShaderID);
         // TODO: Update camera at every frame ----------------------------------------------------------------------
-        
+        // cameraPosition += speed * cameraDirection;
+        // rotation_speed = 0.5/horizontalSplitCount;
+        // float aa = -60;
+        // M_model = glm::rotate(M_model, aa, glm::vec3(0, 0, 1));
+        // M_view = glm::lookAt(cameraPosition, cameraPosition + cameraDirection, cameraUp);
+        // M_projection = glm::perspective(projectionAngle, aspectRatio, near, far);
+        // MVP = M_projection * M_view * M_model;
         // TODO: Update uniform variables at every frame ----------------------------------------------------------------------
-        
+        glUniform3fv(glGetUniformLocation(moonShaderID, "lightPosition"), 1, glm::value_ptr(lightPos));
+        glUniform3fv(glGetUniformLocation(moonShaderID, "cameraPosition"), 1, glm::value_ptr(cameraPosition));
+	    glUniformMatrix4fv(glGetUniformLocation(moonShaderID, "MVP"), 1, GL_FALSE, glm::value_ptr(MVP));
+	    glUniform1f(glGetUniformLocation(moonShaderID, "textureOffset"), textureOffset);
+	    glUniform1f(glGetUniformLocation(moonShaderID, "heightFactor"), heightFactor);
         // TODO: Bind moon vertex array ----------------------------------------------------------------------
+        glBindVertexArray(moonVAO);
 
         // TODO: Draw moon object ----------------------------------------------------------------------
-        
+        glDrawElements(GL_TRIANGLES, moonIndices.size(), GL_UNSIGNED_INT, nullptr);
         /************* MOON *************/
         
 
