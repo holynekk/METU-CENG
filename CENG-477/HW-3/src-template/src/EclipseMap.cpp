@@ -131,12 +131,8 @@ void EclipseMap::Render(const char *coloredTexturePath, const char *greyTextureP
         handleKeyPress(window);
 
         // TODO: Manipulate rotation variables ----------------------------------------------------------------------
-        // static float angle = 0;
-        // float angleRad = (float) (angle / 180.0) * PI;
+
         // TODO: Bind textures
-        // glBindTexture(GL_TEXTURE_2D, textureGrey);
-        // glBindTexture(GL_TEXTURE_2D, textureColor);
-        // glActiveTexture(GL_TEXTURE1);
         glActiveTexture(GL_TEXTURE0 + 0); // Texture unit 0
         glBindTexture(GL_TEXTURE_2D, textureColor);
 
@@ -150,7 +146,8 @@ void EclipseMap::Render(const char *coloredTexturePath, const char *greyTextureP
         
         // TODO: Update camera at every frame ----------------------------------------------------------------------
         cameraPosition += speed * cameraDirection;
-        // M_model = glm::rotate(M_model, angleRad, glm::vec3(1, 0, 0));
+        float rotation_speed = 0.5/horizontalSplitCount;
+        M_model = glm::rotate(M_model, rotation_speed, glm::vec3(0, 0, 1));
         M_view = glm::lookAt(cameraPosition, cameraPosition + cameraDirection, cameraUp);
         M_projection = glm::perspective(projectionAngle, aspectRatio, near, far);
         MVP = M_projection * M_view * M_model;
