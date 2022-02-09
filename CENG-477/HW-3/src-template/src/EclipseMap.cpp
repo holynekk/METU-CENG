@@ -2,6 +2,7 @@
 
 using namespace std;
 
+glm::mat4 M_model_light;
 glm::mat4 MVP, M_model, M_view, M_projection;
 
 bool increase_heightFactor = false, 
@@ -182,7 +183,10 @@ void EclipseMap::Render(const char *coloredTexturePath, const char *greyTextureP
         handleKeyPress(window);
 
         // TODO: Manipulate rotation variables ----------------------------------------------------------------------
-
+        float rotation_speed = 3.0/horizontalSplitCount;
+        M_model_light = glm::mat4(1.0f);
+        M_model_light = glm::rotate(M_model_light, -rotation_speed, glm::vec3(0, 0, 1));
+        lightPos = M_model_light * glm::vec4(lightPos, 1.0f);
         // Bind all textures
 
         // Texture for colored earth
@@ -204,7 +208,6 @@ void EclipseMap::Render(const char *coloredTexturePath, const char *greyTextureP
         
         // Update camera at every frame ----------------------------------------------------------------------
         cameraPosition += speed * cameraDirection;
-        float rotation_speed = 3.0/horizontalSplitCount;
         M_model = glm::rotate(M_model, rotation_speed, glm::vec3(0, 0, 1));
         M_view = glm::lookAt(cameraPosition, cameraPosition + cameraDirection, cameraUp);
         M_projection = glm::perspective(projectionAngle, aspectRatio, near, far);
@@ -395,14 +398,14 @@ void EclipseMap::handleKeyPress(GLFWwindow *window) {
     if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS) {
         if (switch_full_screen) {
             switch_full_screen = false;
-            screenWidth = 1000;
-            screenHeight = 1000;
-            const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-            glfwSetWindowMonitor(window, nullptr, 0, 0, screenWidth, screenHeight, mode->refreshRate);
+            glfwSetWindowMonitor(window, nullptr, 0, 0, screenWidth, screenHeight, 0);
         } else {
             switch_full_screen = true;
-            const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-            glfwSetWindowMonitor(window, glfwGetPrimaryMonitor(), 0, 0, mode->width, mode->height, mode->refreshRate);
+            screenWidth = defaultScreenWidth;
+            screenHeight = defaultScreenHeight;
+            GLFWmonitor * primaryMonitor = glfwGetPrimaryMonitor();
+            const GLFWvidmode * mode = glfwGetVideoMode(primaryMonitor);
+            glfwSetWindowMonitor(window, primaryMonitor, 0, 0, mode->width, mode->height, mode->refreshRate);
         }
     }
 
