@@ -131,12 +131,17 @@ void EclipseMap::Render(const char *coloredTexturePath, const char *greyTextureP
         handleKeyPress(window);
 
         // TODO: Manipulate rotation variables ----------------------------------------------------------------------
-        static float angle = 0;
-        float angleRad = (float) (angle / 180.0) * PI;
+        // static float angle = 0;
+        // float angleRad = (float) (angle / 180.0) * PI;
         // TODO: Bind textures
         // glBindTexture(GL_TEXTURE_2D, textureGrey);
-        glBindTexture(GL_TEXTURE_2D, textureColor);
+        // glBindTexture(GL_TEXTURE_2D, textureColor);
         // glActiveTexture(GL_TEXTURE1);
+        glActiveTexture(GL_TEXTURE0 + 0); // Texture unit 0
+        glBindTexture(GL_TEXTURE_2D, textureColor);
+
+        glActiveTexture(GL_TEXTURE0 + 1); // Texture unit 1
+        glBindTexture(GL_TEXTURE_2D, textureGrey);
 
         /************* WORLD *************/
 
@@ -144,7 +149,8 @@ void EclipseMap::Render(const char *coloredTexturePath, const char *greyTextureP
         glUseProgram(worldShaderID);
         
         // TODO: Update camera at every frame ----------------------------------------------------------------------
-        M_model = glm::rotate(M_model, angleRad, glm::vec3(1, 0, 0));
+        cameraPosition += speed * cameraDirection;
+        // M_model = glm::rotate(M_model, angleRad, glm::vec3(1, 0, 0));
         M_view = glm::lookAt(cameraPosition, cameraPosition + cameraDirection, cameraUp);
         M_projection = glm::perspective(projectionAngle, aspectRatio, near, far);
         MVP = M_projection * M_view * M_model;
@@ -153,7 +159,7 @@ void EclipseMap::Render(const char *coloredTexturePath, const char *greyTextureP
         glUniform3fv(glGetUniformLocation(worldShaderID, "lightPosition"), 1, glm::value_ptr(lightPos));
         glUniform3fv(glGetUniformLocation(worldShaderID, "cameraPosition"), 1, glm::value_ptr(cameraPosition));
 	    glUniformMatrix4fv(glGetUniformLocation(worldShaderID, "MVP"), 1, GL_FALSE, glm::value_ptr(MVP));
-	    glUniform1i(glGetUniformLocation(worldShaderID, "textureOffset"), textureOffset);
+	    glUniform1f(glGetUniformLocation(worldShaderID, "textureOffset"), textureOffset);
 	    glUniform1f(glGetUniformLocation(worldShaderID, "heightFactor"), heightFactor);
 
 
@@ -189,6 +195,19 @@ void EclipseMap::Render(const char *coloredTexturePath, const char *greyTextureP
 
         if (stop_cam) {
             speed = 0.0;
+        }
+        if (increase_heightFactor) {
+            heightFactor += 10;
+            glUniform1f(glGetUniformLocation(worldShaderID, "heightFactor"), heightFactor);
+        }
+        if (decrease_heightFactor) {
+            heightFactor -= 10;
+            glUniform1f(glGetUniformLocation(worldShaderID, "heightFactor"), heightFactor);
+        }
+        if (increase_speed) {
+            speed += 0.01;
+        } if (decrease_speed) {
+            speed -= 0.01;
         }
 		
         // Swap buffers and poll events
