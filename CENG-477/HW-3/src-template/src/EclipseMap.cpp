@@ -161,12 +161,7 @@ void EclipseMap::Render(const char *coloredTexturePath, const char *greyTextureP
 
 
         // TODO: Bind world vertex array ----------------------------------------------------------------------
-        // glBindBuffer(GL_ARRAY_BUFFER, VAO);
-        // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-
-        // glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-        // glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(worldVertices.size() * 3 * sizeof(float)));
-
+        // Did it before getting into main loop
 	
         // TODO: Draw world object ----------------------------------------------------------------------
         glDrawElements(GL_TRIANGLES, worldIndices.size(), GL_UNSIGNED_INT, nullptr);
@@ -205,6 +200,33 @@ void EclipseMap::Render(const char *coloredTexturePath, const char *greyTextureP
             speed += 0.01;
         } if (decrease_speed) {
             speed -= 0.01;
+        }
+        if (increase_pitch) {
+            float aa = -0.05;
+            cameraUp = glm::rotate(cameraUp, -0.05f, cameraLeft);
+		    cameraDirection = glm::rotate(cameraDirection, -0.05f, cameraLeft);
+        } if (decrease_pitch) {
+            cameraUp = glm::rotate(cameraUp, 0.05f, cameraLeft);
+		    cameraDirection = glm::rotate(cameraDirection, 0.05f, cameraLeft);
+        }
+        if (increase_yaw) {
+            cameraLeft = glm::rotate(cameraLeft, -0.05f, cameraUp);
+		    cameraDirection = glm::rotate(cameraDirection, -0.05f, cameraUp);
+        } if (decrease_yaw) {
+            cameraLeft = glm::rotate(cameraLeft, 0.05f, cameraUp);
+		    cameraDirection = glm::rotate(cameraDirection, 0.05f, cameraUp);
+        }
+        if (return_initial) {
+            cameraPosition = glm::vec3(0, 4000, 4000);
+            cameraDirection = glm::vec3(0, -1, -1);
+            cameraUp = glm::vec3(0, 0, 1);
+            cameraLeft = glm::cross(cameraUp, cameraDirection);
+            textureOffset = 0;
+            glUniform1i(glGetUniformLocation(worldShaderID, "textureOffset"), textureOffset);
+            speed = 0;
+            heightFactor = 0.0;
+            glUniform1i(glGetUniformLocation(worldShaderID, "heightFactor"), heightFactor);
+            
         }
 		
         // Swap buffers and poll events
