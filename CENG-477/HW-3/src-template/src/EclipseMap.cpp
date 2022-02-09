@@ -17,8 +17,6 @@ bool increase_heightFactor = false,
     return_initial = false, 
     switch_full_screen = false;
 
-
-
 void EclipseMap::Render(const char *coloredTexturePath, const char *greyTexturePath, const char *moonTexturePath) {
     // Open window
     GLFWwindow *window = openWindow(windowName, screenWidth, screenHeight);
@@ -44,7 +42,7 @@ void EclipseMap::Render(const char *coloredTexturePath, const char *greyTextureP
 			v = (float)i / verticalSplitCount;
 
 			vertex vertex(
-                glm::vec3(x, y + 3200, z),
+                glm::vec3(1.1*x, 1.1*y + 3200, 1.1*z),
                 glm::normalize(glm::vec3(x/moonRadius, y/moonRadius, z/moonRadius)),
                 glm::vec2(u, v)
             );
@@ -158,9 +156,9 @@ void EclipseMap::Render(const char *coloredTexturePath, const char *greyTextureP
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, worldIndices.size() * sizeof(int), worldIndices.data(), GL_STATIC_DRAW);
 
 	// Assign pointers to those buffers
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *) nullptr);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *) offsetof(vertex, normal));
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *) (offsetof(vertex, texture)));
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 8, (void *) nullptr);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 8, (void *) offsetof(vertex, normal));
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 8, (void *) offsetof(vertex, texture));
 
     // Enable Buffers
 	glEnableVertexAttribArray(0);
@@ -173,7 +171,6 @@ void EclipseMap::Render(const char *coloredTexturePath, const char *greyTextureP
     // Main rendering loop
     do {
         glViewport(0, 0, screenWidth, screenHeight);
-
         glClearStencil(0);
         glClearDepth(1.0f);
         glClearColor(0, 0, 0, 1);
@@ -194,7 +191,7 @@ void EclipseMap::Render(const char *coloredTexturePath, const char *greyTextureP
         glBindTexture(GL_TEXTURE_2D, textureColor);
 
         // Texture for earth's heightmap
-        glActiveTexture(GL_TEXTURE0 + 1); // Texture unit 1
+        glActiveTexture(GL_TEXTURE0 + 1);
         glBindTexture(GL_TEXTURE_2D, textureGrey);
 
         // Texture for colored moon
@@ -297,9 +294,6 @@ void EclipseMap::Render(const char *coloredTexturePath, const char *greyTextureP
             textureOffset = 0;
             glUniform1i(glGetUniformLocation(worldShaderID, "textureOffset"), textureOffset);
             speed = 0;
-            heightFactor = 0.0;
-            glUniform1i(glGetUniformLocation(worldShaderID, "heightFactor"), heightFactor);
-            
         }
 
         // Swap buffers and poll events
@@ -401,15 +395,17 @@ void EclipseMap::handleKeyPress(GLFWwindow *window) {
     // Full screen mode on/off
     if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS) {
         if (switch_full_screen) {
-            switch_full_screen = false;
             glfwSetWindowMonitor(window, nullptr, 0, 0, screenWidth, screenHeight, 0);
+            cout << "11111111" << endl;
+            switch_full_screen = false;
         } else {
-            switch_full_screen = true;
             screenWidth = defaultScreenWidth;
             screenHeight = defaultScreenHeight;
             GLFWmonitor * primaryMonitor = glfwGetPrimaryMonitor();
             const GLFWvidmode * mode = glfwGetVideoMode(primaryMonitor);
             glfwSetWindowMonitor(window, primaryMonitor, 0, 0, mode->width, mode->height, mode->refreshRate);
+            cout << "2222222" << endl;
+            switch_full_screen = true;
         }
     }
 
