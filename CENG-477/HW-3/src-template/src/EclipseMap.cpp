@@ -3,7 +3,7 @@
 using namespace std;
 
 glm::mat4 M_model_light;
-glm::mat4 MVP, M_model, M_view, M_projection;
+glm::mat4 MVP, M_model, M_view, M_projection, moon_MVP, moon_M_model(1);
 
 bool increase_heightFactor = false, 
     decrease_heightFactor = false, 
@@ -234,11 +234,15 @@ void EclipseMap::Render(const char *coloredTexturePath, const char *greyTextureP
         // Use moonShaderID program ----------------------------------------------------------------------
         glUseProgram(moonShaderID);
         // TODO: Update camera at every frame ----------------------------------------------------------------------
-        
+        float bumbum = rotation_speed * (-1.5);
+        moon_M_model = glm::rotate(moon_M_model, bumbum, glm::vec3(0, 0, 1));
+        M_view = glm::lookAt(cameraPosition, cameraPosition + cameraDirection, cameraUp);
+        M_projection = glm::perspective(projectionAngle, aspectRatio, near, far);
+        moon_MVP = M_projection * M_view * moon_M_model;
         // Update uniform variables at every frame ----------------------------------------------------------------------
         glUniform3fv(glGetUniformLocation(moonShaderID, "lightPosition"), 1, glm::value_ptr(lightPos));
         glUniform3fv(glGetUniformLocation(moonShaderID, "cameraPosition"), 1, glm::value_ptr(cameraPosition));
-	    glUniformMatrix4fv(glGetUniformLocation(moonShaderID, "MVP"), 1, GL_FALSE, glm::value_ptr(MVP));
+	    glUniformMatrix4fv(glGetUniformLocation(moonShaderID, "MVP"), 1, GL_FALSE, glm::value_ptr(moon_MVP));
 	    glUniform1f(glGetUniformLocation(moonShaderID, "textureOffset"), textureOffset);
 	    glUniform1f(glGetUniformLocation(moonShaderID, "heightFactor"), heightFactor);
         // Bind moon vertex array ----------------------------------------------------------------------
