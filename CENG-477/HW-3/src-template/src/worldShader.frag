@@ -22,7 +22,7 @@ vec4 ambientLightColor = vec4(0.6f, 0.6f, 0.6f, 1.0f);
 vec4 specularReflectenceCoefficient= vec4(1.0f, 1.0f, 1.0f, 1.0f);
 vec4 specularLightColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);
 float SpecularExponent = 10;
-vec4 diffuseReflectenceCoefficient= vec4(1.0f);
+vec4 diffuseReflectenceCoefficient= vec4(1.0f, 1.0f, 1.0f, 1.0f);
 vec4 diffuseLightColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);
 
 
@@ -30,7 +30,9 @@ void main()
 {
     // Calculate texture coordinate based on data.TexCoord
     vec2 textureCoordinate = data.TexCoord;
+    // vec2 textureCoordinate = vec2(500, 320);
     vec4 texColor = texture(TexColor, textureCoordinate);
+    // vec4 texColor = vec4(0.5f, 0.5f, 0.5f, 0.5f);
     diffuseReflectenceCoefficient = vec4(texColor.x, texColor.y, texColor.z, 1.0f);
 
     vec3 ambient = (ambientReflectenceCoefficient * ambientLightColor).xyz;

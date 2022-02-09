@@ -12,6 +12,7 @@
 #include <jpeglib.h>
 #include <GL/glew.h>
 
+#define BUFFER_OFFSET(i) ((char*)NULL + (i))
 #define PI 3.14159265359
 using namespace std;
 
@@ -50,6 +51,7 @@ private:
     glm::vec3 cameraUp = cameraStartUp;
     glm::vec3 cameraPosition = cameraStartPosition;
     glm::vec3 cameraDirection = cameraStartDirection;
+    glm::vec3 cameraLeft = glm::cross(cameraUp, cameraDirection);
 public:
     unsigned int textureColor;
     unsigned int textureGrey;

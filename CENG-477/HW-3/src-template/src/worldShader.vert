@@ -52,6 +52,5 @@ void main()
     vec3 calculated_pos = VertexPosition + heightOffset;
     CameraVector = normalize(cameraPosition - calculated_pos);
     LightVector = normalize(lightPosition - calculated_pos);
-
     gl_Position = MVP * vec4(calculated_pos.xyz, 1.0f);
 }

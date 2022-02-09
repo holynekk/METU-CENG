@@ -102,23 +102,27 @@ void EclipseMap::Render(const char *coloredTexturePath, const char *greyTextureP
     // TODO: Configure Buffers ----------------------------------------------------------------------
 
     // vboVertex
-    glGenBuffers(1, &VAO);
+    glGenVertexArrays(1, &VAO);
+    glBindVertexArray(VAO);
+
+    glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
     // vboNormal
 	glGenBuffers(1, &VBO);
     // vboIndex
 	glGenBuffers(1, &EBO);
+    
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	
-	glBindBuffer(GL_ARRAY_BUFFER, VAO);
-	glBufferData(GL_ARRAY_BUFFER, worldVertices.size() * 3 * sizeof(float), worldVertices.data(), GL_STATIC_DRAW);
 
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, worldNormals.size() * 3 * sizeof(GLfloat), worldNormals.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, worldVertices.size() * 3 * sizeof(float) + worldNormals.size() * 3 * sizeof(GLfloat), 0, GL_STATIC_DRAW);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, worldVertices.size() * 3 * sizeof(float), worldVertices.data());
+	glBufferSubData(GL_ARRAY_BUFFER, worldVertices.size() * 3 * sizeof(float), worldNormals.size() * 3 * sizeof(GLfloat), worldNormals.data());
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, worldIndices.size() * 3 * sizeof(float), worldIndices.data(), GL_STATIC_DRAW);
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, worldIndices.size() * 3 * sizeof(GLuint), worldIndices.data(), GL_STATIC_DRAW);
-
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(worldVertices.size() * 3 * sizeof(float)));
 
     
     // Enable depth test
@@ -139,9 +143,12 @@ void EclipseMap::Render(const char *coloredTexturePath, const char *greyTextureP
         handleKeyPress(window);
 
         // TODO: Manipulate rotation variables ----------------------------------------------------------------------
-        
+        static float angle = 0;
+        float angleRad = (float) (angle / 180.0) * PI;
         // TODO: Bind textures
-
+        // glBindTexture(GL_TEXTURE_2D, textureGrey);
+        glBindTexture(GL_TEXTURE_2D, textureColor);
+        // glActiveTexture(GL_TEXTURE1);
 
         /************* WORLD *************/
 
@@ -149,6 +156,10 @@ void EclipseMap::Render(const char *coloredTexturePath, const char *greyTextureP
         glUseProgram(worldShaderID);
         
         // TODO: Update camera at every frame ----------------------------------------------------------------------
+        M_model = glm::rotate(M_model, angleRad, glm::vec3(1, 0, 0));
+        M_view = glm::lookAt(cameraPosition, cameraPosition + cameraDirection, cameraUp);
+        M_projection = glm::perspective(projectionAngle, aspectRatio, near, far);
+        MVP = M_projection * M_view * M_model;
 
         // TODO: Update uniform variables at every frame ----------------------------------------------------------------------
         glUniform3fv(glGetUniformLocation(worldShaderID, "lightPosition"), 1, glm::value_ptr(lightPos));
@@ -157,15 +168,19 @@ void EclipseMap::Render(const char *coloredTexturePath, const char *greyTextureP
 	    glUniform1i(glGetUniformLocation(worldShaderID, "textureOffset"), textureOffset);
 	    glUniform1f(glGetUniformLocation(worldShaderID, "heightFactor"), heightFactor);
 
-        // TODO: Bind world vertex array ----------------------------------------------------------------------
-        glEnableClientState(GL_VERTEX_ARRAY);
-		glEnableClientState(GL_NORMAL_ARRAY);
-        glBindBuffer(GL_ARRAY_BUFFER, VAO);
-		glVertexPointer(3, GL_FLOAT, 0, 0);
-        glBindBuffer(GL_ARRAY_BUFFER, VBO);
-		glNormalPointer(GL_FLOAT, 0, 0);
+	    // glUniform1i(glGetUniformLocation(worldShaderID, "TexGrey"), textureGrey);
+        // glUniform1i(glGetUniformLocation(worldShaderID, "TexColor"), textureColor);
+        // glUniform1i(glGetUniformLocation(worldShaderID, "MoonTexColor"), 0);
 
+
+        // TODO: Bind world vertex array ----------------------------------------------------------------------
+        glBindBuffer(GL_ARRAY_BUFFER, VAO);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(worldVertices.size() * 3 * sizeof(float)));
+
+	
         // TODO: Draw world object ----------------------------------------------------------------------
         glDrawElements(GL_TRIANGLES, worldIndices.size(), GL_UNSIGNED_INT, nullptr);
         /************* WORLD *************/
