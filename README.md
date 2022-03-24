@@ -56,3 +56,23 @@ These are the courses that I have taken from department of computer engineering 
 **Including**
 - Take Home Exams that are given throughout the semester.
 
+## [CENG-331](CENG-331)
+*Middle East Technical University CENG **Computer Organization** course.*<br><br>
+**Term:** Fall 2021-2022<br><br>
+**Instructor:** Associate Professor Erol Sahin<br><br>
+**Including**
+- Take Home Exams that are given throughout the semester.
+
+## [CENG-351](CENG-351)
+*Middle East Technical University CENG **Data Management and File Structures** course.*<br><br>
+**Term:** Fall 2021-2022<br><br>
+**Instructor:** Assist.Prof.Dr HANDE ALEMDAR<br><br>
+**Including**
+- Programming assignments that are given throughout the semester.
+
+## [CENG-477](CENG-477)
+*Middle East Technical University CENG **Computer Graphics** course.*<br><br>
+**Term:** Fall 2021-2022<br><br>
+**Instructor:** Prof.Dr. TOLGA CAN<br><br>
+**Including**
+- Take Home Exams that are given throughout the semester.
