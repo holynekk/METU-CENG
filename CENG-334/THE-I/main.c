@@ -136,7 +136,6 @@ void main()
                             {
                                 map[location.y + d][location.x].type = MEMPTY;
                             }
-
                             break;
                         }
                         else if (map[location.y + d][location.x].type == MBOMBER || map[location.y + d][location.x].type == MBOMB_AND_BOMBER)
