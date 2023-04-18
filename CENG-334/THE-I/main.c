@@ -11,6 +11,14 @@
 #include "message.h"
 #include "constants.h"
 
+void assign_od_objects(od object, int cell_type, int p_x, int p_y, int *object_count)
+{
+    object.type = cell_type;
+    object.position.x = p_x;
+    object.position.y = p_y;
+    *object_count += 1;
+}
+
 void main()
 {
     int map_width, map_height, obstacle_count, bomber_count;
@@ -292,36 +300,26 @@ void main()
                         {
                             if (map[d][bomber_position_x].type == CELL_WTH_BOMB)
                             {
-                                objects[obj_count].type = BOMB;
-                                objects[obj_count].position.x = bomber_position_x;
-                                objects[obj_count++].position.y = d;
+                                assign_od_objects(objects[obj_count], BOMB, bomber_position_x, d, &obj_count);
                             }
                             else if (map[d][bomber_position_x].type == CELL_WITH_BOMB_AND_BOMBER)
                             {
-                                objects[obj_count].type = BOMB;
-                                objects[obj_count].position.x = bomber_position_x;
-                                objects[obj_count++].position.y = d;
+                                assign_od_objects(objects[obj_count], BOMB, bomber_position_x, d, &obj_count);
                                 if (d != bomber_position_y)
                                 {
-                                    objects[obj_count].type = BOMBER;
-                                    objects[obj_count].position.x = bomber_position_x;
-                                    objects[obj_count++].position.y = d;
+                                    assign_od_objects(objects[obj_count], BOMBER, bomber_position_x, d, &obj_count);
                                 }
                             }
                             else if (map[d][bomber_position_x].type == CELL_WITH_BOMBER)
                             {
                                 if (d != bomber_position_y)
                                 {
-                                    objects[obj_count].type = BOMBER;
-                                    objects[obj_count].position.x = bomber_position_x;
-                                    objects[obj_count++].position.y = d;
+                                    assign_od_objects(objects[obj_count], BOMBER, bomber_position_x, d, &obj_count);
                                 }
                             }
                             else if (map[d][bomber_position_x].type == CELL_WITH_OBSTACLE)
                             {
-                                objects[obj_count].type = OBSTACLE;
-                                objects[obj_count].position.x = bomber_position_x;
-                                objects[obj_count++].position.y = d;
+                                assign_od_objects(objects[obj_count], OBSTACLE, bomber_position_x, d, &obj_count);
                                 break;
                             }
                         }
@@ -329,24 +327,16 @@ void main()
                         {
                             if (map[d][bomber_position_x].type == CELL_WTH_BOMB || map[d][bomber_position_x].type == CELL_WITH_BOMBER)
                             {
-                                objects[obj_count].type = BOMB ? map[d][bomber_position_x].type == CELL_WTH_BOMB : BOMBER;
-                                objects[obj_count].position.x = bomber_position_x;
-                                objects[obj_count++].position.y = d;
+                                assign_od_objects(objects[obj_count], BOMB ? map[d][bomber_position_x].type == CELL_WTH_BOMB : BOMBER, bomber_position_x, d, &obj_count);
                             }
                             else if (map[d][bomber_position_x].type == CELL_WITH_BOMB_AND_BOMBER)
                             {
-                                objects[obj_count].type = BOMB;
-                                objects[obj_count].position.x = bomber_position_x;
-                                objects[obj_count++].position.y = d;
-                                objects[obj_count].type = BOMBER;
-                                objects[obj_count].position.x = bomber_position_x;
-                                objects[obj_count++].position.y = d;
+                                assign_od_objects(objects[obj_count], BOMB, bomber_position_x, d, &obj_count);
+                                assign_od_objects(objects[obj_count], BOMBER, bomber_position_x, d, &obj_count);
                             }
                             else if (map[d][bomber_position_x].type == CELL_WITH_OBSTACLE)
                             {
-                                objects[obj_count].type = OBSTACLE;
-                                objects[obj_count].position.x = bomber_position_x;
-                                objects[obj_count++].position.y = d;
+                                assign_od_objects(objects[obj_count], OBSTACLE, bomber_position_x, d, &obj_count);
                                 break;
                             }
                         }
@@ -354,24 +344,16 @@ void main()
                         {
                             if (map[bomber_position_y][d].type == CELL_WTH_BOMB || map[bomber_position_y][d].type == CELL_WITH_BOMBER)
                             {
-                                objects[obj_count].type = BOMB ? map[bomber_position_y][d].type == CELL_WTH_BOMB : BOMBER;
-                                objects[obj_count].position.x = d;
-                                objects[obj_count++].position.y = bomber_position_y;
+                                assign_od_objects(objects[obj_count], BOMB ? map[bomber_position_y][d].type == CELL_WTH_BOMB : BOMBER, d, bomber_position_y, &obj_count);
                             }
                             else if (map[bomber_position_y][d].type == CELL_WITH_BOMB_AND_BOMBER)
                             {
-                                objects[obj_count].type = BOMB;
-                                objects[obj_count].position.x = d;
-                                objects[obj_count++].position.y = bomber_position_y;
-                                objects[obj_count].type = BOMBER;
-                                objects[obj_count].position.x = d;
-                                objects[obj_count++].position.y = bomber_position_y;
+                                assign_od_objects(objects[obj_count], BOMB, d, bomber_position_y, &obj_count);
+                                assign_od_objects(objects[obj_count], BOMBER, d, bomber_position_y, &obj_count);
                             }
                             else if (map[bomber_position_y][d].type == CELL_WITH_OBSTACLE)
                             {
-                                objects[obj_count].type = OBSTACLE;
-                                objects[obj_count].position.x = d;
-                                objects[obj_count++].position.y = bomber_position_y;
+                                assign_od_objects(objects[obj_count], OBSTACLE, d, bomber_position_y, &obj_count);
                                 break;
                             }
                         }
@@ -379,24 +361,16 @@ void main()
                         {
                             if (map[bomber_position_y][d].type == CELL_WTH_BOMB || map[bomber_position_y][d].type == CELL_WITH_BOMBER)
                             {
-                                objects[obj_count].type = BOMB ? map[bomber_position_y][d].type == CELL_WTH_BOMB : BOMBER;
-                                objects[obj_count].position.x = d;
-                                objects[obj_count++].position.y = bomber_position_y;
+                                assign_od_objects(objects[obj_count], BOMB ? map[bomber_position_y][d].type == CELL_WTH_BOMB : BOMBER, d, bomber_position_y, &obj_count);
                             }
                             else if (map[bomber_position_y][d].type == CELL_WITH_BOMB_AND_BOMBER)
                             {
-                                objects[obj_count].type = BOMB;
-                                objects[obj_count].position.x = d;
-                                objects[obj_count++].position.y = bomber_position_y;
-                                objects[obj_count].type = BOMBER;
-                                objects[obj_count].position.x = d;
-                                objects[obj_count++].position.y = bomber_position_y;
+                                assign_od_objects(objects[obj_count], BOMB, d, bomber_position_y, &obj_count);
+                                assign_od_objects(objects[obj_count], BOMBER, d, bomber_position_y, &obj_count);
                             }
                             else if (map[bomber_position_y][d].type == CELL_WITH_OBSTACLE)
                             {
-                                objects[obj_count].type = OBSTACLE;
-                                objects[obj_count].position.x = d;
-                                objects[obj_count++].position.y = bomber_position_y;
+                                assign_od_objects(objects[obj_count], OBSTACLE, d, bomber_position_y, &obj_count);
                                 break;
                             }
                         }
