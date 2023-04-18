@@ -43,7 +43,8 @@
         "sstream": "cpp",
         "stdexcept": "cpp",
         "streambuf": "cpp",
-        "typeinfo": "cpp"
+        "typeinfo": "cpp",
+        "poll.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

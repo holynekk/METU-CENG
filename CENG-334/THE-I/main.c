@@ -1,11 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 #include <poll.h>
 #include <sys/wait.h>
-#include <sys/types.h>
-#include <unistd.h>
-#include <errno.h>
 
 #include "logging.h"
 #include "message.h"
@@ -13,10 +11,10 @@
 
 void assign_od_objects(od object, int cell_type, int p_x, int p_y, int *object_count)
 {
-    object.type = cell_type;
     object.position.x = p_x;
     object.position.y = p_y;
-    *object_count += 1;
+    object.type = cell_type;
+    *object_count += 1; // !!!! Important !!!!
 }
 
 void main()
@@ -26,8 +24,7 @@ void main()
 
     obj map[map_height][map_width];
     for (int i = 0; i < map_height; i++) {
-        for (int j = 0; j < map_width; j++)
-        {
+        for (int j = 0; j < map_width; j++) {
             map[i][j].type = EMPTY_CELL;
         }
     }
@@ -39,14 +36,12 @@ void main()
         map[obstacle_y][obstacle_x].remaining_durability = obstacle_durability;
     }
 
-    char *exec_of_bomber = (char *)malloc(sizeof(char) * 64);
-    char bomber_execs[bomber_count][sizeof(char) * 64];
+    char bomber_execs[bomber_count][64];
+    char arg_of_bomber[10][10];
+    char *bomber_args[bomber_count][24];
 
-    char **arg_of_bomber = (char **)malloc(sizeof(char *) * 10);
-    char *bomber_args[bomber_count][10];
-
-    bomber bombers[bomber_count];
     bomb bombs[64];
+    bomber bombers[bomber_count];
 
     int bomber_pipes[bomber_count][2], bomb_pipes[64][2], child_status_bomb[64], child_status_bomber[bomber_count];
 
@@ -54,15 +49,12 @@ void main()
         PIPE(bomber_pipes[i]);
         scanf("%d %d %d", &bombers[i].position.x, &bombers[i].position.y, &bombers[i].arg_count);
         map[bombers[i].position.y][bombers[i].position.x].type = CELL_WITH_BOMBER;
-        scanf("%s", exec_of_bomber);
-        strcpy(bomber_execs[i], exec_of_bomber);
-        *(arg_of_bomber) = malloc(10 * sizeof(char));
-        bomber_args[i][0] = exec_of_bomber;
+        scanf("%s", bomber_execs[i]);
+        bomber_args[i][0] = bomber_execs[i];
         for (int a = 1; a < bombers[i].arg_count; a++) {
-            *(arg_of_bomber + a) = malloc(10 * sizeof(char));
-            scanf("%s", *(arg_of_bomber + a));
+            scanf("%s", arg_of_bomber[a]);
             bomber_args[i][a] = (char *)malloc(strlen(*(arg_of_bomber + a)) + 1);
-            strcpy(bomber_args[i][a], *(arg_of_bomber + a));
+            strcpy(bomber_args[i][a], arg_of_bomber[a]);
         }
         bomber_args[i][bombers[i].arg_count] = NULL;
         bombers[i].status = ALIVE;
@@ -76,7 +68,7 @@ void main()
             dup2(bomber_pipes[i][1], 0);
             close(bomber_pipes[i][0]);
             close(bomber_pipes[i][1]);
-            execv(exec_of_bomber, bomber_args[i]);
+            execv(bomber_execs[i], bomber_args[i]);
         }
     }
 
