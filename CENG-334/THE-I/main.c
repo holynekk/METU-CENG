@@ -42,7 +42,6 @@ void main()
     bomber bombers[bomber_count];
     bomb bombs[64];
 
-    pid_t child_pid_bomber;
     int bomber_pipes[bomber_count][2];
     int bomb_pipes[64][2];
     int child_status_bomb[64];
@@ -71,11 +70,11 @@ void main()
         if (fork() != 0)
         {
             close(bomber_pipes[i][1]);
-            bombers[i].bomber_pid = child_pid_bomber;
+            bombers[i].bomber_pid = getpid();
         }
         else
         {
-            bombers[i].bomber_pid = child_pid_bomber;
+            bombers[i].bomber_pid = getpid();
             dup2(bomber_pipes[i][1], 1);
             dup2(bomber_pipes[i][1], 0);
             close(bomber_pipes[i][0]);
@@ -253,8 +252,7 @@ void main()
         {
             if (num_bombers_alive == 1)
             {
-                om outgoing_message_win;
-                outgoing_message_win.type = BOMBER_WIN;
+                om outgoing_message_win = {.type = BOMBER_WIN};
                 num_bombers_alive = 0;
                 if (send_message(bomber_pipes[i][0], &outgoing_message_win) == -1)
                 {
@@ -262,9 +260,7 @@ void main()
                     exit(EXIT_FAILURE);
                 }
 
-                omp omessage_print_WIN;
-                omessage_print_WIN.m = &outgoing_message_win;
-                omessage_print_WIN.pid = bombers[i].bomber_pid;
+                omp omessage_print_WIN = {.m = &outgoing_message_win, .pid = bombers[i].bomber_pid};
                 print_output(NULL, &omessage_print_WIN, NULL, NULL);
 
                 close(bomber_pipes[i][0]);
@@ -276,8 +272,7 @@ void main()
             {
                 if (bombers[i].state == DIE)
                 {
-                    om outgoing_message_die;
-                    outgoing_message_die.type = BOMBER_DIE;
+                    om outgoing_message_die = {.type = BOMBER_DIE};
                     bombers[i].state = KILLED;
                     num_bombers_alive--;
                     if (send_message(bomber_pipes[i][0], &outgoing_message_die) == -1)
@@ -286,9 +281,7 @@ void main()
                         exit(EXIT_FAILURE);
                     }
 
-                    omp omessage_print_DIE;
-                    omessage_print_DIE.m = &outgoing_message_die;
-                    omessage_print_DIE.pid = bombers[i].bomber_pid;
+                    omp omessage_print_DIE = {.m = &outgoing_message_die, .pid = bombers[i].bomber_pid};
                     print_output(NULL, &omessage_print_DIE, NULL, NULL);
 
                     close(bomber_pipes[i][0]);
@@ -303,9 +296,7 @@ void main()
                         exit(EXIT_FAILURE);
                     }
 
-                    imp imessage_print;
-                    imessage_print.m = &incoming_message;
-                    imessage_print.pid = bombers[i].bomber_pid;
+                    imp imessage_print = {.m = &incoming_message, .pid = bombers[i].bomber_pid};
                     print_output(&imessage_print, NULL, NULL, NULL);
 
                     int xpos = bombers[i].position.x;
@@ -486,9 +477,7 @@ void main()
                             exit(EXIT_FAILURE);
                         }
 
-                        omp omessage_print_SEE;
-                        omessage_print_SEE.pid = bombers[i].bomber_pid;
-                        omessage_print_SEE.m = &outgoing_message;
+                        omp omessage_print_SEE = {.m = &outgoing_message, .pid = bombers[i].bomber_pid};
                         print_output(NULL, &omessage_print_SEE, NULL, objects);
 
                         break;
@@ -545,11 +534,8 @@ void main()
                             exit(EXIT_FAILURE);
                         }
 
-                        omp omessage_print_MOVE;
-                        omessage_print_MOVE.m = &outgoing_message;
-                        omessage_print_MOVE.pid = bombers[i].bomber_pid;
+                        omp omessage_print_MOVE = {.m = &outgoing_message, .pid = bombers[i].bomber_pid};
                         print_output(NULL, &omessage_print_MOVE, NULL, NULL);
-
                         break;
 
                     case BOMBER_PLANT:
@@ -559,18 +545,17 @@ void main()
                             bombs[bombomber_count].radius = incoming_message.data.bomb_info.radius;
                             bombs[bombomber_count].position = bombers[i].position;
 
-                            pid_t pid_bomb;
                             PIPE(bomb_pipes[bombomber_count]);
 
                             if (fork() != 0)
                             {
                                 close(bomb_pipes[bombomber_count][1]);
-                                bombs[bombomber_count].pid = pid_bomb;
+                                bombs[bombomber_count].pid = getpid();
                             }
                             else
                             {
                                 char interval[10];
-                                bombs[bombomber_count].pid = pid_bomb;
+                                bombs[bombomber_count].pid = getpid();
                                 dup2(bomb_pipes[bombomber_count][1], 1);
                                 dup2(bomb_pipes[bombomber_count][1], 0);
                                 close(bomb_pipes[bombomber_count][0]);
@@ -596,9 +581,7 @@ void main()
                             exit(EXIT_FAILURE);
                         }
 
-                        omp omessage_print_PLANT;
-                        omessage_print_PLANT.m = &outgoing_message;
-                        omessage_print_PLANT.pid = bombers[i].bomber_pid;
+                        omp omessage_print_PLANT = {.m = &outgoing_message, .pid = bombers[i].bomber_pid};
                         print_output(NULL, &omessage_print_PLANT, NULL, NULL);
 
                         break;
@@ -633,9 +616,7 @@ void main()
                     perror("read bomb data error");
                 }
 
-                imp imessage_print;
-                imessage_print.m = &incoming_message;
-                imessage_print.pid = bombs[i].pid;
+                imp imessage_print = {.m = &incoming_message, .pid = bombs[i].pid};
                 print_output(&imessage_print, NULL, NULL, NULL);
 
                 if (incoming_message.type == BOMB_EXPLODE)
@@ -651,10 +632,7 @@ void main()
                         if (map[location.y + d][location.x].type == CELL_WITH_OBSTACLE)
                         {
                             map[location.y + d][location.x].remaining_durability -= 1;
-                            obsd obstacle;
-                            obstacle.position.x = location.x;
-                            obstacle.position.y = location.y + d;
-                            obstacle.remaining_durability = map[location.y + d][location.x].remaining_durability;
+                            obsd obstacle = {.position.x = location.x, .position.y = location.y + d, .remaining_durability = map[location.y + d][location.x].remaining_durability};
                             print_output(NULL, NULL, &obstacle, NULL);
                             if (map[location.y + d][location.x].remaining_durability == 0)
                             {
