@@ -110,9 +110,7 @@ void main()
                     perror("read bomb data error");
                 }
 
-                imp imessage_print;
-                imessage_print.m = &incoming_message;
-                imessage_print.pid = bombs[i].pid;
+                imp imessage_print = {.m = &incoming_message, .pid = bombs[i].pid};
                 print_output(&imessage_print, NULL, NULL, NULL);
 
                 if (incoming_message.type == BOMB_EXPLODE)
@@ -125,25 +123,26 @@ void main()
                         {
                             break;
                         }
-                        if (map[location.y + d][location.x].type == CELL_WITH_OBSTACLE)
+                        obj m_obj = map[location.y + d][location.x];
+                        if (m_obj.type == CELL_WITH_OBSTACLE)
                         {
-                            map[location.y + d][location.x].remaining_durability -= 1;
-                            obsd obstacle = {.position.x = location.x, .position.y = location.y + d, .remaining_durability = map[location.y + d][location.x].remaining_durability};
+                            m_obj.remaining_durability -= 1;
+                            obsd obstacle = {.position.x = location.x, .position.y = location.y + d, .remaining_durability = m_obj.remaining_durability};
                             print_output(NULL, NULL, &obstacle, NULL);
-                            if (map[location.y + d][location.x].remaining_durability == 0)
+                            if (m_obj.remaining_durability == 0)
                             {
-                                map[location.y + d][location.x].type = EMPTY_CELL;
+                                m_obj.type = EMPTY_CELL;
                             }
                             break;
                         }
-                        else if (map[location.y + d][location.x].type == CELL_WITH_BOMBER || map[location.y + d][location.x].type == CELL_WITH_BOMB_AND_BOMBER)
+                        else if (m_obj.type == CELL_WITH_BOMBER || m_obj.type == CELL_WITH_BOMB_AND_BOMBER)
                         {
                             for (int y = 0; y < bomber_count; y++)
                             {
                                 if (bombers[y].position.x == location.x && bombers[y].position.y == location.y + d)
                                 {
                                     bombers[y].state = DIE;
-                                    map[location.y + d][location.x].type = EMPTY_CELL ? map[location.y + d][location.x].type == CELL_WITH_BOMBER : CELL_WTH_BOMB;
+                                    m_obj.type = EMPTY_CELL ? m_obj.type == CELL_WITH_BOMBER : CELL_WTH_BOMB;
                                 }
                             }
                         }
@@ -461,17 +460,17 @@ void main()
 
                     case BOMBER_MOVE:
                         outgoing_message.type = BOMBER_LOCATION;
-                        coordinate target = incoming_message.data.target_position;
-                        if (target.x >= 0 && target.x < map_width && target.y >= 0 && target.y < map_height)
+                        coordinate target_position = incoming_message.data.target_position;
+                        if (target_position.x >= 0 && target_position.x < map_width && target_position.y >= 0 && target_position.y < map_height)
                         {
-                            if ((target.x == bomber_position_x && (target.y == bomber_position_y - 1 || target.y == bomber_position_y + 1)) ||
-                                (target.y == bomber_position_y && (target.x == bomber_position_x - 1 || target.x == bomber_position_x + 1)))
+                            if ((target_position.x == bomber_position_x && (target_position.y == bomber_position_y - 1 || target_position.y == bomber_position_y + 1)) ||
+                                (target_position.y == bomber_position_y && (target_position.x == bomber_position_x - 1 || target_position.x == bomber_position_x + 1)))
                             {
-                                if (map[target.y][target.x].type != CELL_WITH_OBSTACLE || map[target.y][target.x].type != CELL_WITH_BOMBER)
+                                if (map[target_position.y][target_position.x].type != CELL_WITH_OBSTACLE || map[target_position.y][target_position.x].type != CELL_WITH_BOMBER)
                                 {
-                                    if (map[target.y][target.x].type == CELL_WTH_BOMB)
+                                    if (map[target_position.y][target_position.x].type == CELL_WTH_BOMB)
                                     {
-                                        map[target.y][target.x].type = CELL_WITH_BOMB_AND_BOMBER;
+                                        map[target_position.y][target_position.x].type = CELL_WITH_BOMB_AND_BOMBER;
                                         if (map[bombers[i].position.y][bombers[i].position.x].type == CELL_WITH_BOMB_AND_BOMBER)
                                         {
                                             map[bombers[i].position.y][bombers[i].position.x].type = CELL_WTH_BOMB;
@@ -483,7 +482,7 @@ void main()
                                     }
                                     else
                                     {
-                                        map[target.y][target.x].type = CELL_WITH_BOMBER;
+                                        map[target_position.y][target_position.x].type = CELL_WITH_BOMBER;
                                         if (map[bombers[i].position.y][bombers[i].position.x].type == CELL_WITH_BOMB_AND_BOMBER)
                                         {
                                             map[bombers[i].position.y][bombers[i].position.x].type = CELL_WTH_BOMB;
@@ -493,9 +492,9 @@ void main()
                                             map[bombers[i].position.y][bombers[i].position.x].type = EMPTY_CELL;
                                         }
                                     }
-                                    bombers[i].position.x = target.x;
-                                    bombers[i].position.y = target.y;
-                                    outgoing_message.data.new_position = target;
+                                    bombers[i].position.x = target_position.x;
+                                    bombers[i].position.y = target_position.y;
+                                    outgoing_message.data.new_position = target_position;
                                 }
                             }
                         }
@@ -611,11 +610,7 @@ void main()
                             m_obj.remaining_durability -= 1;
                             obsd obstacle = {.position.x = location.x, .position.y = location.y + d, .remaining_durability = m_obj.remaining_durability};
                             print_output(NULL, NULL, &obstacle, NULL);
-                            if (m_obj.remaining_durability == 0)
-                            {
-                                m_obj.type = EMPTY_CELL;
-                            }
-
+                            m_obj.type = EMPTY_CELL ? m_obj.remaining_durability == 0 : m_obj.type;
                             break;
                         }
                         else if (m_obj.type == CELL_WITH_BOMBER || m_obj.type == CELL_WITH_BOMB_AND_BOMBER)
