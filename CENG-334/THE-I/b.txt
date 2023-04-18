@@ -1,49 +1,49 @@
-IN pid:138866 mid:0 bomber start.
-OUT pid:138866 mid:0 bomber new location:(10, 10).
-IN pid:138866 mid:1 bomber see.
-OUT pid:138866 mid:1 bomber vision object count:0.
-IN pid:138866 mid:0 bomber start.
-OUT pid:138866 mid:0 bomber new location:(15, 15).
-IN pid:138866 mid:1 bomber see.
-OUT pid:138866 mid:1 bomber vision object count:0.
-IN pid:138866 mid:2 bomber move target:(11, 10).
-OUT pid:138866 mid:0 bomber new location:(11, 10).
-IN pid:138866 mid:2 bomber move target:(16, 15).
-OUT pid:138866 mid:0 bomber new location:(16, 15).
-IN pid:138866 mid:2 bomber move target:(12, 10).
-OUT pid:138866 mid:0 bomber new location:(12, 10).
-IN pid:138866 mid:2 bomber move target:(17, 15).
-OUT pid:138866 mid:0 bomber new location:(17, 15).
-IN pid:138866 mid:2 bomber move target:(13, 10).
-OUT pid:138866 mid:0 bomber new location:(13, 10).
-IN pid:138866 mid:2 bomber move target:(18, 15).
-OUT pid:138866 mid:0 bomber new location:(18, 15).
-IN pid:138866 mid:3 bomber plant bomb interval:2500 radius:3.
-OUT pid:138866 mid:2 bomber plant bomb result:1.
-IN pid:138866 mid:3 bomber plant bomb interval:2500 radius:3.
-OUT pid:138866 mid:2 bomber plant bomb result:1.
-IN pid:138866 mid:1 bomber see.
-OUT pid:138866 mid:1 bomber vision object count:1.
-object1 position:(15,0) type:0.
-IN pid:138866 mid:1 bomber see.
-OUT pid:138866 mid:1 bomber vision object count:1.
-object1 position:(15,0) type:0.
-IN pid:138866 mid:2 bomber move target:(14, 10).
-OUT pid:138866 mid:0 bomber new location:(14, 10).
-IN pid:138866 mid:2 bomber move target:(19, 15).
-OUT pid:138866 mid:0 bomber new location:(19, 15).
-IN pid:138866 mid:2 bomber move target:(15, 10).
-OUT pid:138866 mid:0 bomber new location:(15, 10).
-IN pid:138866 mid:2 bomber move target:(20, 15).
-OUT pid:138866 mid:0 bomber new location:(20, 15).
-IN pid:138866 mid:2 bomber move target:(16, 10).
-OUT pid:138866 mid:0 bomber new location:(16, 10).
-IN pid:138866 mid:2 bomber move target:(21, 15).
-OUT pid:138866 mid:0 bomber new location:(21, 15).
-IN pid:138866 mid:3 bomber plant bomb interval:2500 radius:3.
-OUT pid:138866 mid:2 bomber plant bomb result:1.
-IN pid:138866 mid:4 bomb explode.
-IN pid:138866 mid:4 bomb explode.
-OUT pid:138866 mid:3 bomber died.
-OUT pid:138866 mid:4 bomber wins.
-IN pid:138866 mid:4 bomb explode.
+IN pid:143228 mid:0 bomber start.
+OUT pid:143228 mid:0 bomber new location:(10, 10).
+IN pid:143228 mid:0 bomber start.
+OUT pid:143228 mid:0 bomber new location:(15, 15).
+IN pid:143228 mid:1 bomber see.
+OUT pid:143228 mid:1 bomber vision object count:0.
+IN pid:143228 mid:1 bomber see.
+OUT pid:143228 mid:1 bomber vision object count:0.
+IN pid:143228 mid:2 bomber move target:(11, 10).
+OUT pid:143228 mid:0 bomber new location:(11, 10).
+IN pid:143228 mid:2 bomber move target:(16, 15).
+OUT pid:143228 mid:0 bomber new location:(16, 15).
+IN pid:143228 mid:2 bomber move target:(12, 10).
+OUT pid:143228 mid:0 bomber new location:(12, 10).
+IN pid:143228 mid:2 bomber move target:(17, 15).
+OUT pid:143228 mid:0 bomber new location:(17, 15).
+IN pid:143228 mid:2 bomber move target:(13, 10).
+OUT pid:143228 mid:0 bomber new location:(13, 10).
+IN pid:143228 mid:2 bomber move target:(18, 15).
+OUT pid:143228 mid:0 bomber new location:(18, 15).
+IN pid:143228 mid:3 bomber plant bomb interval:2500 radius:3.
+OUT pid:143228 mid:2 bomber plant bomb result:1.
+IN pid:143228 mid:3 bomber plant bomb interval:2500 radius:3.
+OUT pid:143228 mid:2 bomber plant bomb result:1.
+IN pid:143228 mid:1 bomber see.
+OUT pid:143228 mid:1 bomber vision object count:1.
+object1 position:(0,0) type:4096.
+IN pid:143228 mid:1 bomber see.
+OUT pid:143228 mid:1 bomber vision object count:1.
+object1 position:(0,0) type:4096.
+IN pid:143228 mid:2 bomber move target:(14, 10).
+OUT pid:143228 mid:0 bomber new location:(14, 10).
+IN pid:143228 mid:2 bomber move target:(19, 15).
+OUT pid:143228 mid:0 bomber new location:(19, 15).
+IN pid:143228 mid:2 bomber move target:(15, 10).
+OUT pid:143228 mid:0 bomber new location:(15, 10).
+IN pid:143228 mid:2 bomber move target:(20, 15).
+OUT pid:143228 mid:0 bomber new location:(20, 15).
+IN pid:143228 mid:2 bomber move target:(16, 10).
+OUT pid:143228 mid:0 bomber new location:(16, 10).
+IN pid:143228 mid:2 bomber move target:(21, 15).
+OUT pid:143228 mid:0 bomber new location:(21, 15).
+IN pid:143228 mid:3 bomber plant bomb interval:2500 radius:3.
+OUT pid:143228 mid:2 bomber plant bomb result:1.
+IN pid:143228 mid:4 bomb explode.
+IN pid:143228 mid:4 bomb explode.
+OUT pid:143228 mid:3 bomber died.
+OUT pid:143228 mid:4 bomber wins.
+IN pid:143228 mid:4 bomb explode.
