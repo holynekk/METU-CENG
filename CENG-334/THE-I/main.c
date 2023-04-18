@@ -42,15 +42,11 @@ void main()
     bomber bombers[bomber_count];
     bomb bombs[64];
 
-    int bomber_pipes[bomber_count][2];
-    int bomb_pipes[64][2];
-    int child_status_bomb[64];
-    int child_status_bomber[bomber_count];
+    int bomber_pipes[bomber_count][2], bomb_pipes[64][2], child_status_bomb[64], child_status_bomber[bomber_count];
 
     for (int i = 0; i < bomber_count; i++)
     {
         PIPE(bomber_pipes[i]);
-
         scanf("%d %d %d", &bombers[i].position.x, &bombers[i].position.y, &bombers[i].arg_count);
         map[bombers[i].position.y][bombers[i].position.x].type = CELL_WITH_BOMBER;
         scanf("%s", exec_of_bomber);
@@ -86,7 +82,7 @@ void main()
     struct pollfd bomber_pollfds[bomber_count], bomb_pollfds[64];
     int num_bombers_alive = bomber_count, bombomber_count = 0, bombs_exploded = 0;
 
-    while (num_bombers_alive != 0)
+    while (num_bombers_alive)
     {
         for (int i = 0; i < bombomber_count; i++)
         {
@@ -117,12 +113,8 @@ void main()
                 {
                     unsigned int r = bombs[i].radius;
                     coordinate location = bombs[i].position;
-                    for (int d = 0; d < (r + 1); d++)
+                    for (int d = 0; d < (r + 1) && (location.y + d) != map_height; d++)
                     {
-                        if ((location.y + d) == map_height)
-                        {
-                            break;
-                        }
                         obj m_obj = map[location.y + d][location.x];
                         if (m_obj.type == CELL_WITH_OBSTACLE)
                         {
@@ -147,12 +139,8 @@ void main()
                             }
                         }
                     }
-                    for (int d = 1; d < (r + 1); d++)
+                    for (int d = 1; d < (r + 1) && (location.y - d) != -1; d++)
                     {
-                        if ((location.y - d) == -1)
-                        {
-                            break;
-                        }
                         obj m_obj = map[location.y - d][location.x];
                         if (m_obj.type == CELL_WITH_OBSTACLE)
                         {
@@ -175,12 +163,8 @@ void main()
                             }
                         }
                     }
-                    for (int d = 0; d < (r + 1); d++)
+                    for (int d = 0; d < (r + 1) && (location.x + d) != map_width; d++)
                     {
-                        if ((location.x + d) == map_width)
-                        {
-                            break;
-                        }
                         obj m_obj = map[location.y][location.x + d];
                         if (m_obj.type == CELL_WITH_OBSTACLE)
                         {
@@ -203,12 +187,8 @@ void main()
                             }
                         }
                     }
-                    for (int d = 0; d < (r + 1); d++)
+                    for (int d = 0; d < (r + 1) && (location.x - d) != -1; d++)
                     {
-                        if ((location.x - d) == -1)
-                        {
-                            break;
-                        }
                         obj m_obj = map[location.y][location.x - d];
                         if (m_obj.type == CELL_WITH_OBSTACLE)
                         {
@@ -244,7 +224,6 @@ void main()
             bomber_pollfds[i].events = POLLIN;
             bomber_pollfds[i].revents = 0;
         }
-
         poll(bomber_pollfds, bomber_count, -1);
 
         for (int i = 0; i < bomber_count; i++)
@@ -312,12 +291,8 @@ void main()
                         outgoing_message.type = BOMBER_VISION;
                         int obj_count = 0;
                         od objects[MAX_VISION];
-                        for (int d = bomber_position_y; d < bomber_position_y + 4; d++)
+                        for (int d = bomber_position_y; d < bomber_position_y + 4 && d != map_height; d++)
                         {
-                            if (d == map_height)
-                            {
-                                break;
-                            }
                             if (map[d][bomber_position_x].type == CELL_WTH_BOMB)
                             {
                                 objects[obj_count].type = BOMB;
@@ -353,12 +328,8 @@ void main()
                                 break;
                             }
                         }
-                        for (int d = bomber_position_y - 1; d > bomber_position_y - 4; d--)
+                        for (int d = bomber_position_y - 1; d > bomber_position_y - 4 && d != -1; d--)
                         {
-                            if (d == -1)
-                            {
-                                break;
-                            }
                             if (map[d][bomber_position_x].type == CELL_WTH_BOMB || map[d][bomber_position_x].type == CELL_WITH_BOMBER)
                             {
                                 objects[obj_count].type = BOMB ? map[d][bomber_position_x].type == CELL_WTH_BOMB : BOMBER;
@@ -382,12 +353,8 @@ void main()
                                 break;
                             }
                         }
-                        for (int d = bomber_position_x + 1; d < bomber_position_x + 4; d++)
+                        for (int d = bomber_position_x + 1; d < bomber_position_x + 4 && d != map_width; d++)
                         {
-                            if (d == map_width)
-                            {
-                                break;
-                            }
                             if (map[bomber_position_y][d].type == CELL_WTH_BOMB || map[bomber_position_y][d].type == CELL_WITH_BOMBER)
                             {
                                 objects[obj_count].type = BOMB ? map[bomber_position_y][d].type == CELL_WTH_BOMB : BOMBER;
@@ -411,12 +378,8 @@ void main()
                                 break;
                             }
                         }
-                        for (int d = bomber_position_x - 1; d > bomber_position_x - 4; d--)
+                        for (int d = bomber_position_x - 1; d > bomber_position_x - 4 && d != -1; d--)
                         {
-                            if (d == -1)
-                            {
-                                break;
-                            }
                             if (map[bomber_position_y][d].type == CELL_WTH_BOMB || map[bomber_position_y][d].type == CELL_WITH_BOMBER)
                             {
                                 objects[obj_count].type = BOMB ? map[bomber_position_y][d].type == CELL_WTH_BOMB : BOMBER;
@@ -598,12 +561,8 @@ void main()
                 {
                     unsigned int r = bombs[i].radius;
                     coordinate location = bombs[i].position;
-                    for (int d = 0; d < (r + 1); d++)
+                    for (int d = 0; d < (r + 1) && (location.y + d) != map_height; d++)
                     {
-                        if ((location.y + d) == map_height)
-                        {
-                            break;
-                        }
                         obj m_obj = map[location.y + d][location.x];
                         if (m_obj.type == CELL_WITH_OBSTACLE)
                         {
@@ -625,12 +584,8 @@ void main()
                             }
                         }
                     }
-                    for (int d = 1; d < (r + 1); d++)
+                    for (int d = 1; d < (r + 1) && (location.y - d) != -1; d++)
                     {
-                        if ((location.y - d) == -1)
-                        {
-                            break;
-                        }
                         obj m_obj = map[location.y - d][location.x];
                         if (m_obj.type == CELL_WITH_OBSTACLE)
                         {
@@ -653,12 +608,8 @@ void main()
                             }
                         }
                     }
-                    for (int d = 0; d < (r + 1); d++)
+                    for (int d = 0; d < (r + 1) && (location.x + d) != map_width; d++)
                     {
-                        if ((location.x + d) == map_width)
-                        {
-                            break;
-                        }
                         obj m_obj = map[location.y][location.x + d];
                         if (m_obj.type == CELL_WITH_OBSTACLE)
                         {
@@ -682,12 +633,8 @@ void main()
                             }
                         }
                     }
-                    for (int d = 0; d < (r + 1); d++)
+                    for (int d = 0; d < (r + 1) && (location.x - d) != -1; d++)
                     {
-                        if ((location.x - d) == -1)
-                        {
-                            break;
-                        }
                         obj m_obj = map[location.y][location.x - d];
                         if (m_obj.type == CELL_WITH_OBSTACLE)
                         {
