@@ -25,8 +25,7 @@ void main()
     scanf("%d %d %d %d", &map_width, &map_height, &obstacle_count, &bomber_count);
 
     obj map[map_height][map_width];
-    for (int i = 0; i < map_height; i++)
-    {
+    for (int i = 0; i < map_height; i++) {
         for (int j = 0; j < map_width; j++)
         {
             map[i][j].type = EMPTY_CELL;
@@ -34,8 +33,7 @@ void main()
     }
 
     int obstacle_x, obstacle_y, obstacle_durability;
-    for (int i = 0; i < obstacle_count; i++)
-    {
+    for (int i = 0; i < obstacle_count; i++) {
         scanf("%d %d %d", &obstacle_x, &obstacle_y, &obstacle_durability);
         map[obstacle_y][obstacle_x].type = CELL_WITH_OBSTACLE;
         map[obstacle_y][obstacle_x].remaining_durability = obstacle_durability;
@@ -52,8 +50,7 @@ void main()
 
     int bomber_pipes[bomber_count][2], bomb_pipes[64][2], child_status_bomb[64], child_status_bomber[bomber_count];
 
-    for (int i = 0; i < bomber_count; i++)
-    {
+    for (int i = 0; i < bomber_count; i++) {
         PIPE(bomber_pipes[i]);
         scanf("%d %d %d", &bombers[i].position.x, &bombers[i].position.y, &bombers[i].arg_count);
         map[bombers[i].position.y][bombers[i].position.x].type = CELL_WITH_BOMBER;
@@ -61,8 +58,7 @@ void main()
         strcpy(bomber_execs[i], exec_of_bomber);
         *(arg_of_bomber) = malloc(10 * sizeof(char));
         bomber_args[i][0] = exec_of_bomber;
-        for (int a = 1; a < bombers[i].arg_count; a++)
-        {
+        for (int a = 1; a < bombers[i].arg_count; a++) {
             *(arg_of_bomber + a) = malloc(10 * sizeof(char));
             scanf("%s", *(arg_of_bomber + a));
             bomber_args[i][a] = (char *)malloc(strlen(*(arg_of_bomber + a)) + 1);
@@ -71,13 +67,10 @@ void main()
         bomber_args[i][bombers[i].arg_count] = NULL;
         bombers[i].status = ALIVE;
 
-        if (fork() != 0)
-        {
+        if (fork() != 0) {
             close(bomber_pipes[i][1]);
             bombers[i].bomber_pid = getpid();
-        }
-        else
-        {
+        } else {
             bombers[i].bomber_pid = getpid();
             dup2(bomber_pipes[i][1], 1);
             dup2(bomber_pipes[i][1], 0);
@@ -90,127 +83,93 @@ void main()
     struct pollfd bomber_pollfds[bomber_count], bomb_pollfds[64];
     int num_bombers_alive = bomber_count, bombomber_count = 0, bombs_exploded = 0;
 
-    while (num_bombers_alive)
-    {
-        for (int i = 0; i < bombomber_count; i++)
-        {
+    while (num_bombers_alive) {
+        for (int i = 0; i < bombomber_count; i++) {
             bomb_pollfds[i].fd = bomb_pipes[i][0];
             bomb_pollfds[i].events = POLLIN;
             bomb_pollfds[i].revents = 0;
         }
 
-        if (bombomber_count != 0)
-        {
+        if (bombomber_count != 0) {
             poll(bomb_pollfds, bombomber_count, 1);
         }
 
-        for (int i = 0; i < bombomber_count; i++)
-        {
-            if (bomb_pollfds[i].revents & POLLIN)
-            {
+        for (int i = 0; i < bombomber_count; i++) {
+            if (bomb_pollfds[i].revents & POLLIN) {
                 im incoming_message;
-                if (read_data(bomb_pipes[i][0], &incoming_message) == -1)
-                {
+                if (read_data(bomb_pipes[i][0], &incoming_message) == -1) {
                     perror("read bomb data error");
                 }
 
                 imp imessage_print = {.m = &incoming_message, .pid = bombs[i].pid};
                 print_output(&imessage_print, NULL, NULL, NULL);
 
-                if (incoming_message.type == BOMB_EXPLODE)
-                {
+                if (incoming_message.type == BOMB_EXPLODE) {
                     unsigned int r = bombs[i].radius;
                     coordinate location = bombs[i].position;
                     obj m_obj;
-                    for (int d = 0; d < (r + 1) && (location.y + d) != map_height; d++)
-                    {
+                    for (int d = 0; d < (r + 1) && (location.y + d) != map_height; d++) {
                         m_obj = map[location.y + d][location.x];
-                        if (m_obj.type == CELL_WITH_OBSTACLE)
-                        {
+                        if (m_obj.type == CELL_WITH_OBSTACLE) {
                             m_obj.remaining_durability -= 1;
                             obsd obstacle = {.position.x = location.x, .position.y = location.y + d, .remaining_durability = m_obj.remaining_durability};
                             print_output(NULL, NULL, &obstacle, NULL);
-                            if (m_obj.remaining_durability == 0)
-                            {
+                            if (m_obj.remaining_durability == 0) {
                                 m_obj.type = EMPTY_CELL;
                             }
                             break;
-                        }
-                        else if (m_obj.type == CELL_WITH_BOMBER || m_obj.type == CELL_WITH_BOMB_AND_BOMBER)
-                        {
-                            for (int y = 0; y < bomber_count; y++)
-                            {
-                                if (bombers[y].position.x == location.x && bombers[y].position.y == location.y + d)
-                                {
+                        } else if (m_obj.type == CELL_WITH_BOMBER || m_obj.type == CELL_WITH_BOMB_AND_BOMBER) {
+                            for (int y = 0; y < bomber_count; y++) {
+                                if (bombers[y].position.x == location.x && bombers[y].position.y == location.y + d) {
                                     bombers[y].status = DIE;
                                     m_obj.type = EMPTY_CELL ? m_obj.type == CELL_WITH_BOMBER : CELL_WTH_BOMB;
                                 }
                             }
                         }
                     }
-                    for (int d = 1; d < (r + 1) && (location.y - d) != -1; d++)
-                    {
+                    for (int d = 1; d < (r + 1) && (location.y - d) != -1; d++) {
                         m_obj = map[location.y - d][location.x];
-                        if (m_obj.type == CELL_WITH_OBSTACLE)
-                        {
-                            if (--m_obj.remaining_durability == 0)
-                            {
+                        if (m_obj.type == CELL_WITH_OBSTACLE) {
+                            if (--m_obj.remaining_durability == 0) {
                                 m_obj.type = EMPTY_CELL;
                             }
                             break;
                         }
-                        else if (m_obj.type == CELL_WITH_BOMBER || m_obj.type == CELL_WITH_BOMB_AND_BOMBER)
-                        {
-                            for (int y = 0; y < bomber_count; y++)
-                            {
-                                if (bombers[y].position.x == location.x && bombers[y].position.y == location.y - d)
-                                {
+                        else if (m_obj.type == CELL_WITH_BOMBER || m_obj.type == CELL_WITH_BOMB_AND_BOMBER) {
+                            for (int y = 0; y < bomber_count; y++) {
+                                if (bombers[y].position.x == location.x && bombers[y].position.y == location.y - d) {
                                     bombers[y].status = DIE;
                                     m_obj.type = EMPTY_CELL ? m_obj.type == CELL_WITH_BOMBER : CELL_WTH_BOMB;
                                 }
                             }
                         }
                     }
-                    for (int d = 0; d < (r + 1) && (location.x + d) != map_width; d++)
-                    {
+                    for (int d = 0; d < (r + 1) && (location.x + d) != map_width; d++) {
                         m_obj = map[location.y][location.x + d];
-                        if (m_obj.type == CELL_WITH_OBSTACLE)
-                        {
-                            if (--m_obj.remaining_durability == 0)
-                            {
+                        if (m_obj.type == CELL_WITH_OBSTACLE) {
+                            if (--m_obj.remaining_durability == 0) {
                                 m_obj.type = EMPTY_CELL;
                             }
                             break;
-                        }
-                        else if (m_obj.type == CELL_WITH_BOMBER || m_obj.type == CELL_WITH_BOMB_AND_BOMBER)
-                        {
-                            for (int y = 0; y < bomber_count; y++)
-                            {
-                                if (bombers[y].position.x == location.x + d && bombers[y].position.y == location.y)
-                                {
+                        } else if (m_obj.type == CELL_WITH_BOMBER || m_obj.type == CELL_WITH_BOMB_AND_BOMBER) {
+                            for (int y = 0; y < bomber_count; y++) {
+                                if (bombers[y].position.x == location.x + d && bombers[y].position.y == location.y) {
                                     bombers[y].status = DIE;
                                     m_obj.type = EMPTY_CELL ? m_obj.type == CELL_WITH_BOMBER : CELL_WTH_BOMB;
                                 }
                             }
                         }
                     }
-                    for (int d = 0; d < (r + 1) && (location.x - d) != -1; d++)
-                    {
+                    for (int d = 0; d < (r + 1) && (location.x - d) != -1; d++) {
                         m_obj = map[location.y][location.x - d];
-                        if (m_obj.type == CELL_WITH_OBSTACLE)
-                        {
-                            if (--m_obj.remaining_durability == 0)
-                            {
+                        if (m_obj.type == CELL_WITH_OBSTACLE) {
+                            if (--m_obj.remaining_durability == 0) {
                                 m_obj.type = EMPTY_CELL;
                             }
                             break;
-                        }
-                        else if (m_obj.type == CELL_WITH_BOMBER || m_obj.type == CELL_WITH_BOMB_AND_BOMBER)
-                        {
-                            for (int y = 0; y < bomber_count; y++)
-                            {
-                                if (bombers[y].position.x == location.x - d && bombers[y].position.y == location.y)
-                                {
+                        } else if (m_obj.type == CELL_WITH_BOMBER || m_obj.type == CELL_WITH_BOMB_AND_BOMBER) {
+                            for (int y = 0; y < bomber_count; y++) {
+                                if (bombers[y].position.x == location.x - d && bombers[y].position.y == location.y) {
                                     bombers[y].status = DIE;
                                     m_obj.type = EMPTY_CELL ? m_obj.type == CELL_WITH_BOMBER : CELL_WTH_BOMB;
                                 }
@@ -224,22 +183,18 @@ void main()
             }
         }
 
-        for (int i = 0; i < bomber_count; i++)
-        {
+        for (int i = 0; i < bomber_count; i++) {
             bomber_pollfds[i].fd = bomber_pipes[i][0];
             bomber_pollfds[i].events = POLLIN;
             bomber_pollfds[i].revents = 0;
         }
         poll(bomber_pollfds, bomber_count, -1);
 
-        for (int i = 0; i < bomber_count; i++)
-        {
-            if (num_bombers_alive == 1)
-            {
+        for (int i = 0; i < bomber_count; i++) {
+            if (num_bombers_alive == 1) {
                 om outgoing_message_win = {.type = BOMBER_WIN};
                 num_bombers_alive = 0;
-                if (send_message(bomber_pipes[i][0], &outgoing_message_win) == -1)
-                {
+                if (send_message(bomber_pipes[i][0], &outgoing_message_win) == -1) {
                     perror("BOMBER_WIN send message error");
                     exit(EXIT_FAILURE);
                 }
@@ -250,10 +205,8 @@ void main()
                 break;
             }
 
-            if ((bomber_pollfds[i].revents & POLLIN) && bombers[i].status != KILLED)
-            {
-                if (bombers[i].status == DIE)
-                {
+            if ((bomber_pollfds[i].revents & POLLIN) && bombers[i].status != KILLED) {
+                if (bombers[i].status == DIE) {
                     om outgoing_message_die = {.type = BOMBER_DIE};
                     bombers[i].status = KILLED;
                     num_bombers_alive--;
@@ -268,10 +221,8 @@ void main()
                     waitpid(bombers[i].bomber_pid, &child_status_bomber[i], 0);
                 }
                 im incoming_message;
-                if (bombers[i].status == ALIVE)
-                {
-                    if (read_data(bomber_pipes[i][0], &incoming_message) == -1)
-                    {
+                if (bombers[i].status == ALIVE) {
+                    if (read_data(bomber_pipes[i][0], &incoming_message) == -1) {
                         perror("read bomber data error");
                         exit(EXIT_FAILURE);
                     }
@@ -281,8 +232,7 @@ void main()
 
                     int bomber_position_x = bombers[i].position.x, bomber_position_y = bombers[i].position.y;
                     om outgoing_message;
-                    switch (incoming_message.type)
-                    {
+                    switch (incoming_message.type) {
                     case BOMBER_START:
                         outgoing_message.type = BOMBER_LOCATION;
                         outgoing_message.data.new_position.x = bombers[i].position.x;
@@ -296,93 +246,69 @@ void main()
                         outgoing_message.type = BOMBER_VISION;
                         int obj_count = 0;
                         od objects[MAX_VISION];
-                        for (int d = bomber_position_y; d < bomber_position_y + 4 && d != map_height; d++)
-                        {
-                            if (map[d][bomber_position_x].type == CELL_WTH_BOMB)
-                            {
+                        obj m_obj;
+                        for (int d = bomber_position_y; d < bomber_position_y + 4 && d != map_height; d++) {
+                            m_obj = map[d][bomber_position_x];
+                            if (m_obj.type == CELL_WTH_BOMB) {
                                 assign_od_objects(objects[obj_count], BOMB, bomber_position_x, d, &obj_count);
                             }
-                            else if (map[d][bomber_position_x].type == CELL_WITH_BOMB_AND_BOMBER)
-                            {
+                            else if (m_obj.type == CELL_WITH_BOMB_AND_BOMBER) {
                                 assign_od_objects(objects[obj_count], BOMB, bomber_position_x, d, &obj_count);
-                                if (d != bomber_position_y)
-                                {
+                                if (d != bomber_position_y) {
                                     assign_od_objects(objects[obj_count], BOMBER, bomber_position_x, d, &obj_count);
                                 }
-                            }
-                            else if (map[d][bomber_position_x].type == CELL_WITH_BOMBER)
-                            {
-                                if (d != bomber_position_y)
-                                {
+                            } else if (m_obj.type == CELL_WITH_BOMBER) {
+                                if (d != bomber_position_y) {
                                     assign_od_objects(objects[obj_count], BOMBER, bomber_position_x, d, &obj_count);
                                 }
-                            }
-                            else if (map[d][bomber_position_x].type == CELL_WITH_OBSTACLE)
-                            {
+                            } else if (m_obj.type == CELL_WITH_OBSTACLE) {
                                 assign_od_objects(objects[obj_count], OBSTACLE, bomber_position_x, d, &obj_count);
                                 break;
                             }
                         }
-                        for (int d = bomber_position_y - 1; d > bomber_position_y - 4 && d != -1; d--)
-                        {
-                            if (map[d][bomber_position_x].type == CELL_WTH_BOMB || map[d][bomber_position_x].type == CELL_WITH_BOMBER)
-                            {
-                                assign_od_objects(objects[obj_count], BOMB ? map[d][bomber_position_x].type == CELL_WTH_BOMB : BOMBER, bomber_position_x, d, &obj_count);
-                            }
-                            else if (map[d][bomber_position_x].type == CELL_WITH_BOMB_AND_BOMBER)
-                            {
+                        for (int d = bomber_position_y - 1; d > bomber_position_y - 4 && d != -1; d--) {
+                            m_obj = map[d][bomber_position_x];
+                            if (m_obj.type == CELL_WTH_BOMB || m_obj.type == CELL_WITH_BOMBER) {
+                                assign_od_objects(objects[obj_count], BOMB ? m_obj.type == CELL_WTH_BOMB : BOMBER, bomber_position_x, d, &obj_count);
+                            } else if (m_obj.type == CELL_WITH_BOMB_AND_BOMBER) {
                                 assign_od_objects(objects[obj_count], BOMB, bomber_position_x, d, &obj_count);
                                 assign_od_objects(objects[obj_count], BOMBER, bomber_position_x, d, &obj_count);
-                            }
-                            else if (map[d][bomber_position_x].type == CELL_WITH_OBSTACLE)
-                            {
+                            } else if (m_obj.type == CELL_WITH_OBSTACLE) {
                                 assign_od_objects(objects[obj_count], OBSTACLE, bomber_position_x, d, &obj_count);
                                 break;
                             }
                         }
-                        for (int d = bomber_position_x + 1; d < bomber_position_x + 4 && d != map_width; d++)
-                        {
-                            if (map[bomber_position_y][d].type == CELL_WTH_BOMB || map[bomber_position_y][d].type == CELL_WITH_BOMBER)
-                            {
-                                assign_od_objects(objects[obj_count], BOMB ? map[bomber_position_y][d].type == CELL_WTH_BOMB : BOMBER, d, bomber_position_y, &obj_count);
-                            }
-                            else if (map[bomber_position_y][d].type == CELL_WITH_BOMB_AND_BOMBER)
-                            {
+                        for (int d = bomber_position_x + 1; d < bomber_position_x + 4 && d != map_width; d++) {
+                            m_obj = map[bomber_position_y][d];
+                            if (m_obj.type == CELL_WTH_BOMB || m_obj.type == CELL_WITH_BOMBER) {
+                                assign_od_objects(objects[obj_count], BOMB ? m_obj.type == CELL_WTH_BOMB : BOMBER, d, bomber_position_y, &obj_count);
+                            } else if (m_obj.type == CELL_WITH_BOMB_AND_BOMBER) {
                                 assign_od_objects(objects[obj_count], BOMB, d, bomber_position_y, &obj_count);
                                 assign_od_objects(objects[obj_count], BOMBER, d, bomber_position_y, &obj_count);
-                            }
-                            else if (map[bomber_position_y][d].type == CELL_WITH_OBSTACLE)
-                            {
+                            } else if (m_obj.type == CELL_WITH_OBSTACLE) {
                                 assign_od_objects(objects[obj_count], OBSTACLE, d, bomber_position_y, &obj_count);
                                 break;
                             }
                         }
-                        for (int d = bomber_position_x - 1; d > bomber_position_x - 4 && d != -1; d--)
-                        {
-                            if (map[bomber_position_y][d].type == CELL_WTH_BOMB || map[bomber_position_y][d].type == CELL_WITH_BOMBER)
-                            {
-                                assign_od_objects(objects[obj_count], BOMB ? map[bomber_position_y][d].type == CELL_WTH_BOMB : BOMBER, d, bomber_position_y, &obj_count);
-                            }
-                            else if (map[bomber_position_y][d].type == CELL_WITH_BOMB_AND_BOMBER)
-                            {
+                        for (int d = bomber_position_x - 1; d > bomber_position_x - 4 && d != -1; d--) {
+                            m_obj = map[bomber_position_y][d];
+                            if (m_obj.type == CELL_WTH_BOMB || m_obj.type == CELL_WITH_BOMBER) {
+                                assign_od_objects(objects[obj_count], BOMB ? m_obj.type == CELL_WTH_BOMB : BOMBER, d, bomber_position_y, &obj_count);
+                            } else if (m_obj.type == CELL_WITH_BOMB_AND_BOMBER) {
                                 assign_od_objects(objects[obj_count], BOMB, d, bomber_position_y, &obj_count);
                                 assign_od_objects(objects[obj_count], BOMBER, d, bomber_position_y, &obj_count);
-                            }
-                            else if (map[bomber_position_y][d].type == CELL_WITH_OBSTACLE)
-                            {
+                            } else if (m_obj.type == CELL_WITH_OBSTACLE) {
                                 assign_od_objects(objects[obj_count], OBSTACLE, d, bomber_position_y, &obj_count);
                                 break;
                             }
                         }
                         outgoing_message.data.object_count = obj_count;
 
-                        if (send_message(bomber_pipes[i][0], &outgoing_message) == -1)
-                        {
+                        if (send_message(bomber_pipes[i][0], &outgoing_message) == -1) {
                             perror("BOMBER_SEE send message error");
                             exit(EXIT_FAILURE);
                         }
-                        if (send_object_data(bomber_pipes[i][0], obj_count, objects) == -1)
-                        {
+                        if (send_object_data(bomber_pipes[i][0], obj_count, objects) == -1) {
                             perror("BOMBER_SEE send object data error");
                             exit(EXIT_FAILURE);
                         }
@@ -395,27 +321,18 @@ void main()
                     case BOMBER_MOVE:
                         outgoing_message.type = BOMBER_LOCATION;
                         coordinate target_position = incoming_message.data.target_position;
-                        if (target_position.x >= 0 && target_position.x < map_width && target_position.y >= 0 && target_position.y < map_height)
-                        {
+                        if (target_position.x >= 0 && target_position.x < map_width && target_position.y >= 0 && target_position.y < map_height) {
                             if ((target_position.x == bomber_position_x && (target_position.y == bomber_position_y - 1 || target_position.y == bomber_position_y + 1)) ||
-                                (target_position.y == bomber_position_y && (target_position.x == bomber_position_x - 1 || target_position.x == bomber_position_x + 1)))
-                            {
-                                if (map[target_position.y][target_position.x].type != CELL_WITH_OBSTACLE || map[target_position.y][target_position.x].type != CELL_WITH_BOMBER)
-                                {
-                                    if (map[target_position.y][target_position.x].type == CELL_WTH_BOMB)
-                                    {
+                                (target_position.y == bomber_position_y && (target_position.x == bomber_position_x - 1 || target_position.x == bomber_position_x + 1))) {
+                                if (map[target_position.y][target_position.x].type != CELL_WITH_OBSTACLE || map[target_position.y][target_position.x].type != CELL_WITH_BOMBER) {
+                                    if (map[target_position.y][target_position.x].type == CELL_WTH_BOMB) {
                                         map[target_position.y][target_position.x].type = CELL_WITH_BOMB_AND_BOMBER;
-                                        if (map[bombers[i].position.y][bombers[i].position.x].type == CELL_WITH_BOMB_AND_BOMBER)
-                                        {
+                                        if (map[bombers[i].position.y][bombers[i].position.x].type == CELL_WITH_BOMB_AND_BOMBER) {
                                             map[bombers[i].position.y][bombers[i].position.x].type = CELL_WTH_BOMB;
-                                        }
-                                        else
-                                        {
+                                        } else {
                                             map[bombers[i].position.y][bombers[i].position.x].type = EMPTY_CELL;
                                         }
-                                    }
-                                    else
-                                    {
+                                    } else {
                                         map[target_position.y][target_position.x].type = CELL_WITH_BOMBER;
                                         if (map[bombers[i].position.y][bombers[i].position.x].type == CELL_WITH_BOMB_AND_BOMBER)
                                         {
@@ -431,39 +348,30 @@ void main()
                                     outgoing_message.data.new_position = target_position;
                                 }
                             }
-                        }
-                        else
-                        {
+                        } else {
                             outgoing_message.data.new_position.x = bomber_position_x;
                             outgoing_message.data.new_position.y = bomber_position_y;
                         }
-
-                        if (send_message(bomber_pipes[i][0], &outgoing_message) == -1)
-                        {
+                        if (send_message(bomber_pipes[i][0], &outgoing_message) == -1) {
                             perror("BOMBER_MOVE send message error");
                             exit(EXIT_FAILURE);
                         }
-
                         omp omessage_print_MOVE = {.m = &outgoing_message, .pid = bombers[i].bomber_pid};
                         print_output(NULL, &omessage_print_MOVE, NULL, NULL);
                         break;
 
                     case BOMBER_PLANT:
-                        if (map[bombers[i].position.y][bombers[i].position.x].type != CELL_WITH_BOMB_AND_BOMBER)
-                        {
+                        if (map[bombers[i].position.y][bombers[i].position.x].type != CELL_WITH_BOMB_AND_BOMBER) {
                             map[bombers[i].position.y][bombers[i].position.x].type = CELL_WITH_BOMB_AND_BOMBER;
                             bombs[bombomber_count].radius = incoming_message.data.bomb_info.radius;
                             bombs[bombomber_count].position = bombers[i].position;
 
                             PIPE(bomb_pipes[bombomber_count]);
 
-                            if (fork() != 0)
-                            {
+                            if (fork() != 0) {
                                 close(bomb_pipes[bombomber_count][1]);
                                 bombs[bombomber_count].pid = getpid();
-                            }
-                            else
-                            {
+                            } else {
                                 char interval[10];
                                 bombs[bombomber_count].pid = getpid();
                                 dup2(bomb_pipes[bombomber_count][1], 1);
@@ -477,15 +385,12 @@ void main()
 
                             bombomber_count++;
                             outgoing_message.data.planted = 1;
-                        }
-                        else
-                        {
+                        } else {
                             outgoing_message.data.planted = 0;
                         }
                         outgoing_message.type = BOMBER_PLANT_RESULT;
 
-                        if (send_message(bomber_pipes[i][0], &outgoing_message) == -1)
-                        {
+                        if (send_message(bomber_pipes[i][0], &outgoing_message) == -1) {
                             perror("BOMBER_PLANT send message error");
                             exit(EXIT_FAILURE);
                         }
@@ -500,124 +405,87 @@ void main()
         }
         usleep(1000);
     }
-    while (bombs_exploded != bombomber_count)
-    {
-        for (int i = 0; i < bombomber_count; i++)
-        {
+    while (bombs_exploded != bombomber_count) {
+        for (int i = 0; i < bombomber_count; i++) {
             bomb_pollfds[i].fd = bomb_pipes[i][0];
             bomb_pollfds[i].events = POLLIN;
             bomb_pollfds[i].revents = 0;
         }
-
-        if (bombomber_count != 0)
-        {
+        if (bombomber_count != 0) {
             poll(bomb_pollfds, bombomber_count, 1);
         }
-
-        for (int i = 0; i < bombomber_count; i++)
-        {
-            if (bomb_pollfds[i].revents & POLLIN)
-            {
+        for (int i = 0; i < bombomber_count; i++) {
+            if (bomb_pollfds[i].revents & POLLIN) {
                 im incoming_message;
-                if (read_data(bomb_pipes[i][0], &incoming_message) == -1)
-                {
+                if (read_data(bomb_pipes[i][0], &incoming_message) == -1) {
                     perror("read bomb data error");
                 }
 
                 imp imessage_print = {.m = &incoming_message, .pid = bombs[i].pid};
                 print_output(&imessage_print, NULL, NULL, NULL);
 
-                if (incoming_message.type == BOMB_EXPLODE)
-                {
+                if (incoming_message.type == BOMB_EXPLODE) {
                     unsigned int r = bombs[i].radius;
                     coordinate location = bombs[i].position;
-                    for (int d = 0; d < (r + 1) && (location.y + d) != map_height; d++)
-                    {
+                    for (int d = 0; d < (r + 1) && (location.y + d) != map_height; d++) {
                         obj m_obj = map[location.y + d][location.x];
-                        if (m_obj.type == CELL_WITH_OBSTACLE)
-                        {
+                        if (m_obj.type == CELL_WITH_OBSTACLE) {
                             m_obj.remaining_durability -= 1;
                             obsd obstacle = {.position.x = location.x, .position.y = location.y + d, .remaining_durability = m_obj.remaining_durability};
                             print_output(NULL, NULL, &obstacle, NULL);
                             m_obj.type = EMPTY_CELL ? m_obj.remaining_durability == 0 : m_obj.type;
                             break;
-                        }
-                        else if (m_obj.type == CELL_WITH_BOMBER || m_obj.type == CELL_WITH_BOMB_AND_BOMBER)
-                        {
-                            for (int y = 0; y < bomber_count; y++)
-                            {
-                                if (bombers[y].position.x == location.x && bombers[y].position.y == location.y + d)
-                                {
+                        } else if (m_obj.type == CELL_WITH_BOMBER || m_obj.type == CELL_WITH_BOMB_AND_BOMBER) {
+                            for (int y = 0; y < bomber_count; y++) {
+                                if (bombers[y].position.x == location.x && bombers[y].position.y == location.y + d) {
                                     bombers[y].status = DIE;
                                     m_obj.type = EMPTY_CELL ? m_obj.type == CELL_WITH_BOMBER : CELL_WTH_BOMB;
                                 }
                             }
                         }
                     }
-                    for (int d = 1; d < (r + 1) && (location.y - d) != -1; d++)
-                    {
+                    for (int d = 1; d < (r + 1) && (location.y - d) != -1; d++) {
                         obj m_obj = map[location.y - d][location.x];
-                        if (m_obj.type == CELL_WITH_OBSTACLE)
-                        {
-                            if (--m_obj.remaining_durability == 0)
-                            {
+                        if (m_obj.type == CELL_WITH_OBSTACLE) {
+                            if (--m_obj.remaining_durability == 0) {
                                 m_obj.type = EMPTY_CELL;
                             }
                             break;
-                        }
-                        else if (m_obj.type == CELL_WITH_BOMBER || m_obj.type == CELL_WITH_BOMB_AND_BOMBER)
-                        {
-                            for (int y = 0; y < bomber_count; y++)
-                            {
-                                if (bombers[y].position.x == location.x && bombers[y].position.y == location.y - d)
-                                {
+                        } else if (m_obj.type == CELL_WITH_BOMBER || m_obj.type == CELL_WITH_BOMB_AND_BOMBER) {
+                            for (int y = 0; y < bomber_count; y++) {
+                                if (bombers[y].position.x == location.x && bombers[y].position.y == location.y - d) {
                                     bombers[y].status = DIE;
                                     m_obj.type = EMPTY_CELL ? m_obj.type == CELL_WITH_BOMBER : CELL_WTH_BOMB;
                                 }
                             }
                         }
                     }
-                    for (int d = 0; d < (r + 1) && (location.x + d) != map_width; d++)
-                    {
+                    for (int d = 0; d < (r + 1) && (location.x + d) != map_width; d++) {
                         obj m_obj = map[location.y][location.x + d];
-                        if (m_obj.type == CELL_WITH_OBSTACLE)
-                        {
-                            if (--m_obj.remaining_durability == 0)
-                            {
+                        if (m_obj.type == CELL_WITH_OBSTACLE) {
+                            if (--m_obj.remaining_durability == 0) {
                                 m_obj.type = EMPTY_CELL;
                             }
                             break;
-                        }
-                        else if (m_obj.type == CELL_WITH_BOMB_AND_BOMBER || m_obj.type == CELL_WITH_BOMBER)
-                        {
-                            for (int y = 0; y < bomber_count; y++)
-                            {
-                                if (bombers[y].position.x == location.x + d && bombers[y].position.y == location.y)
-                                {
+                        } else if (m_obj.type == CELL_WITH_BOMB_AND_BOMBER || m_obj.type == CELL_WITH_BOMBER) {
+                            for (int y = 0; y < bomber_count; y++) {
+                                if (bombers[y].position.x == location.x + d && bombers[y].position.y == location.y) {
                                     bombers[y].status = DIE;
                                     m_obj.type = EMPTY_CELL ? m_obj.type == CELL_WITH_BOMBER : CELL_WTH_BOMB;
                                 }
                             }
                         }
                     }
-                    for (int d = 0; d < (r + 1) && (location.x - d) != -1; d++)
-                    {
+                    for (int d = 0; d < (r + 1) && (location.x - d) != -1; d++) {
                         obj m_obj = map[location.y][location.x - d];
-                        if (m_obj.type == CELL_WITH_OBSTACLE)
-                        {
-                            if (--m_obj.remaining_durability == 0)
-                            {
+                        if (m_obj.type == CELL_WITH_OBSTACLE) {
+                            if (--m_obj.remaining_durability == 0) {
                                 m_obj.type = EMPTY_CELL;
                             }
                             break;
-                        }
-
-                        else if (m_obj.type == CELL_WITH_BOMBER || m_obj.type == CELL_WITH_BOMB_AND_BOMBER)
-                        {
-                            for (int y = 0; y < bomber_count; y++)
-                            {
-                                if (bombers[y].position.x == location.x - d && bombers[y].position.y == location.y)
-                                {
+                        } else if (m_obj.type == CELL_WITH_BOMBER || m_obj.type == CELL_WITH_BOMB_AND_BOMBER) {
+                            for (int y = 0; y < bomber_count; y++) {
+                                if (bombers[y].position.x == location.x - d && bombers[y].position.y == location.y) {
                                     bombers[y].status = DIE;
                                     m_obj.type = EMPTY_CELL ? m_obj.type == CELL_WITH_BOMBER : CELL_WTH_BOMB;
                                 }
