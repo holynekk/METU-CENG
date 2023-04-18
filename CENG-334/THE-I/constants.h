@@ -1,11 +1,9 @@
-#define MAX_VISION 25
+#define MAX_VISION 64
 
-// bomber_state
-#define KILLED 0
-#define DIE 1
-#define ALIVE 2
+#define ALIVE 0
+#define KILLED 1
+#define DIE 2
 
-// map_objects
 #define EMPTY_CELL 0
 #define CELL_WITH_OBSTACLE 1
 #define CELL_WTH_BOMB 2
@@ -20,9 +18,9 @@ typedef struct object
 
 typedef struct bomber
 {
-    int arg_count;
-    int state;
     pid_t bomber_pid;
+    int arg_count;
+    int status;
     coordinate position;
 } bomber;
 

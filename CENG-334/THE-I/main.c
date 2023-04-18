@@ -61,7 +61,7 @@ void main()
             strcpy(bomber_args[i][a], *(arg_of_bomber + a));
         }
         bomber_args[i][bombers[i].arg_count] = NULL;
-        bombers[i].state = ALIVE;
+        bombers[i].status = ALIVE;
 
         if (fork() != 0)
         {
@@ -113,9 +113,10 @@ void main()
                 {
                     unsigned int r = bombs[i].radius;
                     coordinate location = bombs[i].position;
+                    obj m_obj;
                     for (int d = 0; d < (r + 1) && (location.y + d) != map_height; d++)
                     {
-                        obj m_obj = map[location.y + d][location.x];
+                        m_obj = map[location.y + d][location.x];
                         if (m_obj.type == CELL_WITH_OBSTACLE)
                         {
                             m_obj.remaining_durability -= 1;
@@ -133,7 +134,7 @@ void main()
                             {
                                 if (bombers[y].position.x == location.x && bombers[y].position.y == location.y + d)
                                 {
-                                    bombers[y].state = DIE;
+                                    bombers[y].status = DIE;
                                     m_obj.type = EMPTY_CELL ? m_obj.type == CELL_WITH_BOMBER : CELL_WTH_BOMB;
                                 }
                             }
@@ -141,11 +142,10 @@ void main()
                     }
                     for (int d = 1; d < (r + 1) && (location.y - d) != -1; d++)
                     {
-                        obj m_obj = map[location.y - d][location.x];
+                        m_obj = map[location.y - d][location.x];
                         if (m_obj.type == CELL_WITH_OBSTACLE)
                         {
-                            m_obj.remaining_durability -= 1;
-                            if (m_obj.remaining_durability == 0)
+                            if (--m_obj.remaining_durability == 0)
                             {
                                 m_obj.type = EMPTY_CELL;
                             }
@@ -157,7 +157,7 @@ void main()
                             {
                                 if (bombers[y].position.x == location.x && bombers[y].position.y == location.y - d)
                                 {
-                                    bombers[y].state = DIE;
+                                    bombers[y].status = DIE;
                                     m_obj.type = EMPTY_CELL ? m_obj.type == CELL_WITH_BOMBER : CELL_WTH_BOMB;
                                 }
                             }
@@ -165,11 +165,10 @@ void main()
                     }
                     for (int d = 0; d < (r + 1) && (location.x + d) != map_width; d++)
                     {
-                        obj m_obj = map[location.y][location.x + d];
+                        m_obj = map[location.y][location.x + d];
                         if (m_obj.type == CELL_WITH_OBSTACLE)
                         {
-                            m_obj.remaining_durability -= 1;
-                            if (m_obj.remaining_durability == 0)
+                            if (--m_obj.remaining_durability == 0)
                             {
                                 m_obj.type = EMPTY_CELL;
                             }
@@ -181,7 +180,7 @@ void main()
                             {
                                 if (bombers[y].position.x == location.x + d && bombers[y].position.y == location.y)
                                 {
-                                    bombers[y].state = DIE;
+                                    bombers[y].status = DIE;
                                     m_obj.type = EMPTY_CELL ? m_obj.type == CELL_WITH_BOMBER : CELL_WTH_BOMB;
                                 }
                             }
@@ -189,11 +188,10 @@ void main()
                     }
                     for (int d = 0; d < (r + 1) && (location.x - d) != -1; d++)
                     {
-                        obj m_obj = map[location.y][location.x - d];
+                        m_obj = map[location.y][location.x - d];
                         if (m_obj.type == CELL_WITH_OBSTACLE)
                         {
-                            m_obj.remaining_durability -= 1;
-                            if (m_obj.remaining_durability == 0)
+                            if (--m_obj.remaining_durability == 0)
                             {
                                 m_obj.type = EMPTY_CELL;
                             }
@@ -205,7 +203,7 @@ void main()
                             {
                                 if (bombers[y].position.x == location.x - d && bombers[y].position.y == location.y)
                                 {
-                                    bombers[y].state = DIE;
+                                    bombers[y].status = DIE;
                                     m_obj.type = EMPTY_CELL ? m_obj.type == CELL_WITH_BOMBER : CELL_WTH_BOMB;
                                 }
                             }
@@ -244,12 +242,12 @@ void main()
                 break;
             }
 
-            if ((bomber_pollfds[i].revents & POLLIN) && bombers[i].state != KILLED)
+            if ((bomber_pollfds[i].revents & POLLIN) && bombers[i].status != KILLED)
             {
-                if (bombers[i].state == DIE)
+                if (bombers[i].status == DIE)
                 {
                     om outgoing_message_die = {.type = BOMBER_DIE};
-                    bombers[i].state = KILLED;
+                    bombers[i].status = KILLED;
                     num_bombers_alive--;
                     if (send_message(bomber_pipes[i][0], &outgoing_message_die) == -1)
                     {
@@ -262,7 +260,7 @@ void main()
                     waitpid(bombers[i].bomber_pid, &child_status_bomber[i], 0);
                 }
                 im incoming_message;
-                if (bombers[i].state == ALIVE)
+                if (bombers[i].status == ALIVE)
                 {
                     if (read_data(bomber_pipes[i][0], &incoming_message) == -1)
                     {
@@ -273,8 +271,7 @@ void main()
                     imp imessage_print = {.m = &incoming_message, .pid = bombers[i].bomber_pid};
                     print_output(&imessage_print, NULL, NULL, NULL);
 
-                    int bomber_position_x = bombers[i].position.x;
-                    int bomber_position_y = bombers[i].position.y;
+                    int bomber_position_x = bombers[i].position.x, bomber_position_y = bombers[i].position.y;
                     om outgoing_message;
                     switch (incoming_message.type)
                     {
@@ -527,7 +524,6 @@ void main()
                 }
             }
         }
-
         usleep(1000);
     }
     while (bombs_exploded != bombomber_count)
@@ -578,7 +574,7 @@ void main()
                             {
                                 if (bombers[y].position.x == location.x && bombers[y].position.y == location.y + d)
                                 {
-                                    bombers[y].state = DIE;
+                                    bombers[y].status = DIE;
                                     m_obj.type = EMPTY_CELL ? m_obj.type == CELL_WITH_BOMBER : CELL_WTH_BOMB;
                                 }
                             }
@@ -589,8 +585,7 @@ void main()
                         obj m_obj = map[location.y - d][location.x];
                         if (m_obj.type == CELL_WITH_OBSTACLE)
                         {
-                            m_obj.remaining_durability -= 1;
-                            if (m_obj.remaining_durability == 0)
+                            if (--m_obj.remaining_durability == 0)
                             {
                                 m_obj.type = EMPTY_CELL;
                             }
@@ -602,7 +597,7 @@ void main()
                             {
                                 if (bombers[y].position.x == location.x && bombers[y].position.y == location.y - d)
                                 {
-                                    bombers[y].state = DIE;
+                                    bombers[y].status = DIE;
                                     m_obj.type = EMPTY_CELL ? m_obj.type == CELL_WITH_BOMBER : CELL_WTH_BOMB;
                                 }
                             }
@@ -613,9 +608,7 @@ void main()
                         obj m_obj = map[location.y][location.x + d];
                         if (m_obj.type == CELL_WITH_OBSTACLE)
                         {
-
-                            m_obj.remaining_durability -= 1;
-                            if (m_obj.remaining_durability == 0)
+                            if (--m_obj.remaining_durability == 0)
                             {
                                 m_obj.type = EMPTY_CELL;
                             }
@@ -627,7 +620,7 @@ void main()
                             {
                                 if (bombers[y].position.x == location.x + d && bombers[y].position.y == location.y)
                                 {
-                                    bombers[y].state = DIE;
+                                    bombers[y].status = DIE;
                                     m_obj.type = EMPTY_CELL ? m_obj.type == CELL_WITH_BOMBER : CELL_WTH_BOMB;
                                 }
                             }
@@ -638,8 +631,7 @@ void main()
                         obj m_obj = map[location.y][location.x - d];
                         if (m_obj.type == CELL_WITH_OBSTACLE)
                         {
-                            m_obj.remaining_durability -= 1;
-                            if (m_obj.remaining_durability == 0)
+                            if (--m_obj.remaining_durability == 0)
                             {
                                 m_obj.type = EMPTY_CELL;
                             }
@@ -652,7 +644,7 @@ void main()
                             {
                                 if (bombers[y].position.x == location.x - d && bombers[y].position.y == location.y)
                                 {
-                                    bombers[y].state = DIE;
+                                    bombers[y].status = DIE;
                                     m_obj.type = EMPTY_CELL ? m_obj.type == CELL_WITH_BOMBER : CELL_WTH_BOMB;
                                 }
                             }
