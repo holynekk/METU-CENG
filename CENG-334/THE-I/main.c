@@ -9,16 +9,14 @@
 #include "message.h"
 #include "constants.h"
 
-void assign_od_objects(od object, int cell_type, int p_x, int p_y, int *object_count)
-{
+void assign_od_objects(od object, int cell_type, int p_x, int p_y, int *object_count) {
     object.position.x = p_x;
     object.position.y = p_y;
     object.type = cell_type;
     *object_count += 1; // !!!! Important !!!!
 }
 
-void main()
-{
+void main() {
     int map_width, map_height, obstacle_count, bomber_count;
     scanf("%d %d %d %d", &map_width, &map_height, &obstacle_count, &bomber_count);
 
@@ -36,29 +34,28 @@ void main()
         map[obstacle_y][obstacle_x].remaining_durability = obstacle_durability;
     }
 
-    char bomber_execs[bomber_count][64];
-    char arg_of_bomber[10][10];
-    char *bomber_args[bomber_count][24];
-
     bomb bombs[64];
     bomber bombers[bomber_count];
+
+    char bmbr_exc[bomber_count][64];
+    char arg_of_bomber[10][10];
+    char *bomber_args[bomber_count][24];
 
     int bomber_pipes[bomber_count][2], bomb_pipes[64][2], child_status_bomb[64], child_status_bomber[bomber_count];
 
     for (int i = 0; i < bomber_count; i++) {
+        bombers[i].status = ALIVE;
         PIPE(bomber_pipes[i]);
         scanf("%d %d %d", &bombers[i].position.x, &bombers[i].position.y, &bombers[i].arg_count);
         map[bombers[i].position.y][bombers[i].position.x].type = CELL_WITH_BOMBER;
-        scanf("%s", bomber_execs[i]);
-        bomber_args[i][0] = bomber_execs[i];
+        scanf("%s", bmbr_exc[i]);
+        bomber_args[i][0] = bmbr_exc[i];
         for (int a = 1; a < bombers[i].arg_count; a++) {
             scanf("%s", arg_of_bomber[a]);
             bomber_args[i][a] = (char *)malloc(strlen(*(arg_of_bomber + a)) + 1);
             strcpy(bomber_args[i][a], arg_of_bomber[a]);
         }
         bomber_args[i][bombers[i].arg_count] = NULL;
-        bombers[i].status = ALIVE;
-
         if (fork() != 0) {
             close(bomber_pipes[i][1]);
             bombers[i].bomber_pid = getpid();
@@ -68,34 +65,30 @@ void main()
             dup2(bomber_pipes[i][1], 0);
             close(bomber_pipes[i][0]);
             close(bomber_pipes[i][1]);
-            execv(bomber_execs[i], bomber_args[i]);
+            execv(bmbr_exc[i], bomber_args[i]);
         }
     }
 
-    struct pollfd bomber_pollfds[bomber_count], bomb_pollfds[64];
+    struct pollfd bomber_polls[bomber_count], bomb_polls[64];
     int num_bombers_alive = bomber_count, bombomber_count = 0, bombs_exploded = 0;
 
     while (num_bombers_alive) {
         for (int i = 0; i < bombomber_count; i++) {
-            bomb_pollfds[i].fd = bomb_pipes[i][0];
-            bomb_pollfds[i].events = POLLIN;
-            bomb_pollfds[i].revents = 0;
+            bomb_polls[i].revents = 0;
+            bomb_polls[i].events = POLLIN;
+            bomb_polls[i].fd = bomb_pipes[i][0];
         }
-
         if (bombomber_count != 0) {
-            poll(bomb_pollfds, bombomber_count, 1);
+            poll(bomb_polls, bombomber_count, 1);
         }
-
         for (int i = 0; i < bombomber_count; i++) {
-            if (bomb_pollfds[i].revents & POLLIN) {
+            if (bomb_polls[i].revents & POLLIN) {
                 im incmng_msg;
                 if (read_data(bomb_pipes[i][0], &incmng_msg) == -1) {
-                    perror("read bomb data error");
+                    perror("[FAIL] Bomb data could not read!");
                 }
-
                 imp incmng_msg_prnt = {.m = &incmng_msg, .pid = bombs[i].pid};
                 print_output(&incmng_msg_prnt, NULL, NULL, NULL);
-
                 if (incmng_msg.type == BOMB_EXPLODE) {
                     unsigned int r = bombs[i].radius;
                     coordinate location = bombs[i].position;
@@ -176,28 +169,28 @@ void main()
         }
 
         for (int i = 0; i < bomber_count; i++) {
-            bomber_pollfds[i].fd = bomber_pipes[i][0];
-            bomber_pollfds[i].events = POLLIN;
-            bomber_pollfds[i].revents = 0;
+            bomber_polls[i].fd = bomber_pipes[i][0];
+            bomber_polls[i].events = POLLIN;
+            bomber_polls[i].revents = 0;
         }
-        poll(bomber_pollfds, bomber_count, -1);
+        poll(bomber_polls, bomber_count, -1);
 
         for (int i = 0; i < bomber_count; i++) {
             if (num_bombers_alive == 1) {
-                om outgoing_message_win = {.type = BOMBER_WIN};
                 num_bombers_alive = 0;
-                if (send_message(bomber_pipes[i][0], &outgoing_message_win) == -1) {
+                om otgng_msg = {.type = BOMBER_WIN};
+                omp otgng_msg_prnt = {.m = &otgng_msg, .pid = bombers[i].bomber_pid};
+                if (send_message(bomber_pipes[i][0], &otgng_msg) == -1) {
                     perror("BOMBER_WIN send message error");
                     exit(EXIT_FAILURE);
                 }
-                omp omessage_print_WIN = {.m = &outgoing_message_win, .pid = bombers[i].bomber_pid};
-                print_output(NULL, &omessage_print_WIN, NULL, NULL);
+                print_output(NULL, &otgng_msg_prnt, NULL, NULL);
                 close(bomber_pipes[i][0]);
                 waitpid(bombers[i].bomber_pid, &child_status_bomber[i], 0);
                 break;
             }
 
-            if ((bomber_pollfds[i].revents & POLLIN) && bombers[i].status != KILLED) {
+            if ((bomber_polls[i].revents & POLLIN) && bombers[i].status != KILLED) {
                 if (bombers[i].status == DIE) {
                     om outgoing_message_die = {.type = BOMBER_DIE};
                     bombers[i].status = KILLED;
@@ -399,15 +392,15 @@ void main()
     }
     while (bombs_exploded != bombomber_count) {
         for (int i = 0; i < bombomber_count; i++) {
-            bomb_pollfds[i].revents = 0;
-            bomb_pollfds[i].events = POLLIN;
-            bomb_pollfds[i].fd = bomb_pipes[i][0];
+            bomb_polls[i].revents = 0;
+            bomb_polls[i].events = POLLIN;
+            bomb_polls[i].fd = bomb_pipes[i][0];
         }
         if (bombomber_count != 0) {
-            poll(bomb_pollfds, bombomber_count, 1);
+            poll(bomb_polls, bombomber_count, 1);
         }
         for (int i = 0; i < bombomber_count; i++) {
-            if (bomb_pollfds[i].revents & POLLIN) {
+            if (bomb_polls[i].revents & POLLIN) {
                 im incmng_msg;
                 if (read_data(bomb_pipes[i][0], &incmng_msg) == -1) {
                     perror("read bomb data error");
