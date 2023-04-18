@@ -1,7 +1,3 @@
-#define PATH_MAX 4096
-#define MAX_ARGS 10
-#define MAX_ARG_LEN 10
-#define MAX_BOMB 50
 #define MAX_VISION 25
 
 // bomber_state
@@ -10,11 +6,11 @@
 #define ALIVE 2
 
 // map_objects
-#define MEMPTY 0
-#define MBOMB 1
-#define MBOMB_AND_BOMBER 2
-#define MBOMBER 3
-#define MOBSTACLE 4
+#define EMPTY_CELL 0
+#define CELL_WITH_OBSTACLE 1
+#define CELL_WTH_BOMB 2
+#define CELL_WITH_BOMBER 3
+#define CELL_WITH_BOMB_AND_BOMBER 4
 
 typedef struct object
 {
