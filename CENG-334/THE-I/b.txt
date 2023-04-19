@@ -1,56 +1,56 @@
-IN pid:170972 mid:0 bomber start.
-OUT pid:170972 mid:0 bomber new location:(10, 10).
-IN pid:170972 mid:0 bomber start.
-OUT pid:170972 mid:0 bomber new location:(15, 15).
-IN pid:170972 mid:1 bomber see.
-OUT pid:170972 mid:1 bomber vision object count:0.
-IN pid:170972 mid:1 bomber see.
-OUT pid:170972 mid:1 bomber vision object count:0.
-IN pid:170972 mid:2 bomber move target:(10, 11).
-OUT pid:170972 mid:0 bomber new location:(10, 11).
-IN pid:170972 mid:2 bomber move target:(15, 16).
-OUT pid:170972 mid:0 bomber new location:(15, 16).
-IN pid:170972 mid:2 bomber move target:(10, 12).
-OUT pid:170972 mid:0 bomber new location:(10, 12).
-IN pid:170972 mid:2 bomber move target:(15, 17).
-OUT pid:170972 mid:0 bomber new location:(15, 17).
-IN pid:170972 mid:2 bomber move target:(10, 13).
-OUT pid:170972 mid:0 bomber new location:(10, 13).
-IN pid:170972 mid:2 bomber move target:(15, 18).
-OUT pid:170972 mid:0 bomber new location:(15, 18).
-IN pid:170972 mid:3 bomber plant bomb interval:2500 radius:3.
-OUT pid:170972 mid:2 bomber plant bomb result:1.
-IN pid:170972 mid:3 bomber plant bomb interval:2500 radius:3.
-OUT pid:170972 mid:2 bomber plant bomb result:1.
-IN pid:170972 mid:1 bomber see.
-OUT pid:170972 mid:1 bomber vision object count:1.
-object1 position:(31,0) type:0.
-IN pid:170972 mid:1 bomber see.
-OUT pid:170972 mid:1 bomber vision object count:1.
-object1 position:(31,0) type:0.
-IN pid:170972 mid:2 bomber move target:(11, 13).
-OUT pid:170972 mid:0 bomber new location:(11, 13).
-IN pid:170972 mid:2 bomber move target:(16, 18).
-OUT pid:170972 mid:0 bomber new location:(16, 18).
-IN pid:170972 mid:2 bomber move target:(12, 13).
-OUT pid:170972 mid:0 bomber new location:(12, 13).
-IN pid:170972 mid:2 bomber move target:(17, 18).
-OUT pid:170972 mid:0 bomber new location:(17, 18).
-IN pid:170972 mid:2 bomber move target:(13, 13).
-OUT pid:170972 mid:0 bomber new location:(13, 13).
-IN pid:170972 mid:2 bomber move target:(18, 18).
-OUT pid:170972 mid:0 bomber new location:(18, 18).
-IN pid:170972 mid:3 bomber plant bomb interval:2500 radius:3.
-OUT pid:170972 mid:2 bomber plant bomb result:1.
-IN pid:170972 mid:3 bomber plant bomb interval:2500 radius:3.
-OUT pid:170972 mid:2 bomber plant bomb result:1.
-IN pid:170972 mid:1 bomber see.
-OUT pid:170972 mid:1 bomber vision object count:2.
-object1 position:(31,0) type:0.
-object2 position:(0,15) type:0.
-IN pid:170972 mid:4 bomb explode.
-IN pid:170972 mid:4 bomb explode.
-OUT pid:170972 mid:3 bomber died.
-OUT pid:170972 mid:4 bomber wins.
-IN pid:170972 mid:4 bomb explode.
-IN pid:170972 mid:4 bomb explode.
+IN pid:184737 mid:0 bomber start.
+OUT pid:184737 mid:0 bomber new location:(15, 15).
+IN pid:184737 mid:0 bomber start.
+OUT pid:184737 mid:0 bomber new location:(10, 10).
+IN pid:184737 mid:1 bomber see.
+OUT pid:184737 mid:1 bomber vision object count:0.
+IN pid:184737 mid:1 bomber see.
+OUT pid:184737 mid:1 bomber vision object count:0.
+IN pid:184737 mid:2 bomber move target:(15, 14).
+OUT pid:184737 mid:0 bomber new location:(15, 14).
+IN pid:184737 mid:2 bomber move target:(10, 9).
+OUT pid:184737 mid:0 bomber new location:(10, 9).
+IN pid:184737 mid:2 bomber move target:(15, 13).
+OUT pid:184737 mid:0 bomber new location:(15, 13).
+IN pid:184737 mid:2 bomber move target:(10, 8).
+OUT pid:184737 mid:0 bomber new location:(10, 8).
+IN pid:184737 mid:2 bomber move target:(15, 12).
+OUT pid:184737 mid:0 bomber new location:(15, 12).
+IN pid:184737 mid:2 bomber move target:(10, 7).
+OUT pid:184737 mid:0 bomber new location:(10, 7).
+IN pid:184737 mid:3 bomber plant bomb interval:2500 radius:3.
+OUT pid:184737 mid:2 bomber plant bomb result:1.
+IN pid:184737 mid:3 bomber plant bomb interval:2500 radius:3.
+OUT pid:184737 mid:2 bomber plant bomb result:1.
+IN pid:184737 mid:1 bomber see.
+OUT pid:184737 mid:1 bomber vision object count:1.
+object1 position:(1558803776,32616) type:-2006920144.
+IN pid:184737 mid:1 bomber see.
+OUT pid:184737 mid:1 bomber vision object count:1.
+object1 position:(1558803776,32616) type:-2006920144.
+IN pid:184737 mid:2 bomber move target:(15, 11).
+OUT pid:184737 mid:0 bomber new location:(15, 11).
+IN pid:184737 mid:2 bomber move target:(10, 6).
+OUT pid:184737 mid:0 bomber new location:(10, 6).
+IN pid:184737 mid:2 bomber move target:(15, 10).
+OUT pid:184737 mid:0 bomber new location:(15, 10).
+IN pid:184737 mid:2 bomber move target:(10, 5).
+OUT pid:184737 mid:0 bomber new location:(10, 5).
+IN pid:184737 mid:2 bomber move target:(15, 9).
+OUT pid:184737 mid:0 bomber new location:(15, 9).
+IN pid:184737 mid:2 bomber move target:(10, 4).
+OUT pid:184737 mid:0 bomber new location:(10, 4).
+IN pid:184737 mid:3 bomber plant bomb interval:2500 radius:3.
+OUT pid:184737 mid:2 bomber plant bomb result:1.
+IN pid:184737 mid:3 bomber plant bomb interval:2500 radius:3.
+OUT pid:184737 mid:2 bomber plant bomb result:1.
+IN pid:184737 mid:1 bomber see.
+OUT pid:184737 mid:1 bomber vision object count:2.
+object1 position:(1558803776,32616) type:-2006920144.
+object2 position:(32766,31) type:0.
+IN pid:184737 mid:4 bomb explode.
+IN pid:184737 mid:4 bomb explode.
+OUT pid:184737 mid:3 bomber died.
+OUT pid:184737 mid:4 bomber wins.
+IN pid:184737 mid:4 bomb explode.
+IN pid:184737 mid:4 bomb explode.

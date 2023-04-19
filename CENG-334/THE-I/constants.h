@@ -1,5 +1,3 @@
-#define MAX_VISION 64
-
 #define ALIVE 0
 #define KILLED 1
 #define DIE 2

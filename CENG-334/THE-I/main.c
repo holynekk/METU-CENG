@@ -26,7 +26,6 @@ int main(void) {
             map[i][j].type = EMPTY_CELL;
         }
     }
-
     int obstacle_x, obstacle_y, obstacle_durability;
     for (int i = 0; i < obstacle_count; i++) {
         scanf("%d %d %d", &obstacle_x, &obstacle_y, &obstacle_durability);
@@ -38,10 +37,10 @@ int main(void) {
     bomber bombers[bomber_count];
 
     char bmbr_exc[bomber_count][64];
-    char arg_of_bomber[10][10];
+    char dummy_args[10][10];
     char *bomber_args[bomber_count][24];
 
-    int bomber_pipes[bomber_count][2], bomb_pipes[64][2], child_status_bomb[64], child_status_bomber[bomber_count];
+    int bomber_pipes[bomber_count][2], bomb_pipes[64][2], child_process_bomb[64], child_process_bomber[bomber_count];
 
     for (int i = 0; i < bomber_count; i++) {
         bombers[i].status = ALIVE;
@@ -50,10 +49,10 @@ int main(void) {
         map[bombers[i].position.y][bombers[i].position.x].type = CELL_WITH_BOMBER;
         scanf("%s", bmbr_exc[i]);
         bomber_args[i][0] = bmbr_exc[i];
-        for (int a = 1; a < bombers[i].arg_count; a++) {
-            scanf("%s", arg_of_bomber[a]);
-            bomber_args[i][a] = (char *)malloc(strlen(*(arg_of_bomber + a)) + 1);
-            strcpy(bomber_args[i][a], arg_of_bomber[a]);
+        for (int j = 1; j < bombers[i].arg_count; j++) {
+            scanf("%s", dummy_args[j]);
+            bomber_args[i][j] = (char *) malloc(sizeof(char) * (strlen(*(dummy_args + j)) + 1));
+            strcpy(bomber_args[i][j], dummy_args[j]);
         }
         bomber_args[i][bombers[i].arg_count] = NULL;
         if (fork() != 0) {
@@ -163,7 +162,7 @@ int main(void) {
                     }
                     bombs_exploded++;
                     close(bomb_pipes[i][0]);
-                    waitpid(bombs[i].pid, &child_status_bomb[i], 0);
+                    waitpid(bombs[i].pid, &child_process_bomb[i], 0);
                 }
             }
         }
@@ -186,7 +185,7 @@ int main(void) {
                 }
                 print_output(NULL, &otgng_msg_prnt, NULL, NULL);
                 close(bomber_pipes[i][0]);
-                waitpid(bombers[i].bomber_pid, &child_status_bomber[i], 0);
+                waitpid(bombers[i].bomber_pid, &child_process_bomber[i], 0);
                 break;
             }
 
@@ -203,34 +202,32 @@ int main(void) {
                     omp otgng_msg_prnt = {.m = &otgng_msg, .pid = bombers[i].bomber_pid};
                     print_output(NULL, &otgng_msg_prnt, NULL, NULL);
                     close(bomber_pipes[i][0]);
-                    waitpid(bombers[i].bomber_pid, &child_status_bomber[i], 0);
+                    waitpid(bombers[i].bomber_pid, &child_process_bomber[i], 0);
                 }
                 im incmng_msg;
                 if (bombers[i].status == ALIVE) {
+                    om otgng_msg;
                     if (read_data(bomber_pipes[i][0], &incmng_msg) == -1) {
                         perror("[FAIL] Bomber data could not read!");
                         exit(EXIT_FAILURE);
                     }
-
                     imp incmng_msg_prnt = {.m = &incmng_msg, .pid = bombers[i].bomber_pid};
                     print_output(&incmng_msg_prnt, NULL, NULL, NULL);
-
                     int bomber_position_x = bombers[i].position.x, bomber_position_y = bombers[i].position.y;
-                    om outgoing_message;
                     switch (incmng_msg.type) {
                         case BOMBER_START:
-                            outgoing_message.type = BOMBER_LOCATION;
-                            outgoing_message.data.new_position.x = bombers[i].position.x;
-                            outgoing_message.data.new_position.y = bombers[i].position.y;
-                            send_message(bomber_pipes[i][0], &outgoing_message);
-                            omp omessage_print_START = {.m = &outgoing_message, .pid = bombers[i].bomber_pid};
+                            otgng_msg.type = BOMBER_LOCATION;
+                            otgng_msg.data.new_position.x = bombers[i].position.x;
+                            otgng_msg.data.new_position.y = bombers[i].position.y;
+                            send_message(bomber_pipes[i][0], &otgng_msg);
+                            omp omessage_print_START = {.m = &otgng_msg, .pid = bombers[i].bomber_pid};
                             print_output(NULL, &omessage_print_START, NULL, NULL);
                             break;
 
                         case BOMBER_SEE:
-                            outgoing_message.type = BOMBER_VISION;
+                            otgng_msg.type = BOMBER_VISION;
                             int obj_count = 0;
-                            od objects[MAX_VISION];
+                            od objects[64];
                             obj m_obj;
                             for (int distance = bomber_position_y; distance < bomber_position_y + 4 && distance != map_height; distance++) {
                                 m_obj = map[distance][bomber_position_x];
@@ -287,9 +284,9 @@ int main(void) {
                                     break;
                                 }
                             }
-                            outgoing_message.data.object_count = obj_count;
+                            otgng_msg.data.object_count = obj_count;
 
-                            if (send_message(bomber_pipes[i][0], &outgoing_message) == -1) {
+                            if (send_message(bomber_pipes[i][0], &otgng_msg) == -1) {
                                 perror("[FAIL] Error while sending message with BOMBER_SEE status!");
                                 exit(EXIT_FAILURE);
                             }
@@ -298,17 +295,17 @@ int main(void) {
                                 exit(EXIT_FAILURE);
                             }
 
-                            omp omessage_print_SEE = {.m = &outgoing_message, .pid = bombers[i].bomber_pid};
+                            omp omessage_print_SEE = {.m = &otgng_msg, .pid = bombers[i].bomber_pid};
                             print_output(NULL, &omessage_print_SEE, NULL, objects);
 
                             break;
 
                         case BOMBER_MOVE:
-                            outgoing_message.type = BOMBER_LOCATION;
+                            otgng_msg.type = BOMBER_LOCATION;
                             coordinate target_position = incmng_msg.data.target_position;
                             if (target_position.x >= 0 && target_position.y >= 0 && target_position.x < map_width && target_position.y < map_height) {
-                                if ((target_position.x == bomber_position_x && (target_position.y == bomber_position_y - 1 || target_position.y == bomber_position_y + 1)) ||
-                                    (target_position.y == bomber_position_y && (target_position.x == bomber_position_x - 1 || target_position.x == bomber_position_x + 1))) {
+                                if ((target_position.x == bomber_position_x && (target_position.y == bomber_position_y + 1 || target_position.y == bomber_position_y - 1)) ||
+                                    (target_position.y == bomber_position_y && (target_position.x == bomber_position_x + 1 ||target_position.x == bomber_position_x - 1))) {
                                     if (map[target_position.y][target_position.x].type != CELL_WITH_OBSTACLE || map[target_position.y][target_position.x].type != CELL_WITH_BOMBER) {
                                         if (map[target_position.y][target_position.x].type == CELL_WTH_BOMB) {
                                             map[target_position.y][target_position.x].type = CELL_WITH_BOMB_AND_BOMBER;
@@ -319,29 +316,26 @@ int main(void) {
                                             }
                                         } else {
                                             map[target_position.y][target_position.x].type = CELL_WITH_BOMBER;
-                                            if (map[bombers[i].position.y][bombers[i].position.x].type == CELL_WITH_BOMB_AND_BOMBER)
-                                            {
+                                            if (map[bombers[i].position.y][bombers[i].position.x].type == CELL_WITH_BOMB_AND_BOMBER) {
                                                 map[bombers[i].position.y][bombers[i].position.x].type = CELL_WTH_BOMB;
-                                            }
-                                            else
-                                            {
+                                            } else {
                                                 map[bombers[i].position.y][bombers[i].position.x].type = EMPTY_CELL;
                                             }
                                         }
                                         bombers[i].position.x = target_position.x;
                                         bombers[i].position.y = target_position.y;
-                                        outgoing_message.data.new_position = target_position;
+                                        otgng_msg.data.new_position = target_position;
                                     }
                                 }
                             } else {
-                                outgoing_message.data.new_position.x = bomber_position_x;
-                                outgoing_message.data.new_position.y = bomber_position_y;
+                                otgng_msg.data.new_position.x = bomber_position_x;
+                                otgng_msg.data.new_position.y = bomber_position_y;
                             }
-                            if (send_message(bomber_pipes[i][0], &outgoing_message) == -1) {
+                            if (send_message(bomber_pipes[i][0], &otgng_msg) == -1) {
                                 perror("[FAIL] Error while sending message with BOMBER_MOVE status!");
                                 exit(EXIT_FAILURE);
                             }
-                            omp omessage_print_MOVE = {.m = &outgoing_message, .pid = bombers[i].bomber_pid};
+                            omp omessage_print_MOVE = {.m = &otgng_msg, .pid = bombers[i].bomber_pid};
                             print_output(NULL, &omessage_print_MOVE, NULL, NULL);
                             break;
 
@@ -364,20 +358,20 @@ int main(void) {
                                     close(bomb_pipes[curr_bomber][0]);
                                     close(bomb_pipes[curr_bomber][1]);
                                     sprintf(interval, "%ld", incmng_msg.data.bomb_info.interval);
-                                    execl("./bomb", "./bomb", interval, (char *)NULL);
+                                    execl("./bomb", "./bomb", interval, (char *) NULL);
                                     perror("execl");
                                 }
                                 curr_bomber++;
-                                outgoing_message.data.planted = 1;
+                                otgng_msg.data.planted = 1;
                             } else {
-                                outgoing_message.data.planted = 0;
+                                otgng_msg.data.planted = 0;
                             }
-                            outgoing_message.type = BOMBER_PLANT_RESULT;
-                            if (send_message(bomber_pipes[i][0], &outgoing_message) == -1) {
+                            otgng_msg.type = BOMBER_PLANT_RESULT;
+                            if (send_message(bomber_pipes[i][0], &otgng_msg) == -1) {
                                 perror("[FAIL] Error while sending message with BOMBER_PLANT status!");
                                 exit(EXIT_FAILURE);
                             }
-                            omp omessage_print_PLANT = {.m = &outgoing_message, .pid = bombers[i].bomber_pid};
+                            omp omessage_print_PLANT = {.m = &otgng_msg, .pid = bombers[i].bomber_pid};
                             print_output(NULL, &omessage_print_PLANT, NULL, NULL);
                             break;
                     }
@@ -473,7 +467,7 @@ int main(void) {
                     }
                     bombs_exploded++;
                     close(bomb_pipes[i][0]);
-                    waitpid(bombs[i].pid, &child_status_bomb[i], 0);
+                    waitpid(bombs[i].pid, &child_process_bomb[i], 0);
                 }
             }
         }
