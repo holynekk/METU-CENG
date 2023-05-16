@@ -5,6 +5,11 @@
         "random": "cpp",
         "new": "cpp",
         "initializer_list": "cpp",
-        "ostream": "cpp"
+        "ostream": "cpp",
+        "atomic": "cpp",
+        "condition_variable": "cpp",
+        "memory": "cpp",
+        "semaphore": "cpp",
+        "stop_token": "cpp"
     }
 }
