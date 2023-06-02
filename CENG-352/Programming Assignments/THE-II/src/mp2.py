@@ -305,31 +305,24 @@ class Mp2Client:
                     return None, SUBSCRIBE_PLAN_NOT_FOUND
                 else:
                     cursor.execute(
-                        "SELECT max_parallel_sessions "
-                        "FROM plan "
-                        "WHERE plan_id = %s",
-                        (plan_id,),
+                        "SELECT max_parallel_sessions FROM subscription_plans WHERE plan_id = %s",
+                        (seller.plan_id,),
                     )
                     queryOldPlanMaxSessions = cursor.fetchone()
                     if queryOldPlanMaxSessions is None:
-                        # Fail if no such plan of customer exists (somehow)
                         return None, CMD_EXECUTION_FAILED
                     else:
                         if queryNewPlanMaxSessions[0] < queryOldPlanMaxSessions[0]:
                             return None, SUBSCRIBE_MAX_PARALLEL_SESSIONS_UNAVAILABLE
                         else:
                             cursor.execute(
-                                """
-                                        UPDATE customer
-                                        SET plan_id = %s
-                                        WHERE customer_id = %s;
-                                        """,
-                                (plan_id, customer.customer_id),
+                                "UPDATE seller_subscription SET plan_id = %s WHERE seller_id = %s;",
+                                (plan_id, seller.seller_id),
                             )
-                            conn.commit()
+                            self.conn.commit()
                             cursor.close()
-                            customer.plan_id = plan_id
-                            return customer, CMD_EXECUTION_SUCCESS
+                            seller.plan_id = plan_id
+                            return seller, CMD_EXECUTION_SUCCESS
         except Exception as e:
             return False, CMD_EXECUTION_FAILED
 
