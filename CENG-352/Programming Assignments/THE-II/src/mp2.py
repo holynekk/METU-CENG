@@ -1,6 +1,8 @@
 from seller import Seller
 
 import psycopg2
+import uuid
+from datetime import datetime, timezone
 
 import configparser
 from messages import *
@@ -132,10 +134,10 @@ class Mp2Client:
             else:
                 cursor.execute(
                     """
-                            UPDATE seller_subscription
-                            SET session_count = session_count + 1
-                            WHERE seller_id = %s;
-                            """,
+                    UPDATE seller_subscription
+                    SET session_count = session_count + 1
+                    WHERE seller_id = %s;
+                    """,
                     (seller_id,),
                 )
                 self.conn.commit()
@@ -228,7 +230,7 @@ class Mp2Client:
         try:
             cursor = self.conn.cursor()
             cursor.execute(
-                "SELECT plan_id FROM seller_subscription WHERE seller_id = %s",
+                "SELECT plan_id FROM seller_subscription WHERE seller_id = %s;",
                 (seller.seller_id,),
             )
             querySellerPlanId = cursor.fetchall()
@@ -236,7 +238,7 @@ class Mp2Client:
                 return False, CMD_EXECUTION_FAILED
             else:
                 cursor.execute(
-                    "SELECT plan_id, plan_name, max_parallel_sessions, max_stock_per_product FROM subscription_plans WHERE plan_id = %s",
+                    "SELECT plan_id, plan_name, max_parallel_sessions, max_stock_per_product FROM subscription_plans WHERE plan_id = %s;",
                     (querySellerPlanId[0],),
                 )
                 queryPlan = cursor.fetchone()
@@ -258,7 +260,89 @@ class Mp2Client:
         - If the operation is successful, commit changes and return tuple (seller, CMD_EXECUTION_SUCCESS).
         - If any exception occurs; rollback, do nothing on the database and return tuple (False, CMD_EXECUTION_FAILED).
         """
-        return False, CMD_EXECUTION_FAILED
+        try:
+            cursor = self.conn.cursor()
+
+            # Check if product_id is valid.
+            cursor.execute(
+                "SELECT product_id FROM products WHERE product_id = %s;",
+                (product_id,),
+            )
+            queryProductId = cursor.fetchall()
+            if not queryProductId:
+                return False, PRODUCT_NOT_FOUND
+
+            # Get seller max stock per product.
+            cursor.execute(
+                "SELECT max_stock_per_product FROM subscription_plans WHERE plan_id = %s;",
+                (seller.plan_id,),
+            )
+            queryMaxProductAmount = cursor.fetchone()
+            max_product_per_stock = queryMaxProductAmount[0]
+
+            cursor.execute(
+                "SELECT product_id, stock_count FROM seller_stocks WHERE product_id = %s AND seller_id = %s;",
+                (
+                    product_id,
+                    seller.seller_id,
+                ),
+            )
+            queryStockCount = cursor.fetchone()
+            # For remove operations
+            if change_amount < 0:
+                # Stock data does not exists in table
+                if not queryStockCount:
+                    cursor.close()
+                    return False, STOCK_UPDATE_FAILURE
+                queryStockCount = int(queryStockCount[1])
+                if queryStockCount + change_amount < 0:
+                    # Stock amount gets 0
+                    cursor.close()
+                    return False, STOCK_UPDATE_FAILURE
+                else:
+                    # Calculate successfully
+                    cursor.execute(
+                        "UPDATE seller_stocks SET stock_count = %s WHERE seller_id = %s AND product_id = %s;",
+                        (queryStockCount + change_amount, seller.seller_id, product_id),
+                    )
+                    self.conn.commit()
+                    cursor.close()
+                    return True, CMD_EXECUTION_SUCCESS
+            # For addition operations
+            else:
+                if not queryStockCount:
+                    if change_amount > max_product_per_stock:
+                        cursor.close()
+                        return False, QUOTA_LIMIT_REACHED
+                    else:
+                        cursor.execute(
+                            "INSERT INTO seller_stocks (seller_id, product_id, stock_count) VALUES (%s, %s, %s);",
+                            (seller.seller_id, product_id, change_amount),
+                        )
+                        self.conn.commit()
+                        cursor.close()
+                        return True, CMD_EXECUTION_SUCCESS
+                else:
+                    queryStockCount = int(queryStockCount[1])
+                    if queryStockCount + change_amount > max_product_per_stock:
+                        cursor.close()
+                        return False, QUOTA_LIMIT_REACHED
+                    else:
+                        # Calculate successfully
+                        cursor.execute(
+                            "UPDATE seller_stocks SET stock_count = %s WHERE seller_id = %s AND product_id = %s;",
+                            (
+                                queryStockCount + change_amount,
+                                seller.seller_id,
+                                product_id,
+                            ),
+                        )
+                        self.conn.commit()
+                        cursor.close()
+                        return True, CMD_EXECUTION_SUCCESS
+
+        except Exception as e:
+            return False, CMD_EXECUTION_FAILED
 
     def show_quota(self, seller):
         """
@@ -275,7 +359,23 @@ class Mp2Client:
 
         If the seller does not have a stock, print 'Quota limit is not activated yet.'
         """
-        return False, CMD_EXECUTION_FAILED
+        try:
+            cursor = self.conn.cursor()
+            cursor.execute(
+                "SELECT product_id, stock_count FROM seller_stocks WHERE seller_id = %s",
+                (seller.seller_id,),
+            )
+            queryQuota = cursor.fetchall()
+            cursor.close()
+            if not queryQuota:
+                return False, QUOTA_INACTIVE
+            else:
+                print("Product Id|Remaining Quota")
+                for row in queryQuota:
+                    print(f"{row[0]}|{row[1]}")
+                return True, CMD_EXECUTION_SUCCESS
+        except Exception as e:
+            return False, CMD_EXECUTION_FAILED
 
     def subscribe(self, seller, plan_id):
         """
@@ -350,7 +450,20 @@ class Mp2Client:
         123.45|2018|1
         67.8|2018|2
         """
-        return False, CMD_EXECUTION_FAILED
+        try:
+            cursor = self.conn.cursor()
+            cursor.execute(
+                "SELECT customer_id FROM orders o, order_items oi WHERE customer_id = %s GROUP BY  ORDER BY ;",
+                (customer_id,),
+            )
+            queryCustomerId = cursor.fetchone()
+            if not queryCustomerId:
+                cursor.close()
+                return False, CUSTOMER_NOT_FOUND
+            else:
+                return True, CMD_EXECUTION_SUCCESS
+        except Exception as e:
+            return False, CMD_EXECUTION_FAILED
 
     def show_cart(self, customer_id):
         """
@@ -368,22 +481,22 @@ class Mp2Client:
         try:
             cursor = self.conn.cursor()
             cursor.execute(
-                "SELECT plan_id FROM customers WHERE customer_id = %s",
+                "SELECT customer_id FROM customers WHERE customer_id = %s;",
                 (customer_id,),
             )
-            querySellerPlanId = cursor.fetchone()
-            if querySellerPlanId is None:
-                return False, CMD_EXECUTION_FAILED
+            queryCustomerId = cursor.fetchone()
+            if not queryCustomerId:
+                cursor.close()
+                return False, CUSTOMER_NOT_FOUND
             else:
                 cursor.execute(
-                    "SELECT plan_id, plan_name, max_parallel_sessions, max_stock_per_product FROM subscription_plans WHERE plan_id = %s",
-                    (querySellerPlanId[0],),
+                    "SELECT seller_id, product_id, amount FROM customer_carts WHERE customer_id = %s;",
+                    (customer_id,),
                 )
-                queryPlan = cursor.fetchone()
-                if queryPlan is None:
-                    return False, CMD_EXECUTION_FAILED
-                print("#|Name|Max Sessions|Max Stocks Per Product")
-                print(f"{queryPlan[0]}|{queryPlan[1]}|{queryPlan[2]}|{queryPlan[3]}")
+                queryCart = cursor.fetchall()
+                print("Seller Id|Product Id|Amount")
+                for row in queryCart:
+                    print(f"{row[0]}|{row[1]}|{row[2]}")
                 cursor.close()
                 return True, CMD_EXECUTION_SUCCESS
         except Exception as e:
@@ -399,7 +512,105 @@ class Mp2Client:
         - If any exception occurs; rollback, do nothing on the database and return tuple (False, CMD_EXECUTION_FAILED).
         - Consider stocks of sellers when you add items to the cart.
         """
-        return False, CMD_EXECUTION_FAILED
+        try:
+            cursor = self.conn.cursor()
+            cursor.execute(
+                "SELECT customer_id FROM customers WHERE customer_id = %s;",
+                (customer_id,),
+            )
+            queryCustomerId = cursor.fetchone()
+            if not queryCustomerId:
+                cursor.close()
+                return False, CUSTOMER_NOT_FOUND
+            else:
+                cursor.execute(
+                    "SELECT product_id FROM products WHERE product_id = %s;",
+                    (product_id,),
+                )
+                queryProductId = cursor.fetchone()
+                if not queryProductId:
+                    cursor.close()
+                    return False, PRODUCT_NOT_FOUND
+                else:
+                    cursor.execute(
+                        "SELECT seller_id, stock_count FROM seller_stocks WHERE seller_id = %s AND product_id = %s;",
+                        (
+                            seller_id,
+                            product_id,
+                        ),
+                    )
+                    stock = cursor.fetchone()
+                    stock_count = stock[1]
+                    cursor.execute(
+                        "SELECT amount FROM customer_carts WHERE customer_id = %s AND seller_id = %s AND product_id = %s;",
+                        (customer_id, seller_id, product_id),
+                    )
+                    cartQuery = cursor.fetchone()
+                    # Remove case
+                    if change_amount < 0:
+                        if not cartQuery:
+                            return False, CMD_EXECUTION_FAILED
+                        current_amount_in_cart = cartQuery[0]
+                        if change_amount + current_amount_in_cart < 0:
+                            # Remove row from seller_stocks
+                            cursor.execute(
+                                "DELETE FROM customer_carts WHERE customer_id = %s AND seller_id = %s AND product_id = %s;",
+                                (
+                                    customer_id,
+                                    seller_id,
+                                    product_id,
+                                ),
+                            )
+                        else:
+                            # Decrease
+                            cursor.execute(
+                                "UPDATE customer_carts SET amount = %s WHERE customer_id = %s AND seller_id = %s AND product_id = %s;",
+                                (
+                                    change_amount + current_amount_in_cart,
+                                    customer_id,
+                                    seller_id,
+                                    product_id,
+                                ),
+                            )
+                        self.conn.commit()
+                        cursor.close()
+                        return True, CMD_EXECUTION_SUCCESS
+                    # Addition case
+                    else:
+                        if change_amount > stock_count:
+                            return False, STOCK_UNAVAILABLE
+                        else:
+                            if not cartQuery:
+                                # Add row
+                                cursor.execute(
+                                    "INSERT INTO customer_carts (customer_id, seller_id, product_id, amount) VALUES (%s, %s, %s, %s);",
+                                    (
+                                        customer_id,
+                                        seller_id,
+                                        product_id,
+                                        change_amount,
+                                    ),
+                                )
+                                self.conn.commit()
+                            else:
+                                current_amount_in_cart = cartQuery[0]
+                                # Update row
+                                if current_amount_in_cart + change_amount > stock_count:
+                                    return False, STOCK_UNAVAILABLE
+                                cursor.execute(
+                                    "UPDATE customer_carts SET amount = %s WHERE customer_id = %s AND seller_id = %s AND product_id = %s;",
+                                    (
+                                        change_amount + current_amount_in_cart,
+                                        customer_id,
+                                        seller_id,
+                                        product_id,
+                                    ),
+                                )
+                                self.conn.commit()
+                            cursor.close()
+                            return True, CMD_EXECUTION_SUCCESS
+        except Exception as e:
+            return False, CMD_EXECUTION_FAILED
 
     def purchase_cart(self, customer_id):
         """
@@ -414,4 +625,98 @@ class Mp2Client:
         - Add entries to order_items table
         - Add single entry to order table
         """
-        return False, CMD_EXECUTION_FAILED
+        try:
+            cursor = self.conn.cursor()
+            cursor.execute(
+                "SELECT customer_id FROM customers WHERE customer_id = %s;",
+                (customer_id,),
+            )
+            queryCustomerId = cursor.fetchone()
+            if not queryCustomerId:
+                cursor.close()
+                return False, CUSTOMER_NOT_FOUND
+            else:
+                cursor.execute(
+                    "SELECT COUNT(cc.product_id) FROM customer_carts cc, seller_stocks ss WHERE cc.customer_id = %s AND cc.product_id = ss.product_id AND cc.amount > ss.stock_count;",
+                    (customer_id,),
+                )
+                OutOfStockCount = cursor.fetchone()[0]
+                if OutOfStockCount:
+                    cursor.close()
+                    return False, STOCK_UNAVAILABLE
+                else:
+                    cursor.execute(
+                        "SELECT seller_id, product_id, amount FROM customer_carts WHERE customer_id = %s;",
+                        (customer_id,),
+                    )
+                    queryDecreaseStocks = cursor.fetchall()
+                    order_item_id = 1
+                    order_id = "".join(str(uuid.uuid4()).split("-"))
+                    date = (
+                        datetime.utcnow().today().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
+                    )
+                    cursor.execute(
+                        "INSERT INTO orders (order_id, customer_id, order_status, order_purchase_timestamp, order_approved_at, order_delivered_carrier_date, order_delivered_customer_date, order_estimated_delivery_date) VALUES (%s, %s, NULL, TIMESTAMP %s, NULL, NULL, NULL, NULL);",
+                        (
+                            order_id,
+                            customer_id,
+                            date,
+                        ),
+                    )
+                    self.conn.commit()
+                    for row in queryDecreaseStocks:
+                        # Decrease seller stocks
+                        cursor.execute(
+                            """
+                            DELETE FROM customer_carts WHERE customer_id = '06b8999e2fba1a1fbc88172c00ba8bc7' AND product_id = %s AND seller_id = %s;
+                            """,
+                            (
+                                row[1],
+                                row[0],
+                            ),
+                        )
+                        self.conn.commit()
+
+                        # Remove from cart
+                        cursor.execute(
+                            """
+                            UPDATE seller_stocks
+                            SET stock_count = stock_count - %s
+                            WHERE product_id = %s AND seller_id = %s;
+                            """,
+                            (
+                                row[2],
+                                row[1],
+                                row[0],
+                            ),
+                        )
+                        self.conn.commit()
+
+                        for oi in range(row[2]):
+                            cursor.execute(
+                                "INSERT INTO order_items (order_id, order_item_id, product_id, seller_id, shipping_limit_date, price, freight_value) VALUES (%s, %s, %s, %s, NULL, NULL, NULL);",
+                                (
+                                    order_id,
+                                    order_item_id,
+                                    row[1],
+                                    row[0],
+                                ),
+                            )
+                            self.conn.commit()
+                            cursor.execute(
+                                """
+                                SELECT *
+                                FROM order_items
+                                WHERE order_id = %s AND order_item_id = %s AND product_id = %s;
+                                """,
+                                (
+                                    order_id,
+                                    order_item_id,
+                                    row[1],
+                                ),
+                            )
+                            order_item_id += 1
+                    cursor.close()
+                return True, CMD_EXECUTION_SUCCESS
+        except Exception as e:
+            return False, CMD_EXECUTION_FAILED
