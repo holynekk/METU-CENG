@@ -436,7 +436,40 @@ class Mp2Client:
         - If any one of the products is not in the stock; rollback, do nothing on the database and return tuple (False, CMD_EXECUTION_FAILED).
         - If any exception occurs; rollback, do nothing on the database and return tuple (False, CMD_EXECUTION_FAILED).
         """
-        return False, CMD_EXECUTION_FAILED
+        try:
+            cursor = self.conn.cursor()
+            # Check all valid
+            for product_id in product_ids:
+                cursor.execute(
+                    "SELECT * FROM products WHERE product_id = %s;",
+                    (product_id,),
+                )
+                if not cursor.fetchone():
+                    return False, CMD_EXECUTION_FAILED
+
+                cursor.execute(
+                    "SELECT product_id FROM seller_stocks WHERE seller_id = %s AND product_id = %s AND stock_count <> 0;",
+                    (
+                        seller.seller_id,
+                        product_id,
+                    ),
+                )
+                if not cursor.fetchone():
+                    return False, CMD_EXECUTION_FAILED
+            # All valid -------------------
+            for product_id in product_ids:
+                cursor.execute(
+                    "UPDATE seller_stocks SET stock_count = stock_count - 1 WHERE seller_id = %s AND product_id = %s;",
+                    (
+                        seller.seller_id,
+                        product_id,
+                    ),
+                )
+                self.conn.commit()
+
+            return True, CMD_EXECUTION_SUCCESS
+        except Exception as e:
+            return False, CMD_EXECUTION_FAILED
 
     def calc_gross(self, seller):
         """
