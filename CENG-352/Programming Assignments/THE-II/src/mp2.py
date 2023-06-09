@@ -453,16 +453,22 @@ class Mp2Client:
         try:
             cursor = self.conn.cursor()
             cursor.execute(
-                "SELECT customer_id FROM orders o, order_items oi WHERE customer_id = %s GROUP BY  ORDER BY ;",
-                (customer_id,),
+                "SELECT SUM(oi.price), DATE_TRUNC('year', o.order_purchase_timestamp), DATE_TRUNC('month', o.order_purchase_timestamp) FROM orders o, order_items oi WHERE oi.order_id = o.order_id AND oi.seller_id = %s GROUP BY DATE_TRUNC('year', o.order_purchase_timestamp), DATE_TRUNC('month', o.order_purchase_timestamp);",
+                (seller.seller_id,),
             )
-            queryCustomerId = cursor.fetchone()
-            if not queryCustomerId:
-                cursor.close()
-                return False, CUSTOMER_NOT_FOUND
+            queryGrossTotal = cursor.fetchall()
+            cursor.close()
+            if not queryGrossTotal:
+                print("Gross Income: 0")
             else:
-                return True, CMD_EXECUTION_SUCCESS
+                print("Gross Income|Year|Month")
+                for row in queryGrossTotal:
+                    print(
+                        f"{row[0]}|{str(row[1]).split('-')[0]}|{str(row[2]).split('-')[1].lstrip('0')}"
+                    )
+            return True, CMD_EXECUTION_SUCCESS
         except Exception as e:
+            print(e)
             return False, CMD_EXECUTION_FAILED
 
     def show_cart(self, customer_id):
