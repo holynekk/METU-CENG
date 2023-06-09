@@ -501,7 +501,6 @@ class Mp2Client:
                     )
             return True, CMD_EXECUTION_SUCCESS
         except Exception as e:
-            print(e)
             return False, CMD_EXECUTION_FAILED
 
     def show_cart(self, customer_id):
@@ -590,7 +589,7 @@ class Mp2Client:
                         if not cartQuery:
                             return False, CMD_EXECUTION_FAILED
                         current_amount_in_cart = cartQuery[0]
-                        if change_amount + current_amount_in_cart < 0:
+                        if change_amount + current_amount_in_cart <= 0:
                             # Remove row from seller_stocks
                             cursor.execute(
                                 "DELETE FROM customer_carts WHERE customer_id = %s AND seller_id = %s AND product_id = %s;",
@@ -707,9 +706,10 @@ class Mp2Client:
                         # Decrease seller stocks
                         cursor.execute(
                             """
-                            DELETE FROM customer_carts WHERE customer_id = '06b8999e2fba1a1fbc88172c00ba8bc7' AND product_id = %s AND seller_id = %s;
+                            DELETE FROM customer_carts WHERE customer_id = %s AND product_id = %s AND seller_id = %s;
                             """,
                             (
+                                customer_id,
                                 row[1],
                                 row[0],
                             ),
