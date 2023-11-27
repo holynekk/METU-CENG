@@ -84,6 +84,13 @@ These are the courses that I have taken from department of computer engineering 
 **Including**
 - Take Home Exams that are given throughout the semester.
 
+## [CENG-350](CENG-350)
+*Middle East Technical University CENG **SOFTWARE ENGINEERING** course.*<br><br>
+**Term:** Spring 2021-2022<br><br>
+**Instructor:** Assoc.Prof.Dr. PELİN ANGIN <br><br>
+**Including**
+- Detailed documenting for a project.
+
 ## [CENG-384](CENG-384)
 *Middle East Technical University CENG **SIGNALS AND SYSTEMS FOR COMPUTER ENGINEERS** course.*<br><br>
 **Term:** Spring 2021-2022<br><br>

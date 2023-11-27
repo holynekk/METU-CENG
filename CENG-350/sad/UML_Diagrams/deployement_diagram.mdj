@@ -1,0 +1,95 @@
+{
+	"_type": "Project",
+	"_id": "AAAAAAFF+h6SjaM2Hec=",
+	"name": "Untitled",
+	"ownedElements": [
+		{
+			"_type": "UMLModel",
+			"_id": "AAAAAAFF+qBWK6M3Z8Y=",
+			"_parent": {
+				"$ref": "AAAAAAFF+h6SjaM2Hec="
+			},
+			"name": "Model",
+			"ownedElements": [
+				{
+					"_type": "UMLClassDiagram",
+					"_id": "AAAAAAFF+qBtyKM79qY=",
+					"_parent": {
+						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
+					},
+					"name": "Main",
+					"defaultDiagram": true
+				}
+			]
+		},
+		{
+			"_type": "UMLModel",
+			"_id": "AAAAAAGBP5aRkU/EbGw=",
+			"_parent": {
+				"$ref": "AAAAAAFF+h6SjaM2Hec="
+			},
+			"name": "YOLO Software",
+			"ownedElements": [
+				{
+					"_type": "UMLDeploymentDiagram",
+					"_id": "AAAAAAGBP5aRkk/FU0w=",
+					"_parent": {
+						"$ref": "AAAAAAGBP5aRkU/EbGw="
+					},
+					"name": "DeploymentDiagram1",
+					"ownedViews": [
+						{
+							"_type": "UMLFrameView",
+							"_id": "AAAAAAGBP/0uk0/J8Cc=",
+							"_parent": {
+								"$ref": "AAAAAAGBP5aRkk/FU0w="
+							},
+							"model": {
+								"$ref": "AAAAAAGBP5aRkU/EbGw="
+							},
+							"subViews": [
+								{
+									"_type": "LabelView",
+									"_id": "AAAAAAGBP/0uk0/KNM8=",
+									"_parent": {
+										"$ref": "AAAAAAGBP/0uk0/J8Cc="
+									},
+									"font": "Arial;13;0",
+									"left": 63.9599609375,
+									"top": 117,
+									"width": 92.0380859375,
+									"height": 13,
+									"text": "YOLO Software"
+								},
+								{
+									"_type": "LabelView",
+									"_id": "AAAAAAGBP/0ulE/LxCM=",
+									"_parent": {
+										"$ref": "AAAAAAGBP/0uk0/J8Cc="
+									},
+									"font": "Arial;13;1",
+									"left": 37,
+									"top": 117,
+									"width": 21.9599609375,
+									"height": 13,
+									"text": "pkg"
+								}
+							],
+							"font": "Arial;13;0",
+							"left": 32,
+							"top": 112,
+							"width": 897,
+							"height": 625,
+							"nameLabel": {
+								"$ref": "AAAAAAGBP/0uk0/KNM8="
+							},
+							"frameTypeLabel": {
+								"$ref": "AAAAAAGBP/0ulE/LxCM="
+							}
+						}
+					]
+				}
+			]
+		}
+	]
+}
