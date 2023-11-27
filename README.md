@@ -91,6 +91,13 @@ These are the courses that I have taken from department of computer engineering 
 **Including**
 - Detailed documenting for a project.
 
+## [CENG-382](CENG-382)
+*Middle East Technical University CENG **ANALYSIS OF DYNAMIC SYSTEMS** course.*<br><br>
+**Term:** Spring 2021-2022<br><br>
+**Instructor:** Assoc.Prof.Dr. EBRU AYDIN GÖL <br><br>
+**Including**
+- Homeworks that are given throughout the semester.
+
 ## [CENG-384](CENG-384)
 *Middle East Technical University CENG **SIGNALS AND SYSTEMS FOR COMPUTER ENGINEERS** course.*<br><br>
 **Term:** Spring 2021-2022<br><br>

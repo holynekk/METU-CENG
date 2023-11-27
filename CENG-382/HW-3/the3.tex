@@ -1,0 +1,92 @@
+\documentclass[12pt,a4paper, margin=1in]{article}
+\usepackage{fullpage}
+\usepackage{amsfonts, amsmath, pifont}
+\usepackage{amsthm}
+\usepackage{amsmath}
+
+\usepackage{geometry}
+ \geometry{
+ a4paper,
+ % total={210mm,297mm},
+ left=10mm,
+ right=10mm,
+ top=5mm,
+ bottom=10mm,
+ }
+ \author{
+  YILMAZ, Mert Kaan\\
+  \texttt{e2381093@ceng.metu.edu.tr}
+}
+\title{CENG 382 - Analysis of Dynamic Systems \\
+20221\\
+Take Home Exam 3 Solutions}
+\begin{document}
+\maketitle
+
+\noindent\rule{19cm}{1.2pt}
+
+\begin{enumerate}
+% Write your solutions in the following items.
+
+    \item % Q1 -----------------------------------------------------------------------------------------------------------------------------
+        \begin{enumerate}
+            \item 
+            $f_1 = -x_1 + x_2^2$\\
+            $f_2 = 3x_1^2 - 2x_2$\\
+            \begin{equation*}
+            Df(x) = 
+            \begin{bmatrix}
+                -1 & 2x_2\\
+                6x_1 & -2
+            \end{bmatrix}
+            \end{equation*}
+            $f(x) \approx Df(\tilde{x})(x-\tilde{x})+f(\tilde{x})$\\
+            $= Df(\tilde{x})x - Df(\tilde{x})\tilde{x}$\\
+            
+            \item 
+            1) Lyapunov function is continuous and has continuous first partial derivatives.\\
+            2) It has uniqueue minimum at $\tilde{x}$\\
+            3) \\
+            We know that $V(x_1, x_2) = \frac{x_1^2}{2} + \frac{x_2^2}{4}$\\
+            Firs, let's find $\Delta V$.\\
+            $\Delta V =  \frac{dV}{dt} = \frac{dV}{dx_1}\cdot\frac{dx_1}{dt} + \frac{dV}{dx_2}\cdot\frac{dx_2}{dt}$\\
+            $= x_1\cdot(-x_1+x_2^2) + \frac{x_2}{2}\cdot(-2x_2+3x_1^2)$\\
+            $=x_1^2 + x_1x_2^2 - x_2^2 + \frac{3}{2}x_2x_1^2$
+            
+        \end{enumerate}
+        
+        
+    \item % Q2 -----------------------------------------------------------------------------------------------------------------------------
+        
+        
+    \item % Q3 -----------------------------------------------------------------------------------------------------------------------------
+        We know that $V(x_1, x_2) = \frac{x_1^2}{2} + \frac{x_2^2}{2}$\\
+        Firs, let's find $\Delta V$.\\
+        $\Delta V =  \frac{dV}{dt} = \frac{dV}{dx_1}\cdot\frac{dx_1}{dt} + \frac{dV}{dx_2}\cdot\frac{dx_2}{dt}$\\
+        $=2x_1\cdot(x_1+x_2-4x_1(x_1^2+x_2^2)) + 2x_2\cdot(-x_1+x_2-4x_1(x_1^2+x_2^2))$\\
+        $=2x_1^2 + 2x_2^2 - 16x_1x_2(x_1^2+x_2^2)$\\
+        
+        
+        
+    \item % Q4 -----------------------------------------------------------------------------------------------------------------------------
+        \begin{enumerate}
+            \item 
+            Let's find fixed points $k \approx \tilde{k}$\\
+            $x(\tilde{k}) = 3 - x(\tilde{k})^2$\\
+            $ = x(\tilde{k})^2 + x(\tilde{k}) - 3 = 0$\\
+            We need to find it's roots:\\
+            $\tilde{k}_{1,2}=\frac{-1\pm\sqrt{13}}{2}$
+            
+            \item 
+            $x(k+1) = f(x(k))$\\
+            $x = f^2(x) = f(3-x^2) = 3 - (3-x^2)^2$\\
+            $= 3 - (9 - 6x^2 - x^4) = x^4 + 6x^2 - 6$
+            
+            
+            \item 
+        \end{enumerate}
+
+
+\end{enumerate}
+
+\end{document}

@@ -1,0 +1,269 @@
+\documentclass[12pt,a4paper, margin=1in]{article}
+\usepackage{fullpage}
+\usepackage{amsfonts, amsmath, pifont}
+\usepackage{amsthm}
+\usepackage{graphicx}
+\usepackage{tkz-euclide}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage{pgfplots}
+
+\usepackage{geometry}
+ \geometry{
+ a4paper,
+ total={210mm,297mm},
+ left=10mm,
+ right=10mm,
+ top=5mm,
+ bottom=10mm,
+ }
+ \author{
+  YILMAZ, Mert Kaan\\
+  \texttt{e2381093@ceng.metu.edu.tr}
+}
+\title{CENG 382 - Analysis of Dynamic Systems \\
+20221\\
+Take Home Exam 2 Solutions}
+\begin{document}
+\maketitle
+
+\noindent\rule{19cm}{1.2pt}
+
+\begin{enumerate}
+% Write your solutions in the following items.
+
+    \item % Q1
+        \begin{enumerate}
+            \item We can condense all the given information from the question text into a transition matrix P, namely,\\
+            \begin{equation*}
+            P = 
+            \begin{bmatrix}
+                0.7 & 0.2 & 0.1\\
+                0.2 & 0.6 & 0.2\\
+                0.1 & 0.4 & 0.5
+            \end{bmatrix}
+            \end{equation*}
+            
+            \item We need to compute different possibilities here.\\
+            We have different state transitions for the given case:\\
+            i) unskilled laborer $\rightarrow$ unskilled laborer $\rightarrow$ professional man\\
+            ii) unskilled laborer $\rightarrow$ skilled laborer $\rightarrow$ professional man\\
+            iii) unskilled laborer $\rightarrow$ professional man $\rightarrow$ professional man\\
+
+            Let's model professionals to be the first state, skilled laborers to be the second state, and unskilled laborers to be the third state.
+
+            P(i) = P(3$\rightarrow$3$\rightarrow$1) = P(3$\rightarrow$3)$\cdot$P(3$\rightarrow$1) = 0.5$\cdot$0.1=0.05\\
+            P(ii) = P(3$\rightarrow$2$\rightarrow$1) = P(3$\rightarrow$2)$\cdot$P(2$\rightarrow$1) = 0.4$\cdot$0.2=0.02\\
+            P(iii) = P(3$\rightarrow$1$\rightarrow$1) = P(3$\rightarrow$1)$\cdot$P(1$\rightarrow$1) = 0.1$\cdot$0.7=0.07\\
+
+            At the end, P(3$\rightarrow$j$\rightarrow$1) = P(i) + P(ii) + P(iii) = 0.05 + 0.02 + 0.07 = 0.14
+            
+            \item Just like in the previous question we need to compute different possibilities here.\\
+            We have different state transitions for the given case:\\
+            i) professional man $\rightarrow$ unskilled laborer $\rightarrow$ professional man\\
+            ii) professional man $\rightarrow$ skilled laborer $\rightarrow$ professional man\\
+            iii) professional man $\rightarrow$ professional man $\rightarrow$ professional man\\
+
+            Let's model professionals to be the first state, skilled laborers to be the second state, and unskilled laborers to be the third state.
+
+            P(i) = P(1$\rightarrow$3$\rightarrow$1) = P(1$\rightarrow$3)$\cdot$P(3$\rightarrow$1) = 0.1$\cdot$0.1=0.01\\
+            P(ii) = P(1$\rightarrow$2$\rightarrow$1) = P(1$\rightarrow$2)$\cdot$P(2$\rightarrow$1) = 0.2$\cdot$0.2 = 0.04\\
+            P(iii) = P(1$\rightarrow$1$\rightarrow$1) = P(1$\rightarrow$1)$\cdot$P(1$\rightarrow$1) = 0.7$\cdot$0.7=0.49\\
+
+            At the end, P(1$\rightarrow$j$\rightarrow$1) = P(i) + P(ii) + P(iii) = 0.01 + 0.04 + 0.49 = 0.54
+
+            \newpage
+            
+            \item Assume we have started at the state one, namely with a professional man. We will use general formula for calculations $(p(m)=p(0)P^m)$.\\
+            Therefore we can write, $(p(100)=p(0)P^{100})=[1,0,0]P^{100})$.\\
+
+            I have used octave online to calculate big matrix multiplications here with these code lines:\\
+            a = [1, 0, 0]\\
+            b = [0.7 0.2 0.1; 0.2 0.6 0.2; 0.1 0.4 0.5]\\
+            a * b\^ 100\\
+            and the result is: [0.3529, 0.4118, 0.2353] which means if we start with a professional man 100th generation grandson is going to be professional man with probability 0.3529, skilled laborer with probability 0.4118, and lastly unskilled laborer with probability 0.2353.
+        \end{enumerate}
+        
+        
+    \item % Q2
+        \begin{enumerate}
+            \item Because it has three states, we will get three terms in $M_c$ = $[B, AB, A^2B]$\\
+            We need to calculate them first:\\
+            \begin{equation*}
+            B=
+            \begin{bmatrix}
+                1\\
+                0\\
+                0
+            \end{bmatrix}
+            \end{equation*}
+
+            \begin{equation*}
+            AB=
+            \begin{bmatrix}
+                0 & 0 & 1\\
+                -2 & 0 & -1\\
+                0 & 1 & 0
+            \end{bmatrix}
+            \begin{bmatrix}
+                1\\
+                0\\
+                0
+            \end{bmatrix}=
+            \begin{bmatrix}
+                0\\
+                -2\\
+                0
+            \end{bmatrix}
+            \end{equation*}
+
+            \begin{equation*}
+            A^2B=A\cdot(AB)=
+            \begin{bmatrix}
+                0 & 0 & 1\\
+                -2 & 0 & -1\\
+                0 & 1 & 0
+            \end{bmatrix}
+            \begin{bmatrix}
+                0\\
+                -2\\
+                0
+            \end{bmatrix}=
+            \begin{bmatrix}
+                0\\
+                0\\
+                -2
+            \end{bmatrix}
+            \end{equation*}
+
+            \begin{equation*}
+            M_c=
+            \begin{bmatrix}
+                1 & 0 & 0\\
+                0 & -2 & 0\\
+                0 & 0 & -2
+            \end{bmatrix}
+            \end{equation*}
+            The rank of the matrix is 3, so we can say that it's controllable.
+            
+            \item 
+        \end{enumerate}
+        
+    \newpage
+    
+    \item % Q3
+        \begin{enumerate}
+            \item The definition tells us that a discrete-time system x(k + 1) = Ax(k), y(k) = C x(k) is said to be observable if there is a finite index N such that knowing the output sequence y(0), y(1), . . . , y(N-1) is sufficient to determine the initial state x(0).\\
+            Therefore, in this question, we will check if y(0) and y(1) can determine x(0).\\
+            
+            We have given:\\
+            \begin{equation*}
+            x(k+1)
+            =
+            \begin{bmatrix}
+                0 & 0 & 1\\
+                -2 & 0 & -1\\
+                0 & 1 & 0
+            \end{bmatrix}
+            x(k)
+            \end{equation*}
+            $x_1(1) = x_3(0)$\\
+            $x_2(1) = -2x_1(0)-x_3(0)$\\
+            $x_3(1) = x_2(0)$\\
+
+            y(0) = $-2x_2(0)-4x_3(0)$\\
+            y(1) = $-2x_2(1)-4x_3(1)$\\
+            
+            \item We are given,\\
+            \begin{equation*}
+            A =
+            \begin{bmatrix}
+                0 & 0 & 1\\
+                -2 & 0 & -1\\
+                0 & 1 & 0
+            \end{bmatrix}; 
+            C = 
+            \begin{bmatrix}
+                0 & -2 & -4\\
+            \end{bmatrix}; 
+            \end{equation*}
+            And with these we want to calculate observability matrix:
+
+
+            \begin{equation*}
+            CA =
+            \begin{bmatrix}
+                0 & -2 & -4\\
+            \end{bmatrix}
+            \cdot
+            \begin{bmatrix}
+                0 & 0 & 1\\
+                -2 & 0 & -1\\
+                0 & 1 & 0
+            \end{bmatrix}=
+            \begin{bmatrix}
+                4 & -4 & 2\\
+            \end{bmatrix}; 
+            \end{equation*}
+
+
+            \begin{equation*}
+            CA^2 = (CA)\cdot A =
+            \begin{bmatrix}
+                4 & -4 & 2\\
+            \end{bmatrix}
+            \cdot
+            \begin{bmatrix}
+                0 & 0 & 1\\
+                -2 & 0 & -1\\
+                0 & 1 & 0
+            \end{bmatrix}=
+            \begin{bmatrix}
+                8 & 2 & 8
+            \end{bmatrix}; 
+            \end{equation*}
+
+
+
+            
+            \begin{equation*}
+            M_0 =
+            \begin{bmatrix}
+                C\\
+                CA\\
+                CA^2
+            \end{bmatrix}
+            = 
+            \begin{bmatrix}
+                0 & -2 & -4\\
+                4 & -4 & 2\\
+                8 & 2 & 8
+            \end{bmatrix}; 
+            \end{equation*}
+
+            Since the matrix $M_0$ is rank 3/full rank, we can say that the system is observable.
+            
+        \end{enumerate}
+        
+        
+    \item % Q4 
+        $\dot{x}$ = $3x^2-3x^3$\\
+        We are given that the derivative of x(t) $(\frac{dx}{dt})$ is $3x^2-3x^3$. And we also know from the definition, a fixed point of a dynamical system is a state vector $\tilde{x}$ with the property that if the system is ever in the state $\tilde{x}$, it will remain in that state for all the time.\\
+        Therefore, if we are looking for fixed points for this equation, we can say:\\
+        $\dot{x}$ = $(\frac{dx}{dt})$ = $3x^2-3x^3$ = $3\cdot x^2 \cdot (1-x) = 0$\\
+        $\tilde{x}_1$ = 0, $\tilde{x}_2$ = 1\\\\
+        The formula for linearization is:\\
+        f(x) $\approx$ f($\tilde{x}$) + $\frac{d}{dx}f(\tilde{x})(x-\tilde{x})$\\
+        Since $\tilde{x}$ is a fixed point, $f(\tilde{x})$ = 0.\\
+
+        i) For $\tilde{x}_1$ = 0\\
+        f(x) = 0(x-0) = 0, coefficient of x = 0, so it has test fails.\\
+        
+        ii) For $\tilde{x}_2$ = 1\\
+        f(x) = -3(x-1) = -3x + 3, coefficient of x < 0, so it's stable.\\
+        
+
+
+\end{enumerate}
+
+\end{document}
