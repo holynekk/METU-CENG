@@ -91,6 +91,13 @@ These are the courses that I have taken from department of computer engineering 
 **Including**
 - Homeworks that are given throughout the semester.
 
+## [CENG-466](CENG-466)
+*Middle East Technical University CENG **FUNDAMENTALS OF IMAGE PROCESSING** course.*<br><br>
+**Term:** Fall 2022-2023<br><br>
+**Instructor:** Prof.Dr. FATOŞ TUNAY YARMAN VURAL <br><br>
+**Including**
+- Homeworks that are given throughout the semester.
+
 ## [CENG-445](CENG-445)
 *Middle East Technical University CENG **SOFTWARE DEVELOPMENT WITH SCRIPTING LANGUAGES** course.*<br><br>
 **Term:** Spring 2022-2023<br><br>
