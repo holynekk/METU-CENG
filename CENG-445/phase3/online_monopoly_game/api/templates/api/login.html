@@ -1,0 +1,21 @@
+{% extends 'api/base.html' %}
+{% block 'content' %}
+
+<div class="formWrapper">
+    <h1>Login</h1>
+    <form class="formStyle" action="/login/" method="POST">
+        {% csrf_token %}
+        <div class="input-field">
+            <input id="username" type="text" name="username" placeholder="Username" value="">
+        </div>
+        <div class="input-field">
+            <input id="password" type="password" name="password" placeholder="Password" value="">
+        </div>
+
+        <span style="margin-top: 10px;">Don't have an account?</span>
+        <a href="/signup" style="margin-bottom: 10px;">Sign up</a>
+        <input class="formSubmitButton" type="submit" value="Log in">
+    </form>
+</div>
+
+{% endblock %}

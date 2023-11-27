@@ -1,0 +1,242 @@
+{
+    "cells": [
+        {
+            "type": "start"
+        },
+        {
+            "type": "property",
+            "name": "Sisli",
+            "cell": 2,
+            "color": "brown",
+            "price": 450,
+            "rents": [
+                20,
+                100,
+                300,
+                700,
+                1200
+            ]
+        },
+        {
+            "type": "property",
+            "name": "Kadikoy",
+            "cell": 2,
+            "color": "brown",
+            "price": 450,
+            "rents": [
+                40,
+                200,
+                500,
+                900,
+                1400
+            ]
+        },
+        {
+            "type": "tax"
+        },
+        {
+            "type": "property",
+            "name": "Maltepe",
+            "cell": 3,
+            "color": "blue",
+            "price": 1000,
+            "rents": [
+                40,
+                200,
+                500,
+                900,
+                1400
+            ]
+        },
+        {
+            "type": "chance"
+        },
+        {
+            "type": "property",
+            "name": "BeylerBeyi",
+            "cell": 3,
+            "color": "blue",
+            "price": 1000,
+            "rents": [
+                60,
+                250,
+                600,
+                950,
+                1300
+            ]
+        },
+        {
+            "type": "property",
+            "name": "Uskudar",
+            "cell": 3,
+            "color": "blue",
+            "price": 1200,
+            "rents": [
+                80,
+                300,
+                500,
+                1000,
+                1600
+            ]
+        },
+        {
+            "type": "jail"
+        },
+        {
+            "type": "property",
+            "name": "Atasehir",
+            "cell": 3,
+            "color": "red",
+            "price": 1200,
+            "rents": [
+                70,
+                350,
+                550,
+                900,
+                1500
+            ]
+        },
+        {
+            "type": "property",
+            "name": "Bostanci",
+            "cell": 3,
+            "color": "red",
+            "price": 1400,
+            "rents": [
+                100,
+                400,
+                550,
+                1100,
+                1500
+            ]
+        },
+        {
+            "type": "property",
+            "name": "Kartal",
+            "cell": 3,
+            "color": "red",
+            "price": 800,
+            "rents": [
+                60,
+                200,
+                400,
+                800,
+                1200
+            ]
+        },
+        {
+            "type": "property",
+            "name": "Bebek",
+            "cell": 3,
+            "color": "green",
+            "price": 800,
+            "rents": [
+                80,
+                250,
+                450,
+                850,
+                1300
+            ]
+        },
+        {
+            "type": "tax"
+        },
+        {
+            "type": "property",
+            "name": "Yenikoy",
+            "cell": 3,
+            "color": "green",
+            "price": 600,
+            "rents": [
+                40,
+                150,
+                300,
+                700,
+                1100
+            ]
+        },
+        {
+            "type": "property",
+            "name": "Emirgan",
+            "cell": 3,
+            "color": "green",
+            "price": 900,
+            "rents": [
+                70,
+                200,
+                350,
+                750,
+                1100
+            ]
+        },
+        {
+            "type": "teleport"
+        },
+        {
+            "type": "property",
+            "name": "Levent",
+            "cell": 2,
+            "color": "orange",
+            "price": 1400,
+            "rents": [
+                100,
+                250,
+                450,
+                900,
+                1400
+            ]
+        },
+        {
+            "type": "chance"
+        },
+        {
+            "type": "property",
+            "name": "Etiler",
+            "cell": 2,
+            "color": "orange",
+            "price": 1500,
+            "rents": [
+                120,
+                300,
+                550,
+                900,
+                1500
+            ]
+        }
+    ],
+    "upgrade": 50,
+    "teleport": 100,
+    "jailbail": 100,
+    "tax": 30,
+    "lottery": 400,
+    "startup": 2000,
+    "chances": [
+        {
+            "type": "Goto Jail"
+        },
+        {
+            "type": "Lottery"
+        },
+        {
+            "type": "Jail free"
+        },
+        {
+            "type": "Tax"
+        },
+        {
+            "type": "Teleport"
+        },
+        {
+            "type": "Upgrade"
+        },
+        {
+            "type": "Downgrade"
+        },
+        {
+            "type": "Color Upgrade"
+        },
+        {
+            "type": "Color Downgrade"
+        }
+    ]
+}

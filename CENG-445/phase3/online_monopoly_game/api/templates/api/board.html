@@ -1,0 +1,110 @@
+{% extends 'api/base.html' %}
+{% block 'content' %}
+
+{% if is_authenticated %}
+<div class="boardInfo">
+    <span><b>Board ID: </b>{{board.id}}</span>
+    <span><b>Board Name: </b>{{board.name}}</span>
+    <span><b>Number of players: </b>{{board.num_players}}</span>
+    <span><b>Game is running?: </b>{% if board.is_game_started %} Yes {% else %} No {% endif %}</span>
+    <form action="/refresh/game/" method="POST">
+        {% csrf_token %}
+        <label for="board_id" class="board_id">Board ID: </label>
+        <input id="board_id" class="board_id" name="board_id" type="text" value={{board.id}}>
+        <input type="submit" value="Refresh">
+    </form>
+    <form action="/close_board/" method="POST">
+        {% csrf_token %}
+        <input type="submit" value="Leave Game">
+    </form>
+</div>
+<hr>
+<div class="playersWrapper">
+    <div class="players">
+        {% for player in players %}
+        <div class="playerCard {% if player.status == 'Ready' %} greenBorder {% else %} redBorder {% endif %}">
+            <span><b>Username: </b>{{player.username}}</span>
+            <span><b>Status: </b>{{player.status}}</span>
+        </div>
+        {% endfor %}
+    </div>
+    {% if not is_ready %}
+    <form action=" /ready/" method="POST">
+        {% csrf_token %}
+        <label for="board_id" class="board_id">Board Name: </label>
+        <input id="board_id" class="board_id" name="board_id" type="text" value={{board.id}}>
+        <input type="submit" value="Ready">
+    </form>
+
+</div>
+<hr>
+{% endif %}
+<hr style="width: calc(100% - 10px);">
+{% if board.is_game_started %}
+<div class="boardWrapper">
+    <form style="color: white;" action="/send_game_command/" method="POST">
+        {% csrf_token %}
+        <label for="commands">Choose a command:</label>
+        <select id="commands" name="commands">
+            <option value="roll">Roll</option>
+            <option value="pass">Pass</option>
+            <option value="buy">Buy</option>
+            <option value="bail">Bail</option>
+            <option value="upgrade">Upgrade</option>
+            <option value="downgrade">Downgrade</option>
+            <option value="teleport">Teleport</option>
+        </select>
+        <label for="board_id" class="board_id">Board ID: </label>
+        <input id="board_id" class="board_id" name="board_id" type="text" value={{board.id}}>
+        <input type="submit" value="Send">
+    </form>
+    <div class="gameBoard">
+        {% for cell in cells %}
+        <div class="boardCell">
+            <div class="cellColor {{cell.color}}">
+                {% for username in cell.players_on %}
+                <span>{{username}} -</span>
+                {% endfor %}
+            </div>
+            
+            <div class="cellInfo">
+                {% if cell.type == "property"%}
+                <span><a href="/pick_cell/{{board.id}}/{{cell.name}}"><b>{{cell.name}}</b></a></span>
+                <span>Owner: {% if cell.owner %}{{cell.owner.username }} {% else %} - {% endif %}</span>
+                <span>Price: {{cell.price}}</span>
+                <span>Level: {{cell.level}}</span>
+                <span>Rent: {{cell.rent}}</span>
+                {% else %}
+                <span>{{cell.type}}</span>
+                {% endif %}
+            </div>
+
+        </div>
+        {% endfor %}
+    </div>
+    <div class="userInfo">
+        {{username}}'s User Info:
+        {% for player in players %}
+        {% if username == player.username %}
+        <span>Balance: {{player.balance}}</span>
+        <span>Properties Owned:
+            {% for prop in player.properties_owned %}
+            <span>{{prop.property_name}}</span>
+            {% endfor %}
+        </span>
+        <span>Chance Cards Owned: {{player.chance_cards_owned}}</span>
+        <span>Is in jail: {% if player.is_in_jail %} Yes {% else %} No {%endif%}</span>
+        <span>Picked Cell: {{player.picked_cell}}</span>
+
+        {% endif %}
+        {% endfor %}
+
+    </div>
+</div>
+{% endif %}
+{% else %}
+<div>You have to login first!</div>
+<a href="/login">Login</a>
+{% endif %}
+
+{% endblock %}

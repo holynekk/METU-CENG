@@ -1,0 +1,49 @@
+{% extends 'api/base.html' %}
+{% block 'content' %}
+
+{% if is_authenticated %}
+<div class="formWrapper2">
+    <form id="board-create-form" class="formStyle2" method="POST">
+        {% csrf_token %}
+        {% comment %} <label for="boardname">Board Name: </label> {% endcomment %}
+        <div class="input-field"><input id="boardname" type="text" name="boardname" placeholder="Board Name" value=""></br></div>
+        <input id="createboardid" class="homeButtons" type="submit" value="Create New Board">
+    </form>
+    <form action="/logout/" method="POST">
+        {% csrf_token %}
+        <input class="homeButtons" type="submit" value="Log out">
+    </form>
+</div>
+<div class="cardWrapper">
+    {% for board in boards %}
+    <div class="boardCard">
+        <span>Board ID: {{board.id}}</span>
+        <span>Board Name: {{board.name}}</span>
+        <span>Number of players: {{board.num_players}}</span>
+        {% if board.num_players < 4 and not board.ever_started%} 
+            <form id="open-form" method="POST">
+                {% csrf_token %}
+                <label for="board_id" class="board_id">Board Name: </label>
+                <input id="board_id" class="board_id" name="board_id" type="text" value={{board.id}}>
+                <input type="submit" value="Open">
+            </form>
+        {% elif board.num_players < 2 and board.ever_started %}
+            <span style="color: red;">GAME OVER</span>
+        {% elif board.num_players < 4 and board.ever_started %}
+        <span style="color: red;">ONGOING</span>
+        {% else %}
+            <span style="color: red;">FULL</span>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="loginWarning">
+    <span>You have to login first!</span>
+    <a href="/login">Login</a>
+</div>
+
+{% endif %}
+{% load static %}
+<script type="text/javascript" src="{% static 'js/home.js' %}"></script>
+{% endblock %}

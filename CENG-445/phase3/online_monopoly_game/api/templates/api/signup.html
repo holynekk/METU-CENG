@@ -1,0 +1,32 @@
+{% extends 'api/base.html' %}
+{% block 'content' %}
+
+<div class="formWrapper">
+    <h1>Sign-up</h1>
+    <form class="formStyle" action="/signup/" method="POST">
+        {% csrf_token %}
+        <div class="input-field">
+            <input id="username" type="text" name="username" placeholder="Username" value="">
+        </div>
+
+        <div class="input-field">
+            <input id="fullname" type="text" name="fullname" placeholder="Full Name" value="">
+        </div>
+
+        <div class="input-field">
+            <input id="email" type="text" name="email" placeholder="Email" value="">
+        </div>
+        <div class="input-field">
+            <input id="password" type="password" name="password" placeholder="Password" value="">
+        </div>
+        <span style="margin-top: 10px;">Already have an account?</span>
+        <a style="margin-bottom: 10px;" href="/login"> Log in</a>
+        <input class="formSubmitButton" type="submit" value="Sign up">
+
+    </form>
+
+</div>
+
+
+
+{% endblock %}

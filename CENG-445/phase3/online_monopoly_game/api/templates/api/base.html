@@ -1,0 +1,22 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Online Monopoly</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'api/style.css' %}">
+</head>
+
+<body>
+    <div class="navbar">
+        <h1>Online Monopoly Game</h1></br>
+    </div>
+
+    <div class="serverMessage">
+        Message: {{ message }}
+    </div>
+    {% block 'content' %}
+    {% endblock %}
+</body>
+
+</html>

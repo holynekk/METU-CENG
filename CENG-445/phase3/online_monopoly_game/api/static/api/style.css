@@ -1,0 +1,312 @@
+:root {
+    --navbar: #202424;
+    --card: #2d2f34;
+    --card2: #424449;
+    --border: #57595d;
+}
+
+
+html,
+body {
+    height: 100%;
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+    background-color: var(--card);
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+    margin-top: 0px;
+    background-color: var(--navbar);
+    font-family: "monospace";
+    color: white;
+}
+
+.serverMessage {
+    display: flex;
+    align-items: center;
+    color: white;
+    height: 50px;
+    border: 1px solid var(--border);
+    padding-left: 15px;
+}
+
+.loginWarning {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    width: 350px;
+    margin: 100px auto auto auto;
+    background-color: var(--card2);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    color: white;
+}
+
+.formWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 350px;
+    margin: 100px auto auto auto;
+    background-color: var(--card2);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    color: white;
+}
+
+.loginForm {
+    height: 400px;
+}
+
+.signupForm {
+    height: 500px;
+}
+
+.formWrapper2 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
+    width: 250px;
+    margin: 10px auto auto auto;
+    background-color: var(--card2);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    color: white;
+}
+
+.formStyle {
+    padding: 20px auto 0px auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.cardWrapper {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid var(--border);
+}
+
+.boardCard {
+    height: 150px;
+    width: 300px;
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--card2);
+    color: white;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+}
+
+.board_id {
+    display: none;
+}
+
+.boardInfo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+
+.playersWrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.players {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.playerCard {
+    height: 100px;
+    width: 200px;
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--card2);
+    color: white;
+}
+
+.greenBorder {
+    border: 1px solid green;
+    border-radius: 10px;
+}
+
+.redBorder {
+    border: 1px solid red;
+    border-radius: 10px;
+}
+
+.boardWrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.gameBoard {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    background-color: red;
+}
+
+.boardCell {
+    display: flex;
+    flex-direction: column;
+    height: 150px;
+    width: 200px;
+    border: 1px solid black;
+}
+
+.cellColor {
+    height: 40px;
+    background-color: black;
+    color: white;
+}
+
+.cellInfo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    height: calc(100% - 40px);
+}
+
+.userInfo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+
+.brown {
+    background-color: brown;
+}
+
+.blue {
+    background-color: blue;
+}
+
+.red {
+    background-color: red;
+}
+
+.orange {
+    background-color: orange;
+}
+
+.green {
+    background-color: green;
+}
+
+.homeButtons {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.formWrapper h1 {
+    padding: 35px 35px 0 35px;
+    font-weight: 300;
+}
+
+.formStyle .input-field {
+    padding: 12px 5px;
+}
+
+.formStyle .input-field input {
+    font-size: 16px;
+    display: block;
+    font-family: 'Rubik', sans-serif;
+    width: 100%;
+    padding: 10px 1px;
+    border: 0;
+    border-bottom: 1px solid #747474;
+    outline: none;
+    -webkit-transition: all .2s;
+    transition: all .2s;
+    background-color: var(--card2);
+    color: white;
+}
+
+.formStyle .input-field input::-webkit-input-placeholder {
+    text-transform: uppercase;
+}
+
+.formStyle .input-field input::-moz-placeholder {
+    text-transform: uppercase;
+}
+
+.formStyle .input-field input:-ms-input-placeholder {
+    text-transform: uppercase;
+}
+
+.formStyle .input-field input::-ms-input-placeholder {
+    text-transform: uppercase;
+}
+
+.formStyle .input-field input::placeholder {
+    text-transform: uppercase;
+}
+
+.formStyle .input-field input:focus {
+    border-color: #222;
+}
+
+.formSubmitButton {
+    width: 100%;
+}
+
+.formSubmitButton {
+    width: 70%;
+    border: none;
+    padding: 12px;
+    font-family: 'Rubik', sans-serif;
+    cursor: pointer;
+    text-transform: uppercase;
+    background: #e8e9ec;
+    color: #777;
+    border-radius: 4px;
+    letter-spacing: 0.2px;
+    outline: 0;
+    -webkit-transition: all .3s;
+    transition: all .3s;
+}
+
+.formSubmitButton:hover {
+    background: #d8d8d8;
+}
+
+.formSubmitButton:nth-child(2) {
+    background: #2d3b55;
+    color: #fff;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 4px;
+}

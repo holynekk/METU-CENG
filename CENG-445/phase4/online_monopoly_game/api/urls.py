@@ -1,0 +1,60 @@
+from django.urls import re_path as url
+from api import views
+
+urlpatterns = [
+    url(
+        r"^$",
+        views.home,
+        name="home",
+    ),
+    url(
+        r"^signup/$",
+        views.signup,
+        name="signup",
+    ),
+    url(
+        r"^login/$",
+        views.login,
+        name="login",
+    ),
+    url(
+        r"^logout/$",
+        views.logout,
+        name="logout",
+    ),
+    url(
+        r"^new_board/$",
+        views.new_board,
+        name="new_board",
+    ),
+    url(
+        r"^open_board/$",
+        views.open_board,
+        name="open_board",
+    ),
+    url(
+        r"^close_board/$",
+        views.close_board,
+        name="close_board",
+    ),
+    url(
+        r"^board/(?P<board_id>[0-9a-zA-Z_-]+)/$",
+        views.board,
+        name="board",
+    ),
+    url(
+        r"^ready/$",
+        views.ready,
+        name="ready",
+    ),
+    url(
+        r"^send_game_command/$",
+        views.send_game_command,
+        name="send_game_command",
+    ),
+    url(
+        r"^pick_cell/(?P<board_id>[0-9]+)/(?P<cell_name>[a-zA-Z]+)/$",
+        views.pick_cell,
+        name="pick_cell",
+    ),
+]
